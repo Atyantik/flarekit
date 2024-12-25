@@ -4,8 +4,6 @@
   "compatibility_date": "2024-09-02",
   "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": "dist",
-  "node_compat": true,
-  "base_dir": ".",
   "d1_databases": [
     {
       "binding": "DB",
