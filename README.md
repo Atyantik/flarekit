@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://cdn.atyantik.com/Astroflare.webp" alt="Astroflare" width="200">
+</p>
+
 # **Astroflare**
 
 Astroflare is a scalable and modular monorepo ecosystem for building modern, edge-first web applications using **Astro** and **Cloudflare Workers**. It’s designed to simplify the development of performant, globally distributed applications while promoting code reusability and maintainability.
