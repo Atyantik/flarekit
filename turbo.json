@@ -9,8 +9,7 @@
     },
     "build:production": {
       "dependsOn": [
-        "@services/db#build",
-        "@apps/web#build:remote"
+        "@services/db#build"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": []

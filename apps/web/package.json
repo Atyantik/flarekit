@@ -1,14 +1,14 @@
 {
-  "name": "@app/web",
+  "name": "@apps/web",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "wrangler types && astro dev",
     "build": "npm run build:local",
     "build:local": "wrangler types && astro check && astro build && npm run migrate:local",
-    "build:remote": "wrangler types && astro check && astro build && npm run migrate:remote",
+    "build:production": "wrangler types && astro check && astro build && npm run migrate:production",
     "migrate:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
-    "migrate:remote": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
+    "migrate:production": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
     "preview": "wrangler types && astro preview",
     "astro": "astro"
   },
