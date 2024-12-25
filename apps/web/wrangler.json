@@ -7,14 +7,14 @@
     {
       "binding": "DB",
       "database_name": "cf-astro-d1",
-      "database_id": "72035a29-9507-4e75-9ecd-020457bed7c1",
+      "database_id": "f8763464-9a96-40d8-a492-f737027a15ef",
       "migrations_dir": "../../services/db/drizzle"
     }
   ],
   "r2_buckets": [
     {
       "binding": "STORAGE",
-      "bucket_name": "cf-astro-public-storage"
+      "bucket_name": "cf-astro-storage"
     }
   ]
 }
