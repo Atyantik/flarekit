@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="https://cdn.atyantik.com/Astroflare.webp" alt="Astroflare" width="200">
+  <img src="https://cdn.atyantik.com/Astroflare.webp" alt="Astroflare" width="200" style="border-radius: 20px;"
+  >
 </p>
 
 # **Astroflare**
