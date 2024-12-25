@@ -1,5 +1,4 @@
 {
-  "account_id": "c85d295f9ecfc5243eb696aa623476f0",
   "name": "cloudflare-astro-apps",
   "compatibility_date": "2024-09-02",
   "compatibility_flags": ["nodejs_compat"],
