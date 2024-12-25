@@ -1,84 +1,166 @@
-# Turborepo starter
+# **Astroflare**
 
-This is an official starter Turborepo.
+Astroflare is a scalable and modular monorepo ecosystem for building modern, edge-first web applications using **Astro** and **Cloudflare Workers**. It’s designed to simplify the development of performant, globally distributed applications while promoting code reusability and maintainability.
 
-## Using this example
+This project is supported and sponsored by [Atyantik Technologies](https://atyantik.com/). 🚀
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
-```
+## **Table of Contents**
+- [Features](#features)
+- [Current Structure](#current-structure)
+- [Future Scope](#future-scope)
+- [Getting Started](#getting-started)
+- [Development Workflow](#development-workflow)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license)
+- [About Atyantik Technologies](#about-atyantik-technologies)
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## **Features**
 
-### Apps and Packages
+- 🌍 **Edge-Optimized**: Seamless integration with Cloudflare Workers for fast, globally distributed applications.
+- ⚡ **Astro-Powered**: Build blazing-fast web applications using Astro’s island architecture.
+- 🛠️ **Monorepo Design**: Manage multiple apps and packages efficiently within a unified structure.
+- 🎯 **TypeScript First**: Type-safe development for robust, scalable codebases.
+- 📦 **Future-Proof**: Designed to evolve with support for additional services and apps.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+---
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## **Current Structure**
 
-### Utilities
+Astroflare is currently focused on providing:
+- A **web application** built with Astro.
+- A basic structure for future apps and services.
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
+### **Directory Layout**
 
 ```
-cd my-turborepo
-pnpm dev
+astroflare/
+├── apps/
+│   └── web/              # Astro-based frontend (@apps/web)
+├── packages/
+│   └── db/               # Database schema and utilities (@services/db)
+├── turbo.json            # Turborepo configuration
+├── tsconfig.json         # Shared TypeScript configuration
+└── README.md             # Project overview
 ```
 
-### Remote Caching
+### **Available Packages**
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+| Package         | Description                                     |
+|------------------|-------------------------------------------------|
+| `@apps/web`      | The primary web frontend built with Astro.      |
+| `@services/db`   | Database utilities and schema for the project. |
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+---
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+## **Future Scope**
 
+Astroflare is designed with extensibility in mind. Future plans include:
+- **New Applications**:
+  - `@apps/api`: Cloudflare Worker-based API services.
+- **Reusable Services**:
+  - `@services/auth`: Authentication utilities and middleware.
+  - `@services/utils`: Shared utility functions for applications.
+  - Additional modular packages as needed.
+
+These features will be introduced incrementally, and contributions are welcome!
+
+---
+
+## **Getting Started**
+
+### **1. Clone the Repository**
+```bash
+git clone https://github.com/Atyantik/astroflare.git
+cd astroflare
 ```
-cd my-turborepo
-npx turbo login
+
+### **2. Install Dependencies**
+```bash
+npm install
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+### **3. Run the Development Server**
+Start the web application:
+```bash
+npm run dev
 ```
 
-## Useful Links
+### **4. Build for Local**
+```bash
+npm turbo build
+```
 
-Learn more about the power of Turborepo:
+### **5. Build for Production**
+```bash
+npm turbo build:production
+```
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+### **5. Deploy to Cloudflare Workers**
+Although the repo currently doesn’t include Cloudflare Workers apps, the structure is ready for future deployments.
+
+---
+
+## **Configuration**
+
+### **App-Specific Configuration**
+Each app or package may have its own configuration file. For example:
+- **`apps/web`:** Astro's configuration is defined in `astro.config.mjs`.
+- **`packages/db`:** Database configurations are handled internally.
+
+---
+
+## **Contributing**
+
+We’re building Astroflare to support modern, scalable web development. Contributions are welcome to help improve its features and extend its scope.
+
+### **How to Contribute**
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add your feature"
+   ```
+4. Push the branch:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. Open a pull request.
+
+---
+
+## **License**
+
+Astroflare is licensed under the [MIT License](LICENSE).
+
+---
+
+## **About Atyantik Technologies**
+
+Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**, a leading software development company specializing in scalable web applications, cloud services, and cutting-edge technologies.
+
+### **Contact Atyantik**
+- 🌐 [Website](https://atyantik.com)
+- 💼 [LinkedIn](https://linkedin.com/company/atyantik-technologies/)
+- 🐦 [Twitter](https://twitter.com/atyantik_tech)
+
+<p align="center">
+  <img src="https://cdn.atyantik.com/atyantik-logo.png" alt="Atyantik Technologies" width="200">
+</p>
+
+---
+
+Astroflare – Simplifying Edge-First Development with Cloudflare 🌍✨
+
+---
+
+### **Feedback and Support**
+
+If you have suggestions or run into issues, please [open an issue](https://github.com/Atyantik/astroflare/issues) or contact us directly. We value your feedback and contributions!
