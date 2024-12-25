@@ -7,9 +7,17 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": []
     },
+    "build:production": {
+      "dependsOn": [
+        "@services/db#build",
+        "@apps/web#build:remote"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": []
+    },
     "migrate:local": {
       "dependsOn": [
-        "@package/db#build",
+        "@services/db#build",
         "^migrate:local"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
