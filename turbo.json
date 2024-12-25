@@ -5,7 +5,15 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": []
+    },
+    "migrate:local": {
+      "dependsOn": [
+        "@package/db#build",
+        "^migrate:local"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": []
     },
     "lint": {
       "dependsOn": ["^lint"]

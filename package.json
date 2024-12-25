@@ -1,11 +1,13 @@
 {
   "name": "cloudflare-astro-apps",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "migrate:local": "turbo migrate:local",
+    "migrate:remote": "turbo migrate:remote"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
@@ -18,6 +20,9 @@
   "packageManager": "npm@11.0.0",
   "workspaces": [
     "apps/*",
-    "packages/*"
-  ]
+    "services/*"
+  ],
+  "dependencies": {
+    "wrangler": "^3.99.0"
+  }
 }

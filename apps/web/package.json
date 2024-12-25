@@ -1,27 +1,25 @@
 {
-  "name": "web",
-  "version": "0.1.0",
+  "name": "@app/web",
+  "version": "0.0.1",
   "type": "module",
-  "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "dev": "wrangler types && astro dev",
+    "build": "npm run build:local",
+    "build:local": "wrangler types && astro check && astro build && npm run migrate:local",
+    "build:remote": "wrangler types && astro check && astro build && npm run migrate:remote",
+    "migrate:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
+    "migrate:remote": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
+    "preview": "wrangler types && astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@repo/ui": "*",
-    "next": "^15.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "^12.1.0",
+    "astro": "^5.1.1",
+    "typescript": "^5.7.2",
+    "@package/db": "*"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "@types/node": "^20",
-    "@types/react": "18.3.1",
-    "@types/react-dom": "18.3.0",
-    "typescript": "5.5.4"
+    "tsx": "^4.19.2"
   }
 }
