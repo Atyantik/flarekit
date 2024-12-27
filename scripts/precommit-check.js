@@ -30,12 +30,14 @@ try {
     .split('\n')
     .filter((file) => file.startsWith(schemaPath.replace(/\\/g, '/'))); // Normalize path for Git
 
+  console.log(diffOutput);
+
   // If there are schema changes, run migrations
   if (diffOutput.length > 0) {
     console.log('Schema changes detected, generating migrations...');
     execSync('turbo run migrate --filter=@services/database', { stdio: 'inherit' }); // Run migration generation
     console.log('Migrations generated and staged.');
-    execSync('git add '. migrationsPath, { stdio: 'inherit' }); // Stage the migrations
+    execSync(`git add ${migrationsPath}`, { stdio: 'inherit' }); // Stage the migrations
   } else {
     console.log('No schema changes detected, skipping migration generation.');
   }
