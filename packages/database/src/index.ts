@@ -1,3 +1,3 @@
 export * from './client';
-export * from './services/storage';
-export * from './schema/storage';
+export * from './services/storage.service';
+export * from './schema/storage.schema';

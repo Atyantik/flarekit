@@ -21,6 +21,7 @@ export default defineConfig({
         "apps/web", // Temporary exclude web app
         "**/dist/**", // Exclude dist directories
         "**/tests/**", // Exclude tests directories
+        "**/__tests__/**", // Exclude tests directories
         "**/*.test.{ts,js}", // Exclude test files
         "**/*.d.ts", // Exclude TypeScript declaration files
         "node_modules/**", // Exclude dependencies
