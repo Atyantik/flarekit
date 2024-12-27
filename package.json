@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:ci": "CI=true vitest --run",
     "test:coverage": "vitest --run --coverage",
-    "prepare": "husky"
+    "prepare": "npm exec husky || echo 'Husky not found, skipping...'"
   },
   "devDependencies": {
     "@vitest/coverage-istanbul": "^2.1.8",
