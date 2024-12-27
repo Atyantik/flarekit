@@ -1,7 +1,7 @@
 import { sqliteTable, text, index, integer } from "drizzle-orm/sqlite-core";
 import { sql, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 
-// Files Table
+// Storage Schema
 export const storageSchema = sqliteTable('storage', {
   id: text('id').primaryKey(),
   key: text('key').notNull().unique(),
