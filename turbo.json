@@ -11,23 +11,13 @@
       "cache": false,
       "outputs": []
     },
-    "deploy:web:local": {
+    "deploy:web": {
       "dependsOn": [
         "@services/database#build",
-        "@apps/web#build",
-        "migrate:d1:local"
+        "@apps/web#build"
       ],
-      "inputs": [],
-      "outputs": []
-    },
-    "deploy:web:production": {
-      "dependsOn": [
-        "@services/database#build",
-        "@apps/web#build",
-        "migrate:d1:production"
-      ],
-      "inputs": [],
-      "outputs": []
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**"]
     }
   }
 }

@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "turbo dev",
-    "deploy:web:local": "turbo deploy:web:local",
-    "deploy:web:production": "turbo deploy:web:production",
+    "deploy:web": "turbo deploy:web",
     "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
     "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
     "test": "vitest",
