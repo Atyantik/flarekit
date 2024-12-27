@@ -1,1 +1,1 @@
-node scripts/precommit-check.js
+npm run migration:generate

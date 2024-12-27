@@ -6,21 +6,21 @@
       "cache": false,
       "persistent": true
     },
-    "migrate": {
+    "migration:generate": {
       "dependsOn": [],
       "inputs": [],
       "outputs": []
     },
     "migrate:local": {
       "dependsOn": [
-        "@services/database#migrate"
+        "@services/database#migration:generate"
       ],
       "inputs": [],
       "outputs": []
     },
     "migrate:production": {
       "dependsOn": [
-        "@services/database#migrate"
+        "@services/database#migration:generate"
       ],
       "inputs": [],
       "outputs": []

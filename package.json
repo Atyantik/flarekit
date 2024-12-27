@@ -6,6 +6,7 @@
     "build": "turbo build",
     "build:production": "turbo build:production",
     "dev": "turbo dev",
+    "migration:generate": "turbo migration:generate",
     "migrate:local": "turbo migrate:local",
     "migrate:production": "turbo migrate:production",
     "prepare": "husky"

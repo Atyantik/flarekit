@@ -30,7 +30,7 @@
     "build": "npm run migration:generate && npm run clean && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --module ESNext --outDir dist/esm",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "migrate": "drizzle-kit generate"
+    "migration:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
