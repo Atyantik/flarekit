@@ -9,7 +9,7 @@
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@utils/*": ["./src/utils/*"],
-      "@services/db/*": ["../../services/db/src/*"]
+      "@services/database/*": ["../../packages/database/src/*"]
     }
   }
 }

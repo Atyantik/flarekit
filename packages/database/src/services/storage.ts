@@ -1,4 +1,4 @@
-import { storageTable, type InsertStorageType } from "./schema/storage";
+import { storageSchema, type InsertStorageType } from "../schema/storage";
 import { and, eq, isNull } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { v7 as uuidv7 } from "uuid";
@@ -15,7 +15,7 @@ export const createFile = async (
   db: DrizzleD1Database,
 ) => {
   try {
-    const response = await db.insert(storageTable).values({
+    const response = await db.insert(storageSchema).values({
       ...file,
       id: uuidv7(),
     });
@@ -46,10 +46,10 @@ export const getFileFromKey = async (
   try {
     return (await db
       .select()
-      .from(storageTable).where(
+      .from(storageSchema).where(
         and(
-          eq(storageTable.key, key),
-          isNull(storageTable.deletedAt),
+          eq(storageSchema.key, key),
+          isNull(storageSchema.deletedAt),
         )
       )
       .limit(1))?.[0] || null;

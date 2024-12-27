@@ -2,7 +2,7 @@ import { sqliteTable, text, index, integer } from "drizzle-orm/sqlite-core";
 import { sql, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 
 // Files Table
-export const storageTable = sqliteTable('storage', {
+export const storageSchema = sqliteTable('storage', {
   id: text('id').primaryKey(),
   key: text('key').notNull().unique(),
   originalName: text('original_name').notNull(),
@@ -16,5 +16,5 @@ export const storageTable = sqliteTable('storage', {
   index('idx_r2_storage_key').on(t.key)
 ]);
 
-export type InsertStorageType = InferInsertModel<typeof storageTable>;
-export type SelectStorageType = InferSelectModel<typeof storageTable>;
+export type InsertStorageType = InferInsertModel<typeof storageSchema>;
+export type SelectStorageType = InferSelectModel<typeof storageSchema>;

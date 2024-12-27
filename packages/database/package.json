@@ -1,0 +1,43 @@
+{
+  "name": "@services/database",
+  "version": "1.0.0",
+  "description": "DB Schema and Services",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./client": {
+      "import": "./dist/esm/client.js",
+      "require": "./dist/cjs/client.js"
+    },
+    "./storage": {
+      "import": "./dist/esm/storage.js",
+      "require": "./dist/cjs/storage.js"
+    },
+    "./schema/*": {
+      "import": "./dist/esm/schema/*.js",
+      "require": "./dist/cjs/schema/*.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "dev": "tsc --module ESNext --outDir dist/esm --watch --preserveWatchOutput",
+    "build": "npm run migration:generate && npm run clean && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module ESNext --outDir dist/esm",
+    "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
+    "migrate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.2",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30.1"
+  }
+}

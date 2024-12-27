@@ -8,7 +8,7 @@
       "binding": "DB",
       "database_name": "cf-astro-d1",
       "database_id": "f8763464-9a96-40d8-a492-f737027a15ef",
-      "migrations_dir": "../../services/db/drizzle"
+      "migrations_dir": "../../packages/database/migrations"
     }
   ],
   "r2_buckets": [

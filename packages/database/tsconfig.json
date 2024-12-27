@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // Modern target for smaller bundles
+    "module": "ESNext", // Default to ESNext
+    "moduleResolution": "node", // Node.js module resolution
+    "lib": ["dom", "dom.iterable", "esnext"], // DOM and ESNext libraries
+    "declaration": true, // Generate type declarations
+    "declarationDir": "./dist/types", // Output directory for type declarations
+    "outDir": "./dist", // Common output directory
+    "rootDir": "./src", // Source directory
+    "strict": true, // Enable strict type checking
+    "esModuleInterop": true, // Interoperability with CommonJS modules
+    "skipLibCheck": true, // Skip type checking for dependencies
+    "forceConsistentCasingInFileNames": true, // Consistent file casing
+    "baseUrl": ".", // Base URL for imports
+    "paths": {
+      "@services/db/*": ["./src/*"],
+      "@schema/*": ["./src/schema/*"],
+      "@service/*": ["./src/service/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

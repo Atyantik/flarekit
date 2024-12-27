@@ -6,12 +6,12 @@
     "build": "turbo build",
     "build:production": "turbo build:production",
     "dev": "turbo dev",
-    "lint": "turbo lint",
     "migrate:local": "turbo migrate:local",
-    "migrate:remote": "turbo migrate:remote"
+    "migrate:production": "turbo migrate:production",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "husky": "^9.1.7",
     "turbo": "^2.3.3",
     "typescript": "5.5.4"
   },
@@ -21,7 +21,7 @@
   "packageManager": "npm@11.0.0",
   "workspaces": [
     "apps/*",
-    "services/*"
+    "packages/*"
   ],
   "dependencies": {
     "wrangler": "^3.99.0"

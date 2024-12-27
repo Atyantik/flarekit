@@ -2,6 +2,29 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "migrate": {
+      "dependsOn": [],
+      "inputs": [],
+      "outputs": []
+    },
+    "migrate:local": {
+      "dependsOn": [
+        "@services/database#migrate"
+      ],
+      "inputs": [],
+      "outputs": []
+    },
+    "migrate:production": {
+      "dependsOn": [
+        "@services/database#migrate"
+      ],
+      "inputs": [],
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -13,24 +36,6 @@
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": []
-    },
-    "migrate:local": {
-      "dependsOn": [
-        "@services/db#build",
-        "^migrate:local"
-      ],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": []
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
     }
   }
 }

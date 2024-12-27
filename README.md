@@ -115,7 +115,7 @@ Although the repo currently doesn’t include Cloudflare Workers apps, the struc
 ### **App-Specific Configuration**
 Each app or package may have its own configuration file. For example:
 - **`apps/web`:** Astro's configuration is defined in `astro.config.mjs`.
-- **`packages/db`:** Database configurations are handled internally.
+- **`servces/db`:** Database configurations are handled internally.
 
 ---
 
