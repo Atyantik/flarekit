@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { AnyD1Database, drizzle } from "drizzle-orm/d1";
-import { storageSchema } from "@schema/storage.schema";
-import { createStorageRecord, getStorageRecordFromKey } from "@services/storage.service";
+import { storageSchema } from "../../schema/storage.schema";
+import { createStorageRecord, getStorageRecordFromKey } from "../../services/storage.service";
 import { getTestDatabase } from "../scripts/global-setup";
 import { v7 as uuidv7 } from "uuid";
 import { eq } from "drizzle-orm";

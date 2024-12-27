@@ -17,6 +17,7 @@
   "devDependencies": {
     "@vitest/coverage-istanbul": "^2.1.8",
     "husky": "^9.1.7",
+    "tsc-alias": "^1.8.10",
     "turbo": "^2.3.3",
     "typescript": "^5.5.4",
     "vite-tsconfig-paths": "^5.1.4",

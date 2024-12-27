@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { AnyD1Database, drizzle } from "drizzle-orm/d1";
 import { getTestDatabase } from "../scripts/global-setup";
-import { storageSchema } from "@schema/storage.schema";
+import { storageSchema } from "../../schema/storage.schema";
 import { eq, sql } from "drizzle-orm";
 
 let db: AnyD1Database;
