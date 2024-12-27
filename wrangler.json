@@ -1,14 +1,13 @@
 {
-  "name": "astroflare-web",
+  "name": "astroflare",
   "compatibility_date": "2024-09-02",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "dist",
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "cf-astro-d1",
       "database_id": "f8763464-9a96-40d8-a492-f737027a15ef",
-      "migrations_dir": "../../packages/database/migrations"
+      "migrations_dir": "./packages/database/migrations"
     }
   ],
   "r2_buckets": [

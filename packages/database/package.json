@@ -9,8 +9,9 @@
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "rollup --config --watch",
-    "build": "npm run migration:generate && npm run clean && rollup --config",
-    "migration:generate": "drizzle-kit generate",
+    "build": "npm run build:distribution && npm run build:migrations",
+    "build:migrations": "drizzle-kit generate",
+    "build:distribution": "npm run clean && rollup --config",
     "test": "vitest --coverage"
   },
   "dependencies": {

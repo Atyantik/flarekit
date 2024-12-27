@@ -6,35 +6,27 @@
       "cache": false,
       "persistent": true
     },
-    "migration:generate": {
-      "dependsOn": [],
-      "inputs": [],
-      "outputs": []
-    },
-    "migrate:local": {
-      "dependsOn": [
-        "@services/database#migration:generate"
-      ],
-      "inputs": [],
-      "outputs": []
-    },
-    "migrate:production": {
-      "dependsOn": [
-        "@services/database#migration:generate"
-      ],
-      "inputs": [],
-      "outputs": []
-    },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false,
       "outputs": []
     },
-    "build:production": {
+    "deploy:web:local": {
       "dependsOn": [
-        "@services/database#build"
+        "@services/database#build",
+        "@apps/web#build",
+        "migrate:d1:local"
       ],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "inputs": [],
+      "outputs": []
+    },
+    "deploy:web:production": {
+      "dependsOn": [
+        "@services/database#build",
+        "@apps/web#build",
+        "migrate:d1:production"
+      ],
+      "inputs": [],
       "outputs": []
     }
   }
