@@ -32,7 +32,7 @@
     },
     "build:production": {
       "dependsOn": [
-        "@services/db#build"
+        "@services/database#build"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": []

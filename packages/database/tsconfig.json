@@ -3,16 +3,21 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
     "declarationDir": "./dist/types",
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "dist",
+    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/__tests__/**"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/__tests__/**"
+  ]
 }
