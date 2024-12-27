@@ -7,8 +7,11 @@ import {
 } from '@utils/r2-storage.util';
 import { computeShortHash } from '@utils/hash.util';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
-import { createFile, getFileFromKey } from '@services/db/storage';
-import type { SelectStorageType } from '@services/db/schema/storage';
+import {
+  createStorageRecord,
+  getStorageRecordFromKey,
+  type SelectStorageType,
+} from '@services/database';
 
 type R2Bucket = Env["STORAGE"];
 
@@ -62,16 +65,16 @@ async function handleUpload(
   }
 
   // Check if the DB Entry exists!
-  let fileFromKey = await getFileFromKey(key, db);
+  let fileFromKey = await getStorageRecordFromKey(key, db);
   if (!fileFromKey) {
-    await createFile({
+    await createStorageRecord({
       key,
       originalName: file.name,
       size: file.size,
       mimeType: file.type,
       hash: hashHex,
     }, db);
-    fileFromKey = await getFileFromKey(key, db);
+    fileFromKey = await getStorageRecordFromKey(key, db);
   }
 
   // Construct the CDN URL
@@ -123,7 +126,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
         ? error.message
         : 'Failed to upload image. Please try again later.';
     }
-
 
     return new Response(
       JSON.stringify({ error: errorMessage }),

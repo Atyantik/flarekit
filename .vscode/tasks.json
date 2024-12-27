@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Tests with Coverage",
+      "type": "shell",
+      "command": "npx vitest --coverage",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Display Coverage",
+      "type": "shell",
+      "command": "code --command coverage-gutters.displayCoverage",
+      "problemMatcher": [],
+      "dependsOn": "Run Tests with Coverage"
+    }
+  ]
+}

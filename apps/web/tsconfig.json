@@ -8,8 +8,7 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@services/database/*": ["../../packages/database/src/*"]
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }

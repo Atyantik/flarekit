@@ -9,19 +9,8 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./client": {
-      "import": "./dist/esm/client.js",
-      "require": "./dist/cjs/client.js"
-    },
-    "./storage": {
-      "import": "./dist/esm/storage.js",
-      "require": "./dist/cjs/storage.js"
-    },
-    "./schema/*": {
-      "import": "./dist/esm/schema/*.js",
-      "require": "./dist/cjs/schema/*.js"
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
   "scripts": {
@@ -30,7 +19,8 @@
     "build": "npm run migration:generate && npm run clean && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --module ESNext --outDir dist/esm",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "migration:generate": "drizzle-kit generate"
+    "migration:generate": "drizzle-kit generate",
+    "test": "vitest --coverage"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
@@ -38,6 +28,7 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.30.1"
+    "drizzle-kit": "^0.30.1",
+    "miniflare": "^3.20241218.0"
   }
 }

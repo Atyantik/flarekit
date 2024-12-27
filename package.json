@@ -9,12 +9,17 @@
     "migration:generate": "turbo migration:generate",
     "migrate:local": "turbo migrate:local",
     "migrate:production": "turbo migrate:production",
+    "test": "vitest",
+    "test:ci": "CI=true vitest --run",
+    "test:coverage": "vitest --run --coverage",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@vitest/coverage-istanbul": "^2.1.8",
     "husky": "^9.1.7",
     "turbo": "^2.3.3",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=18"

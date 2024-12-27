@@ -47,3 +47,9 @@ pnpm-debug.log*
 
 # SSL keys and certificates
 *.pem
+
+# Ignore vscode but inclide settings, extensions and tasks
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json

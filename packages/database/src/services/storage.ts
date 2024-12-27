@@ -4,26 +4,27 @@ import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { v7 as uuidv7 } from "uuid";
 
 /**
- * Creates a new file record in the database.
- * @param file - The file data to be inserted.
+ * Creates a new storage record in the database.
+ * @param storageRecord - The storage record to create.
  * @param db - The Drizzle database instance.
- * @returns The inserted file data.
- * @throws Error if the insertion fails.
+ * @returns The created storage record.
+ * @throws Error if the creation fails.
  */
-export const createFile = async (
-  file: Omit<InsertStorageType, "id">,
+export const createStorageRecord = async (
+  storageRecord: Omit<InsertStorageType, "id">,
   db: DrizzleD1Database,
 ) => {
   try {
+    const uid = uuidv7();
     const response = await db.insert(storageSchema).values({
-      ...file,
-      id: uuidv7(),
+      ...storageRecord,
+      id: uid,
     });
     if (response.success) {
       return {
-        ...file,
-        id: uuidv7(),
-      }
+        ...storageRecord,
+        id: uid,
+      };
     }
     throw response;
   } catch (err) {
@@ -33,13 +34,13 @@ export const createFile = async (
 };
 
 /**
- * Retrieves a file record from the database by its key.
- * @param key - The key of the file to retrieve.
+ * Retrieves a storage record from the database using the key.
+ * @param key - The key of the storage record.
  * @param db - The Drizzle database instance.
- * @returns The file data if found, otherwise null.
+ * @returns The storage record if found, otherwise null.
  * @throws Error if the retrieval fails.
  */
-export const getFileFromKey = async (
+export const getStorageRecordFromKey = async (
   key: string,
   db: DrizzleD1Database,
 ) => {
