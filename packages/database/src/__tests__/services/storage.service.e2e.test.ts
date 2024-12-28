@@ -25,8 +25,7 @@ describe('Storage Service Tests', () => {
   describe('createStorageRecord', () => {
     it('should successfully create a storage record', async () => {
       const mockUuid = 'mock-uuid';
-      const u7 = () => uuidv7();
-      vi.mocked(u7).mockReturnValue(mockUuid);
+      vi.mocked(uuidv7 as () => string).mockReturnValue(mockUuid);
 
       const newRecord = {
         key: 'file-key',
@@ -125,8 +124,7 @@ describe('Storage Service Tests', () => {
   describe('createStorageRecord (Throw Scenario)', () => {
     it('should throw the response if insert fails', async () => {
       const mockUuid = 'mock-uuid';
-      const u7 = () => uuidv7();
-      vi.mocked(u7).mockReturnValue(mockUuid);
+      vi.mocked(uuidv7 as () => string).mockReturnValue(mockUuid);
 
       const newRecord = {
         key: 'invalid-key', // Some valid mock data
