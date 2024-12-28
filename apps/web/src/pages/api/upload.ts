@@ -13,7 +13,7 @@ import {
   type SelectStorageType,
 } from '@services/database';
 
-type R2Bucket = Env["STORAGE"];
+type R2Bucket = Env['STORAGE'];
 
 /**
  * Generates a unique key for the file using its hash and name.
@@ -67,13 +67,16 @@ async function handleUpload(
   // Check if the DB Entry exists!
   let fileFromKey = await getStorageRecordFromKey(key, db);
   if (!fileFromKey) {
-    await createStorageRecord({
-      key,
-      originalName: file.name,
-      size: file.size,
-      mimeType: file.type,
-      hash: hashHex,
-    }, db);
+    await createStorageRecord(
+      {
+        key,
+        originalName: file.name,
+        size: file.size,
+        mimeType: file.type,
+        hash: hashHex,
+      },
+      db,
+    );
     fileFromKey = await getStorageRecordFromKey(key, db);
   }
 
@@ -81,8 +84,8 @@ async function handleUpload(
   const fileUrl = constructCdnUrl(mode, cdnUrlEnv, requestUrl, key);
   return {
     ...fileFromKey,
-    url: fileUrl
-  }
+    url: fileUrl,
+  };
 }
 
 /**
@@ -90,7 +93,7 @@ async function handleUpload(
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const { STORAGE: storage, PUBLIC_CDN_URL } = locals.runtime.env;
-  const { dbClient } = locals
+  const { dbClient } = locals;
   const mode = import.meta.env.MODE;
   const requestUrl = request.url;
 
@@ -109,11 +112,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
     );
 
     // Respond with the image URL
-    return new Response(
-      JSON.stringify(fileData),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    );
-
+    return new Response(JSON.stringify(fileData), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     let errorMessage = 'Failed to upload image. Please try again later.';
     let status = 500;
@@ -122,17 +124,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
       // Determine error type for appropriate response
       status = error.message.includes('No image file') ? 400 : 500;
-      errorMessage = status === 400
-        ? error.message
-        : 'Failed to upload image. Please try again later.';
+      errorMessage =
+        status === 400
+          ? error.message
+          : 'Failed to upload image. Please try again later.';
     }
 
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        status,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };

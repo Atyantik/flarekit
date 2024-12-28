@@ -1,7 +1,10 @@
-import { storageSchema, type InsertStorageType } from "../schema/storage.schema";
-import { and, eq, isNull } from "drizzle-orm";
-import type { DrizzleD1Database } from "drizzle-orm/d1";
-import { v7 as uuidv7 } from "uuid";
+import {
+  storageSchema,
+  type InsertStorageType,
+} from '../schema/storage.schema';
+import { and, eq, isNull } from 'drizzle-orm';
+import type { DrizzleD1Database } from 'drizzle-orm/d1';
+import { v7 as uuidv7 } from 'uuid';
 
 /**
  * Creates a new storage record in the database.
@@ -11,7 +14,7 @@ import { v7 as uuidv7 } from "uuid";
  * @throws Error if the creation fails.
  */
 export const createStorageRecord = async (
-  storageRecord: Omit<InsertStorageType, "id">,
+  storageRecord: Omit<InsertStorageType, 'id'>,
   db: DrizzleD1Database,
 ) => {
   try {
@@ -45,15 +48,17 @@ export const getStorageRecordFromKey = async (
   db: DrizzleD1Database,
 ) => {
   try {
-    return (await db
-      .select()
-      .from(storageSchema).where(
-        and(
-          eq(storageSchema.key, key),
-          isNull(storageSchema.deletedAt),
-        )
-      )
-      .limit(1))?.[0] || null;
+    return (
+      (
+        await db
+          .select()
+          .from(storageSchema)
+          .where(
+            and(eq(storageSchema.key, key), isNull(storageSchema.deletedAt)),
+          )
+          .limit(1)
+      )?.[0] || null
+    );
   } catch (err) {
     console.error(err);
     throw err;

@@ -16,10 +16,10 @@ export default {
   ],
   plugins: [
     // Resolves node_modules imports
-    resolve(),       
+    resolve(),
     // Converts CommonJS modules to ES6
     commonjs(),
     // Compiles TypeScript
-    typescript(),    
+    typescript(),
   ],
 };

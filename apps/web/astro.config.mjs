@@ -9,13 +9,13 @@ export default defineConfig({
     platformProxy: {
       enabled: true,
       persist: {
-        path: "../../.wrangler/state/v3",
-      }
-    }
+        path: '../../.wrangler/state/v3',
+      },
+    },
   }),
   vite: {
     optimizeDeps: {
       include: ['@services/database'],
     },
-  }
+  },
 });

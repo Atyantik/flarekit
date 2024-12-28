@@ -1,4 +1,4 @@
-type R2Bucket = Env['STORAGE']
+type R2Bucket = Env['STORAGE'];
 
 /**
  * Validates the uploaded file.
@@ -19,7 +19,10 @@ export function validateFile(file: FormDataEntryValue | null): File {
  * @param key - The unique key of the file.
  * @returns A boolean indicating existence.
  */
-export async function fileExists(storage: R2Bucket, key: string): Promise<boolean> {
+export async function fileExists(
+  storage: R2Bucket,
+  key: string,
+): Promise<boolean> {
   try {
     const file = await storage.get(key);
     return !!file;
@@ -39,7 +42,7 @@ export async function uploadFile(
   storage: R2Bucket,
   key: string,
   arrayBuffer: ArrayBuffer,
-  contentType: string
+  contentType: string,
 ): Promise<void> {
   await storage.put(key, arrayBuffer, {
     httpMetadata: {
@@ -60,15 +63,12 @@ export function constructCdnUrl(
   mode: string,
   cdnUrl: string | undefined,
   requestUrl: string,
-  key: string
+  key: string,
 ): string {
   const isProduction = mode === 'production';
-  const baseCdnUrl = (
-    isProduction
-    && typeof cdnUrl === 'string'
-    && cdnUrl.length
-  )
-    ? cdnUrl
-    : new URL('/cdn/', requestUrl);
+  const baseCdnUrl =
+    isProduction && typeof cdnUrl === 'string' && cdnUrl.length
+      ? cdnUrl
+      : new URL('/cdn/', requestUrl);
   return new URL(key, baseCdnUrl).toString();
 }

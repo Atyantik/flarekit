@@ -75,16 +75,12 @@
       "indexes": {
         "storage_key_unique": {
           "name": "storage_key_unique",
-          "columns": [
-            "key"
-          ],
+          "columns": ["key"],
           "isUnique": true
         },
         "idx_r2_storage_key": {
           "name": "idx_r2_storage_key",
-          "columns": [
-            "key"
-          ],
+          "columns": ["key"],
           "isUnique": false
         }
       },

@@ -1,8 +1,8 @@
 {
-"recommendations": [
-    "vitest.explorer",
-    "ryanluker.vscode-coverage-gutters"
-  ],
+  "recommendations": ["vitest.explorer", "ryanluker.vscode-coverage-gutters"],
   "coverage-gutters.coverageFilePaths": ["./coverage/lcov.info"],
-  "coverage-gutters.showGutterCoverage": true
+  "coverage-gutters.showGutterCoverage": true,
+  "editor.formatOnSave": true,
+  "eslint.validate": ["javascript", "typescript"],
+  "prettier.requireConfig": true
 }

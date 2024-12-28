@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { getTestDatabase } from "./scripts/global-setup";
-import { getDBClient } from "../client";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { getTestDatabase } from './scripts/global-setup';
+import { getDBClient } from '../client';
 
 let db: any; // The actual D1 database instance
 
@@ -9,8 +9,8 @@ beforeEach(() => {
   db = getTestDatabase();
 });
 
-describe("getDBClient", () => {
-  it("should return a valid drizzle instance", async () => {
+describe('getDBClient', () => {
+  it('should return a valid drizzle instance', async () => {
     const reference = {}; // A mock reference object
 
     // Call the function to get the drizzle instance
@@ -18,10 +18,10 @@ describe("getDBClient", () => {
 
     // Verify that drizzleInstance is a valid object
     expect(drizzleInstance).toBeDefined();
-    expect(typeof drizzleInstance).toBe("object");
+    expect(typeof drizzleInstance).toBe('object');
   });
 
-  it("should reuse the same drizzle instance for the same reference", async () => {
+  it('should reuse the same drizzle instance for the same reference', async () => {
     const reference = {}; // A mock reference object
 
     // Get the drizzle instance for the first time
@@ -34,7 +34,7 @@ describe("getDBClient", () => {
     expect(drizzleInstance1).toBe(drizzleInstance2);
   });
 
-  it("should create a new drizzle instance for a different reference", async () => {
+  it('should create a new drizzle instance for a different reference', async () => {
     const reference1 = {}; // First reference
     const reference2 = {}; // Second reference
 

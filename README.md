@@ -12,6 +12,7 @@ This project is supported and sponsored by [Atyantik Technologies](https://atyan
 ---
 
 ## **Table of Contents**
+
 - [Features](#features)
 - [Current Structure](#current-structure)
 - [Future Scope](#future-scope)
@@ -37,6 +38,7 @@ This project is supported and sponsored by [Atyantik Technologies](https://atyan
 ## **Current Structure**
 
 Astroflare is currently focused on providing:
+
 - A **web application** built with Astro.
 - A basic structure for future apps and services.
 
@@ -55,16 +57,17 @@ astroflare/
 
 ### **Available Packages**
 
-| Package         | Description                                     |
-|------------------|-------------------------------------------------|
-| `@apps/web`      | The primary web frontend built with Astro.      |
-| `@services/db`   | Database utilities and schema for the project. |
+| Package        | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `@apps/web`    | The primary web frontend built with Astro.     |
+| `@services/db` | Database utilities and schema for the project. |
 
 ---
 
 ## **Future Scope**
 
 Astroflare is designed with extensibility in mind. Future plans include:
+
 - **New Applications**:
   - `@apps/api`: Cloudflare Worker-based API services.
 - **Reusable Services**:
@@ -79,33 +82,40 @@ These features will be introduced incrementally, and contributions are welcome!
 ## **Getting Started**
 
 ### **1. Clone the Repository**
+
 ```bash
 git clone https://github.com/Atyantik/astroflare.git
 cd astroflare
 ```
 
 ### **2. Install Dependencies**
+
 ```bash
 npm install
 ```
 
 ### **3. Run the Development Server**
+
 Start the web application:
+
 ```bash
 npm run dev
 ```
 
 ### **4. Build for Local**
+
 ```bash
 npm turbo build
 ```
 
 ### **5. Build for Production**
+
 ```bash
 npm turbo build:production
 ```
 
 ### **5. Deploy to Cloudflare Workers**
+
 Although the repo currently doesn’t include Cloudflare Workers apps, the structure is ready for future deployments.
 
 ---
@@ -113,7 +123,9 @@ Although the repo currently doesn’t include Cloudflare Workers apps, the struc
 ## **Configuration**
 
 ### **App-Specific Configuration**
+
 Each app or package may have its own configuration file. For example:
+
 - **`apps/web`:** Astro's configuration is defined in `astro.config.mjs`.
 - **`servces/db`:** Database configurations are handled internally.
 
@@ -124,6 +136,7 @@ Each app or package may have its own configuration file. For example:
 We’re building Astroflare to support modern, scalable web development. Contributions are welcome to help improve its features and extend its scope.
 
 ### **How to Contribute**
+
 1. Fork the repository.
 2. Create a new branch:
    ```bash
@@ -152,6 +165,7 @@ Astroflare is licensed under the [MIT License](LICENSE).
 Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**, a leading software development company specializing in scalable web applications, cloud services, and cutting-edge technologies.
 
 ### **Contact Atyantik**
+
 - 🌐 [Website](https://atyantik.com)
 - 💼 [LinkedIn](https://linkedin.com/company/atyantik-technologies/)
 - 🐦 [Twitter](https://twitter.com/atyantik_tech)

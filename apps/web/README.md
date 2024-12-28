@@ -5,6 +5,7 @@ This repository contains the **Astroflare Web App**, a high-performance, edge-fi
 ---
 
 ## **Table of Contents**
+
 - [Overview](#overview)
 - [Features](#features)
 - [Getting Started](#getting-started)
@@ -18,6 +19,7 @@ This repository contains the **Astroflare Web App**, a high-performance, edge-fi
 ## **Overview**
 
 The Astroflare Web App is part of the Astroflare ecosystem. This project leverages:
+
 - **Astro**: For creating fast, SEO-friendly frontends.
 - **Cloudflare Pages**: For edge-first deployment and serverless APIs.
 - **D1**: Cloudflare’s database for lightweight and scalable storage.
@@ -38,30 +40,38 @@ The Astroflare Web App is part of the Astroflare ecosystem. This project leverag
 ## **Getting Started**
 
 ### **1. Clone the Repository**
+
 ```bash
 git clone https://github.com/Atyantik/astroflare.git
 cd apps/web
 ```
 
 ### **2. Install Dependencies**
+
 ```bash
 npm install
 ```
 
 ### **3. Run the Development Server**
+
 Start the local development server with Cloudflare workers and types:
+
 ```bash
 npm run dev
 ```
 
 ### **4. Build for Production**
+
 Build the application and apply D1 migrations:
+
 ```bash
 npm run build:production
 ```
 
 ### **5. Preview the Build**
+
 Preview the production build locally:
+
 ```bash
 npm run preview
 ```
@@ -72,15 +82,15 @@ npm run preview
 
 The following npm scripts are available in the `package.json`:
 
-| Command                  | Description                                                                                  |
-|--------------------------|----------------------------------------------------------------------------------------------|
-| `npm run dev`            | Starts the development server with Cloudflare worker types.                                  |
-| `npm run build:local`    | Builds the application for local development and applies D1 migrations locally.              |
-| `npm run build:production` | Builds the application for production and applies D1 migrations to the remote environment. |
-| `npm run migrate:local`  | Applies D1 migrations to the local database.                                                 |
-| `npm run migrate:production` | Applies D1 migrations to the remote production database.                                 |
-| `npm run preview`        | Previews the production build locally.                                                       |
-| `npm run astro`          | Runs Astro CLI commands.                                                                     |
+| Command                      | Description                                                                                |
+| ---------------------------- | ------------------------------------------------------------------------------------------ |
+| `npm run dev`                | Starts the development server with Cloudflare worker types.                                |
+| `npm run build:local`        | Builds the application for local development and applies D1 migrations locally.            |
+| `npm run build:production`   | Builds the application for production and applies D1 migrations to the remote environment. |
+| `npm run migrate:local`      | Applies D1 migrations to the local database.                                               |
+| `npm run migrate:production` | Applies D1 migrations to the remote production database.                                   |
+| `npm run preview`            | Previews the production build locally.                                                     |
+| `npm run astro`              | Runs Astro CLI commands.                                                                   |
 
 ---
 
@@ -134,6 +144,7 @@ Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https
 </p>
 
 ### **Contact Atyantik**
+
 - 🌐 [Website](https://atyantik.com)
 - 💼 [LinkedIn](https://www.linkedin.com/company/atyantik-technologies/)
 - 🐦 [Twitter](https://twitter.com/atyantik_tech)

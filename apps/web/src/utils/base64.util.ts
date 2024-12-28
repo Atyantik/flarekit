@@ -31,9 +31,7 @@ export function base64UrlEncode(binaryStr: string): string {
  */
 export function base64UrlDecode(base64UrlStr: string): string {
   // Replace URL-safe characters back to standard Base64 characters
-  let base64 = base64UrlStr
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
+  let base64 = base64UrlStr.replace(/-/g, '+').replace(/_/g, '/');
 
   // Pad with '=' characters to make the length a multiple of 4
   while (base64.length % 4 !== 0) {

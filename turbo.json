@@ -12,10 +12,7 @@
       "outputs": []
     },
     "deploy:web": {
-      "dependsOn": [
-        "@services/database#build",
-        "@apps/web#build"
-      ],
+      "dependsOn": ["@services/database#build", "@apps/web#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
     }

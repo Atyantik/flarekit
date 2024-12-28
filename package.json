@@ -10,14 +10,24 @@
     "test": "vitest",
     "test:ci": "CI=true vitest --run",
     "test:coverage": "vitest --run --coverage",
-    "prepare": "npm exec husky || echo 'Husky not found, skipping...'"
+    "prepare": "npm exec husky || echo 'Husky not found, skipping...'",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@vitest/coverage-istanbul": "^2.1.8",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.3",
+    "globals": "^15.14.0",
     "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
     "tsc-alias": "^1.8.10",
     "turbo": "^2.3.3",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.18.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
     "wrangler": "^3.99.0"

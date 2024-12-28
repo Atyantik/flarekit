@@ -1,10 +1,9 @@
-import { Miniflare } from "miniflare";
+import { Miniflare } from 'miniflare';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { beforeAll, afterAll } from "vitest";
-import { applyMigrations } from "./migration-runner";
-import { AnyD1Database } from "drizzle-orm/d1";
-
+import { beforeAll, afterAll } from 'vitest';
+import { applyMigrations } from './migration-runner';
+import { AnyD1Database } from 'drizzle-orm/d1';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -15,7 +14,7 @@ export const setupMiniflare = async () => {
   mf = new Miniflare({
     modules: true,
     d1Databases: {
-      DB: ":memory:", // Use an in-memory SQLite database for testing
+      DB: ':memory:', // Use an in-memory SQLite database for testing
     },
     script: `
       export default {
@@ -26,20 +25,13 @@ export const setupMiniflare = async () => {
     `,
   });
   try {
-
     const env = await mf.getBindings();
     db = env.DB; // Get the D1 database binding from Miniflare
 
     // Apply migrations from the migrations directory
-    await applyMigrations(db, join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'migrations',
-    ));
+    await applyMigrations(db, join(__dirname, '..', '..', '..', 'migrations'));
 
-    console.log("Migrations applied to in-memory database.");
+    console.log('Migrations applied to in-memory database.');
   } catch (ex) {
     console.error(ex);
   }
@@ -51,4 +43,3 @@ beforeAll(setupMiniflare);
 afterAll(disposeMiniflare);
 
 export const getTestDatabase = () => db; // Provide access to the test database
-
