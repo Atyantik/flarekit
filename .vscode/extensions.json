@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "vitest.explorer",
+    "ryanluker.vscode-coverage-gutters",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "astro-build.astro-vscode",
+    "svelte.svelte-vscode"
+  ],
+  "unwantedRecommendations": []
+}

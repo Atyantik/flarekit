@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { getTestDatabase } from './scripts/global-setup';
 import { getDBClient } from '../client';
 
+// eslint-disable-next-line
 let db: any; // The actual D1 database instance
 
 beforeEach(() => {

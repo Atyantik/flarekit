@@ -1,5 +1,4 @@
 {
-  "recommendations": ["vitest.explorer", "ryanluker.vscode-coverage-gutters"],
   "coverage-gutters.coverageFilePaths": ["./coverage/lcov.info"],
   "coverage-gutters.showGutterCoverage": true,
   "editor.formatOnSave": true,

@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AnyD1Database, drizzle } from 'drizzle-orm/d1';
-import { storageSchema } from '../../schema/storage.schema';
+import { storageSchema } from '@schema/storage.schema';
 import {
   createStorageRecord,
   getStorageRecordFromKey,
-} from '../../services/storage.service';
+} from '@services/storage.service';
 import { getTestDatabase } from '../scripts/global-setup';
 import { v7 as uuidv7 } from 'uuid';
 import { eq } from 'drizzle-orm';
@@ -25,7 +25,7 @@ describe('Storage Service Tests', () => {
   describe('createStorageRecord', () => {
     it('should successfully create a storage record', async () => {
       const mockUuid = 'mock-uuid';
-      vi.mocked(uuidv7).mockReturnValue(mockUuid as any);
+      vi.mocked(() => uuidv7()).mockReturnValue(mockUuid);
 
       const newRecord = {
         key: 'file-key',
@@ -71,7 +71,8 @@ describe('Storage Service Tests', () => {
 
       // Attempt to create an invalid record
       await expect(
-        createStorageRecord(invalidRecord as any, db),
+        // @ts-expect-error we are testing the error case when key is null
+        createStorageRecord(invalidRecord, db),
       ).rejects.toThrow();
     });
   });
@@ -123,7 +124,7 @@ describe('Storage Service Tests', () => {
   describe('createStorageRecord (Throw Scenario)', () => {
     it('should throw the response if insert fails', async () => {
       const mockUuid = 'mock-uuid';
-      vi.mocked(uuidv7).mockReturnValue(mockUuid as any);
+      vi.mocked(() => uuidv7()).mockReturnValue(mockUuid);
 
       const newRecord = {
         key: 'invalid-key', // Some valid mock data
