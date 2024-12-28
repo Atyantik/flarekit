@@ -90,12 +90,6 @@ describe('Storage Schema Tests with Drizzle Instance', () => {
 
     // Insert the record without specifying createdAt
     await db.insert(storageSchema).values(record);
-
-    // Retrieve the record and validate createdAt
-    const [retrievedRecord] = await db
-      .select()
-      .from(storageSchema)
-      .where(eq(storageSchema.key, 'default-createdAt-key'));
   });
 
   it("should update a record's updatedAt column", async () => {
@@ -165,7 +159,7 @@ describe('Storage Schema Tests with Drizzle Instance', () => {
 
     // Validate the index exists and is associated with the correct column
     const indexColumns = indexes?.results?.map?.(
-      (index: Record<any, any>) => index.name,
+      (index: { name: string }) => index.name,
     );
     expect(indexColumns).toContain('key');
   });
@@ -178,7 +172,7 @@ describe('Storage Schema Tests with Drizzle Instance', () => {
 
     // Validate the index exists in the table
     const indexNames = tableIndexes?.results?.map?.(
-      (index: Record<any, any>) => index.name,
+      (index: { name: string }) => index.name,
     );
     expect(indexNames).toContain('idx_r2_storage_key');
   });

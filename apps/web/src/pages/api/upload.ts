@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import type { R2Bucket } from "@cloudflare/workers-types";
 import {
   constructCdnUrl,
   fileExists,
@@ -12,8 +13,6 @@ import {
   getStorageRecordFromKey,
   type SelectStorageType,
 } from '@services/database';
-
-type R2Bucket = Env['STORAGE'];
 
 /**
  * Generates a unique key for the file using its hash and name.
@@ -92,7 +91,13 @@ async function handleUpload(
  * POST route handler for uploading images to R2.
  */
 export const POST: APIRoute = async ({ request, locals }) => {
-  const { STORAGE: storage, PUBLIC_CDN_URL } = locals.runtime.env;
+  const { PUBLIC_CDN_URL } = locals.runtime.env;
+  // @ts-expect-error we are using STORAGE from wrangler and types which has different 
+  // signatures than the one from the worker
+  const storage = locals.runtime.env.STORAGE as R2Bucket;
+  if (!storage) {
+    throw new Error('You need to add storage binding to the environment.');
+  }
   const { dbClient } = locals;
   const mode = import.meta.env.MODE;
   const requestUrl = request.url;
@@ -100,7 +105,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse form data
     const formData = await request.formData();
-
     // Handle the upload process
     const fileData = await handleUpload(
       formData,

@@ -9,5 +9,5 @@ export default defineConfig({
       exclude: ['./src/__tests__'], // Exclude test files from coverage
     },
   },
-  plugins: [tsconfigPaths() as any],
+  plugins: [tsconfigPaths()],
 });

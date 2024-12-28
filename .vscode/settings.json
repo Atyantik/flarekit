@@ -2,6 +2,12 @@
   "coverage-gutters.coverageFilePaths": ["./coverage/lcov.info"],
   "coverage-gutters.showGutterCoverage": true,
   "editor.formatOnSave": true,
-  "eslint.validate": ["javascript", "typescript"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "astro", // Enable .astro
+    "typescript", // Enable .ts
+    "typescriptreact" // Enable .tsx
+  ],
   "prettier.requireConfig": true
 }

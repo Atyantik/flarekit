@@ -1,4 +1,4 @@
-type R2Bucket = Env['STORAGE'];
+import type { R2Bucket } from "@cloudflare/workers-types";
 
 /**
  * Validates the uploaded file.
@@ -6,7 +6,7 @@ type R2Bucket = Env['STORAGE'];
  * @returns The validated File object.
  * @throws Error if validation fails.
  */
-export function validateFile(file: FormDataEntryValue | null): File {
+export function validateFile(file: File | null): File {
   if (!file || !(file instanceof File)) {
     throw new Error('No image file provided or invalid file type.');
   }

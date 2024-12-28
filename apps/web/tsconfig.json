@@ -3,8 +3,10 @@
   "include": [".astro/types.d.ts", "**/*", "../../scripts"],
   "exclude": ["dist"],
   "compilerOptions": {
+    "lib": ["DOM", "ESNext"],
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "types": ["@cloudflare/workers-types"],
     "paths": {
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
