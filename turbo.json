@@ -2,9 +2,37 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "dev": {
+    "@services/database#build": {
       "cache": false,
-      "persistent": true
+      "outputs": ["dist/**"]
+    },
+    "@services/database#dev": {
+      "dependsOn": ["@services/database#build"],
+      "cache": false,
+      "persistent": true,
+      "outputs": []
+    },
+    "@apps/web#dev": {
+      "dependsOn": ["@services/database#build"],
+      "cache": false,
+      "persistent": true,
+      "outputs": []
+    },
+    "dev": {
+      "dependsOn": [],
+      "cache": false,
+      "outputs": []
+    },
+    "dev:web": {
+      "dependsOn": [
+        "@services/database#dev",
+        "@apps/web#dev",
+        "@apps/worker#dev"
+      ],
+      "persistent": true,
+      "cache": false,
+      "inputs": [],
+      "outputs": []
     },
     "build": {
       "dependsOn": ["^build"],

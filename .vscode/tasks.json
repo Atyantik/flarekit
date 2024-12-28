@@ -2,25 +2,63 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run Tests with Coverage",
+      // 1) Dev server
+      "label": "dev",
       "type": "shell",
-      "command": "npx vitest --coverage",
-      "problemMatcher": [],
+      "command": "npm run dev",
       "group": {
-        "kind": "test",
+        // This lets VS Code consider it a "build" task
+        "kind": "build",
         "isDefault": true
       },
+      "problemMatcher": [],
       "presentation": {
         "reveal": "always",
         "panel": "shared"
       }
     },
     {
-      "label": "Display Coverage",
+      // 2) Run normal tests (no coverage)
+      "label": "test",
+      "type": "shell",
+      "command": "npm run test",
+      "group": {
+        // Typically a "test" group
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      // 3) Run tests with coverage
+      "label": "test:coverage",
+      "type": "shell",
+      "command": "npm run test:coverage",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      // 4) Display coverage (depends on test:coverage)
+      "label": "coverage:display",
       "type": "shell",
       "command": "code --command coverage-gutters.displayCoverage",
       "problemMatcher": [],
-      "dependsOn": "Run Tests with Coverage"
+      "dependsOn": "test:coverage",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 }

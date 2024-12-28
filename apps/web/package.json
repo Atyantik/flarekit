@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "wrangler types && astro dev",
-    "build": "wrangler types && astro build",
-    "preview": "wrangler pages dev ./dist",
-    "astro": "astro"
+    "dev": "npm run setup && astro dev",
+    "build": "npm run setup && astro build",
+    "preview": "npm run setup && wrangler pages dev ./dist",
+    "astro": "npm run setup && astro",
+    "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

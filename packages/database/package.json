@@ -12,7 +12,7 @@
     "build": "npm run build:distribution && npm run build:migrations",
     "build:migrations": "drizzle-kit generate",
     "build:distribution": "npm run clean && rollup --config",
-    "test": "vitest --coverage"
+    "test": "CI=true vitest run --coverage"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

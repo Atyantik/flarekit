@@ -1,0 +1,32 @@
+name: Deploy @apps/web to Cloudflare Pages with Wrangler
+
+on:
+  push:
+    branches:
+      - main # or whichever branch you want to deploy from
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build the project
+        run: npm i && npm run deploy:web
+
+      - name: Run migrations on production
+        run: npm run migrate:d1:production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # Deploy using Wrangler Action
+      - name: Deploy astroflare-web to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: './apps/web'
+          command: pages deploy ./dist
