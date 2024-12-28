@@ -1,20 +1,20 @@
-import globals from 'globals';
-import eslintPluginAstro from 'eslint-plugin-astro';
-import astroParser from 'astro-eslint-parser';
-import tsParser from '@typescript-eslint/parser';
-import rootConfig from '../../eslint.config.js';
+import globals from "globals";
+import eslintPluginAstro from "eslint-plugin-astro";
+import astroParser from "astro-eslint-parser";
+import tsParser from "@typescript-eslint/parser";
+import rootConfig from "../../eslint.config.js";
 
 export default [
   ...rootConfig,
   {
     settings: {
       react: {
-        version: 'detect', // Automatically detect React version
+        version: "detect", // Automatically detect React version
       },
     },
   },
   {
-    files: ['**/*.astro'],
+    files: ["**/*.astro"],
     plugins: {
       astro: eslintPluginAstro,
     },
@@ -27,8 +27,8 @@ export default [
       parserOptions: {
         parser: tsParser, // Use TypeScript parser for embedded scripts
         ecmaVersion: 2021,
-        sourceType: 'module',
-        extraFileExtensions: ['.astro'],
+        sourceType: "module",
+        extraFileExtensions: [".astro"],
       },
     },
     rules: {
@@ -45,7 +45,7 @@ export default [
     },
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.json",
       },
     },
   },

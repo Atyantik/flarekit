@@ -1,18 +1,18 @@
-import type { APIRoute } from 'astro';
+import type { APIRoute } from "astro";
 import type { R2Bucket } from "@cloudflare/workers-types";
 import {
   constructCdnUrl,
   fileExists,
   uploadFile,
   validateFile,
-} from '@utils/r2-storage.util';
-import { computeShortHash } from '@utils/hash.util';
-import type { DrizzleD1Database } from 'drizzle-orm/d1';
+} from "@utils/r2-storage.util";
+import { computeShortHash } from "@utils/hash.util";
+import type { DrizzleD1Database } from "drizzle-orm/d1";
 import {
   createStorageRecord,
   getStorageRecordFromKey,
   type SelectStorageType,
-} from '@services/database';
+} from "@services/database";
 
 /**
  * Generates a unique key for the file using its hash and name.
@@ -43,7 +43,7 @@ async function handleUpload(
   db: DrizzleD1Database,
 ): Promise<SelectStorageType & { url: string }> {
   // Validate the image
-  const file = validateFile(formData.get('file'));
+  const file = validateFile(formData.get("file"));
 
   // Read the file content as ArrayBuffer
   const arrayBuffer = await file.arrayBuffer();
@@ -92,11 +92,11 @@ async function handleUpload(
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const { PUBLIC_CDN_URL } = locals.runtime.env;
-  // @ts-expect-error we are using STORAGE from wrangler and types which has different 
+  // @ts-expect-error we are using STORAGE from wrangler and types which has different
   // signatures than the one from the worker
   const storage = locals.runtime.env.STORAGE as R2Bucket;
   if (!storage) {
-    throw new Error('You need to add storage binding to the environment.');
+    throw new Error("You need to add storage binding to the environment.");
   }
   const { dbClient } = locals;
   const mode = import.meta.env.MODE;
@@ -118,25 +118,25 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Respond with the image URL
     return new Response(JSON.stringify(fileData), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    let errorMessage = 'Failed to upload image. Please try again later.';
+    let errorMessage = "Failed to upload image. Please try again later.";
     let status = 500;
     if (error instanceof Error) {
-      console.error('Error uploading image:', error.message);
+      console.error("Error uploading image:", error.message);
 
       // Determine error type for appropriate response
-      status = error.message.includes('No image file') ? 400 : 500;
+      status = error.message.includes("No image file") ? 400 : 500;
       errorMessage =
         status === 400
           ? error.message
-          : 'Failed to upload image. Please try again later.';
+          : "Failed to upload image. Please try again later.";
     }
 
     return new Response(JSON.stringify({ error: errorMessage }), {
       status,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 };

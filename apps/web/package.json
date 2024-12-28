@@ -11,11 +11,13 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.1.0",
+    "@services/database": "*",
     "astro": "^5.1.1",
-    "typescript": "^5.7.2",
-    "@services/database": "*"
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1",
     "tsx": "^4.19.2"
   }
 }

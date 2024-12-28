@@ -1,4 +1,4 @@
-import { base64UrlEncode } from '@utils/base64.util';
+import { base64UrlEncode } from "@utils/base64.util";
 
 /**
  * Computes the SHA-256 hash of the given ArrayBuffer, encodes it in URL-safe Base64,
@@ -9,11 +9,11 @@ import { base64UrlEncode } from '@utils/base64.util';
 export async function computeShortHash(
   arrayBuffer: ArrayBuffer,
 ): Promise<string> {
-  const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
   const hashArray = new Uint8Array(hashBuffer);
 
   // Convert ArrayBuffer to binary string
-  let hashString = '';
+  let hashString = "";
   for (let i = 0; i < hashArray.length; i++) {
     hashString += String.fromCharCode(hashArray[i]);
   }

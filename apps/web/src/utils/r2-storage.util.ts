@@ -8,7 +8,7 @@ import type { R2Bucket } from "@cloudflare/workers-types";
  */
 export function validateFile(file: File | null): File {
   if (!file || !(file instanceof File)) {
-    throw new Error('No image file provided or invalid file type.');
+    throw new Error("No image file provided or invalid file type.");
   }
   return file;
 }
@@ -65,10 +65,10 @@ export function constructCdnUrl(
   requestUrl: string,
   key: string,
 ): string {
-  const isProduction = mode === 'production';
+  const isProduction = mode === "production";
   const baseCdnUrl =
-    isProduction && typeof cdnUrl === 'string' && cdnUrl.length
+    isProduction && typeof cdnUrl === "string" && cdnUrl.length
       ? cdnUrl
-      : new URL('/cdn/', requestUrl);
+      : new URL("/cdn/", requestUrl);
   return new URL(key, baseCdnUrl).toString();
 }

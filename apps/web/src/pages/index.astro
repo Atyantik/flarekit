@@ -1,35 +1,33 @@
 ---
-import Layout from '@layouts/Layout.astro';
+import Layout from "@layouts/Layout.astro";
 
 // Get the server time to calculate approx page load time
 const serverTime = Date.now();
-
 ---
 
 <Layout>
-	<div class="center">
-		<h1>
-			Cloudflare + Astro
-		</h1>
-		<div>
-			⚡ Blazing Fast, Budget Friendly, Built to Scale
-			<p id="loadTime"></p>
-		</div>
-	</div>
+  <div class="center">
+    <h1>Cloudflare + Astro</h1>
+    <div>
+      ⚡ Blazing Fast, Budget Friendly, Built to Scale
+      <p id="loadTime"></p>
+    </div>
+  </div>
 </Layout>
 <script is:inline define:vars={{ serverTime }}>
-	const loadTime = Date.now() - serverTime;
-	document.querySelector('#loadTime').innerText = `Page Load Time: ${loadTime}ms`;
+  const loadTime = Date.now() - serverTime;
+  document.querySelector("#loadTime").innerText =
+    `Page Load Time: ${loadTime}ms`;
 </script>
 <style>
-	.center {
-		box-sizing: border-box;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-		flex-direction: column;
-		padding: 10px;
-		text-align: center;
-	}
+  .center {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    padding: 10px;
+    text-align: center;
+  }
 </style>

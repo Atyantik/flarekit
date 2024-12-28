@@ -1,7 +1,4 @@
-import {
-  storageSchema,
-  type InsertStorageType,
-} from '@schema/storage.schema';
+import { storageSchema, type InsertStorageType } from '@schema/storage.schema';
 import { and, eq, isNull } from 'drizzle-orm';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import { v7 as uuidv7 } from 'uuid';

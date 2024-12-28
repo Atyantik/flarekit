@@ -1,21 +1,21 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import cloudflare from '@astrojs/cloudflare';
+import { defineConfig } from "astro/config";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: "server",
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
       persist: {
-        path: '../../.wrangler/state/v3',
+        path: "../../.wrangler/state/v3",
       },
     },
   }),
   vite: {
     optimizeDeps: {
-      include: ['@services/database'],
+      include: ["@services/database"],
     },
   },
 });

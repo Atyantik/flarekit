@@ -1,5 +1,5 @@
-import { defineMiddleware } from 'astro:middleware';
-import { getDBClient } from '@services/database';
+import { defineMiddleware } from "astro:middleware";
+import { getDBClient } from "@services/database";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // intercept data from a request
