@@ -43,6 +43,11 @@
       "dependsOn": ["@services/database#build", "@apps/web#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
+    },
+    "setup": {
+      "dependsOn": ["^setup"],
+      "cache": false,
+      "outputs": []
     }
   }
 }

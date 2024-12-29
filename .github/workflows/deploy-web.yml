@@ -7,8 +7,8 @@ on:
     branches: ['main']
 
 jobs:
-  lint_and_test:
-    runs-on: ubuntu-24.04 # explicit OS version
+  lint:
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -33,12 +33,36 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  test:
+    runs-on: ubuntu-24.04
+    # No 'needs:' here, so it can run in parallel with 'lint'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Test
         run: npm run test
 
   build:
     runs-on: ubuntu-24.04
-    needs: [lint_and_test] # Only build if lint_and_test passed
+    needs: [lint, 'test'] # Only build if lint_and_test passed
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -79,10 +103,22 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
+      - name: Use Node
+        uses: actions/setup-node@v4
         with:
-          name: web-dist
+          node-version: 22
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run migrations on production
         run: npm run migrate:d1:production
@@ -97,10 +133,34 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Setup
+        run: npm run setup
+
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
           name: web-dist
+          path: './apps/web/dist'
+
+      - name: Display CP and Wrangler versions
+        run: ls -al . && ls -al ./apps/web/dist && cat ./apps/web/wrangler.json
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
@@ -108,4 +168,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/web
+          preCommands: npm run setup
           command: pages deploy ./dist
