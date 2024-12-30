@@ -197,6 +197,9 @@ jobs:
       - name: Run Setup
         run: npm run setup
 
+      - name: Run Setup
+        run: npm run build --workspace=@services/database
+
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
