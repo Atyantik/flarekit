@@ -197,9 +197,6 @@ jobs:
       - name: Run Setup
         run: npm run setup
 
-      - name: Display CP and Wrangler versions
-        run: ls -al . && ls -al ./apps/web/dist && cat ./apps/web/wrangler.json
-
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
