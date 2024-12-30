@@ -173,3 +173,4 @@ dist
 
 # Remove wrangler.json as we will generate runtime
 wrangler.json
+.dev.vars
