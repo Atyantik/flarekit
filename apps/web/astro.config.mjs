@@ -13,6 +13,9 @@ export default defineConfig({
       },
     },
   }),
+  security: {
+    checkOrigin: false,
+  },
   vite: {
     optimizeDeps: {
       include: ["@services/database"],
