@@ -8,7 +8,7 @@
     "deploy:web": "turbo deploy:web",
     "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
     "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
-    "test": "npm run setup && CI=true vitest run",
+    "test": "npm run setup && turbo run @services/database#build && CI=true vitest run",
     "test:coverage": "npm run setup && CI=true vitest --run --coverage",
     "prepare": "npm exec husky || echo 'Husky not found, skipping...'",
     "lint": "eslint .",
