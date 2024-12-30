@@ -3,6 +3,12 @@
   "name": "astroflare",
   "compatibility_date": "2024-09-02",
   "compatibility_flags": ["nodejs_compat"],
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "a85ba274f085448595d36befbe9bb798"
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",
