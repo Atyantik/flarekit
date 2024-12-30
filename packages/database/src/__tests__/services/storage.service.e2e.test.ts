@@ -4,6 +4,7 @@ import { storageSchema } from '@schema/storage.schema';
 import {
   createStorageRecord,
   getStorageRecordFromKey,
+  listStorageRecords,
 } from '@services/storage.service';
 import { getTestDatabase } from '../scripts/global-setup';
 import { v7 as uuidv7 } from 'uuid';
@@ -15,10 +16,13 @@ vi.mock('uuid', () => ({
 
 let db: AnyD1Database;
 
-beforeEach(() => {
+beforeEach(async () => {
   // Initialize the test database with Drizzle ORM
   db = drizzle(getTestDatabase());
   vi.resetAllMocks(); // Reset all mocks before each test
+
+  // Optionally, clear existing data from the table to ensure each test starts clean
+  await db.delete(storageSchema);
 });
 
 describe('Storage Service Tests', () => {
@@ -146,6 +150,104 @@ describe('Storage Service Tests', () => {
 
       // Restore the mocked implementation after the test
       vi.restoreAllMocks();
+    });
+  });
+
+  describe('listStorageRecords', () => {
+    it('should return an empty array if no records exist', async () => {
+      // listStorageRecords should return []
+      const records = await listStorageRecords(db);
+      expect(records).toEqual([]);
+    });
+
+    it('should return all records that are not deleted', async () => {
+      const mockRecords = [
+        {
+          id: 'record-1',
+          key: 'key-1',
+          originalName: 'file1.txt',
+          size: 100,
+          mimeType: 'text/plain',
+          hash: 'hash1',
+          createdAt: new Date().toISOString(),
+          updatedAt: null,
+          deletedAt: null,
+        },
+        {
+          id: 'record-2',
+          key: 'key-2',
+          originalName: 'file2.txt',
+          size: 200,
+          mimeType: 'text/plain',
+          hash: 'hash2',
+          createdAt: new Date().toISOString(),
+          updatedAt: null,
+          deletedAt: null,
+        },
+      ];
+
+      // Insert multiple records
+      await db.insert(storageSchema).values(mockRecords);
+
+      // Retrieve them
+      const records = await listStorageRecords(db);
+
+      // Expect to find both since none are deleted
+      expect(records).toHaveLength(2);
+      expect(records).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining(mockRecords[0]),
+          expect.objectContaining(mockRecords[1]),
+        ]),
+      );
+    });
+
+    it('should not return records that have a non-null deletedAt', async () => {
+      const mockRecord = {
+        id: 'record-deleted',
+        key: 'deleted-key',
+        originalName: 'file-deleted.txt',
+        size: 300,
+        mimeType: 'text/plain',
+        hash: 'hash3',
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        // Mark it as deleted
+        deletedAt: new Date().toISOString(),
+      };
+
+      const activeRecord = {
+        id: 'record-active',
+        key: 'active-key',
+        originalName: 'file-active.txt',
+        size: 400,
+        mimeType: 'text/plain',
+        hash: 'hash4',
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        deletedAt: null,
+      };
+
+      // Insert both a soft-deleted record and an active record
+      await db.insert(storageSchema).values([mockRecord, activeRecord]);
+
+      // listStorageRecords should only return the active record
+      const records = await listStorageRecords(db);
+      expect(records).toHaveLength(1);
+      expect(records[0]).toMatchObject(activeRecord);
+    });
+
+    it('should throw an error if the query fails', async () => {
+      // Mock (or spy on) db.select() so it throws an error
+      vi.spyOn(db, 'select').mockImplementationOnce(() => {
+        throw new Error('List records query failed');
+      });
+
+      // Because listStorageRecords() re-throws the error,
+      // we expect the promise to reject
+      await expect(listStorageRecords(db)).rejects.toThrow(
+        'List records query failed',
+      );
     });
   });
 });

@@ -23,10 +23,11 @@ export default {
 			headers: { 'content-type': 'application/json' },
 		});
 	},
-	// async queue(batch, env)
+
+	// async queue( batch: MessageBatch, env: Environment, ctx: ExecutionContext)
 	async queue(batch): Promise<void> {
 		let messages = JSON.stringify(batch.messages);
-		console.log(`consumed from our queue: ${messages}`);
+		console.log(`Consumed from our queue: ${messages}`);
 		batch.ackAll();
 	},
 	// eslint-disable-next-line no-undef

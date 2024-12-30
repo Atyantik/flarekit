@@ -3,6 +3,10 @@
 	"name": "astroflare-worker",
 	"main": "src/index.ts",
 	"workers_dev": false,
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	},
 	"queues": {
 		"consumers": [
 			{
