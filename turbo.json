@@ -19,7 +19,7 @@
       "outputs": []
     },
     "dev": {
-      "dependsOn": [],
+      "dependsOn": ["@services/database#build"],
       "cache": false,
       "outputs": []
     },

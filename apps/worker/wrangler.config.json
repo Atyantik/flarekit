@@ -1,5 +1,21 @@
 {
 	"$schema": "../../node_modules/wrangler/config-schema.json",
 	"name": "astroflare-worker",
-	"main": "src/index.ts"
+	"main": "src/index.ts",
+	"workers_dev": false,
+	"queues": {
+		"consumers": [
+			{
+				"queue": "astroflare-queue",
+				"max_batch_size": 10,
+				"max_batch_timeout": 5
+			}
+		]
+	},
+	"routes": [
+		{
+			"pattern": "astroflare-api.atyantik.com",
+			"custom_domain": true
+		}
+	]
 }

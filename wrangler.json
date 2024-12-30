@@ -16,5 +16,13 @@
       "binding": "STORAGE",
       "bucket_name": "cf-astro-storage"
     }
-  ]
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "QUEUE",
+        "queue": "astroflare-queue"
+      }
+    ]
+  }
 }

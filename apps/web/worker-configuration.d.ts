@@ -4,4 +4,5 @@ interface Env {
 	PUBLIC_CDN_URL: string;
 	STORAGE: R2Bucket;
 	DB: D1Database;
+	QUEUE: Queue;
 }

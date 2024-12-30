@@ -60,7 +60,7 @@ jobs:
       - name: Test
         run: npm run test
 
-  build:
+  build_web:
     runs-on: ubuntu-24.04
     needs: [lint, 'test'] # Only build if lint_and_test passed
     steps:
@@ -98,7 +98,7 @@ jobs:
 
   migrate:
     runs-on: ubuntu-24.04
-    needs: [build]
+    needs: [build_web]
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -126,7 +126,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  deploy:
+  deploy_web:
     runs-on: ubuntu-24.04
     needs: [migrate]
     steps:
@@ -168,5 +168,42 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/web
-          preCommands: npm run setup
           command: pages deploy ./dist
+
+  deploy_worker:
+    runs-on: ubuntu-24.04
+    needs: [migrate]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Setup
+        run: npm run setup
+
+      - name: Display CP and Wrangler versions
+        run: ls -al . && ls -al ./apps/web/dist && cat ./apps/web/wrangler.json
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: ./apps/worker
+          command: deploy

@@ -61,3 +61,21 @@ export const getStorageRecordFromKey = async (
     throw err;
   }
 };
+
+/**
+ * List all storage records in the database.
+ * @param db - The Drizzle database instance.
+ * @returns Array of all Storage Records.
+ * @throws Error if the listing fails.
+ */
+export const listStorageRecords = async (db: DrizzleD1Database) => {
+  try {
+    return await db
+      .select()
+      .from(storageSchema)
+      .where(isNull(storageSchema.deletedAt));
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
