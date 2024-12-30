@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declarationDir": "./dist/__tests__/scripts/types"
+  },
+  "exclude": ["node_modules", "dist"]
+}

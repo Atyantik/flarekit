@@ -4,7 +4,13 @@ import { getDBClient, listStorageRecords } from '@services/database';
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		const DB = await getDBClient(this, env.DB);
-		const storageRecords = await listStorageRecords(DB);
+		let storageRecords: Record<string, unknown>[] = [];
+		try {
+			storageRecords = await listStorageRecords(DB);
+		} catch {
+			// Do nothing
+		}
+
 		const data = {
 			ctx,
 			storageRecords,

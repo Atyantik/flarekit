@@ -9,7 +9,7 @@ import worker from '../src/index';
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
 describe('Hello World worker', () => {
-	it('responds with Hello World! (unit style)', async () => {
+	it('responds with request data as json', async () => {
 		const request = new IncomingRequest('http://example.com');
 		// Create an empty context to pass to `worker.fetch()`.
 		const ctx = createExecutionContext();

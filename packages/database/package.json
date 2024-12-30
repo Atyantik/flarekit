@@ -6,6 +6,18 @@
   "main": "./dist/bundle.cjs.js",
   "module": "./dist/bundle.esm.js",
   "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/bundle.esm.js",
+      "require": "./dist/bundle.cjs.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./test-utils": {
+      "import": "./dist/__tests__/scripts/test-utils.esm.js",
+      "require": "./dist/__tests__/scripts/test-utils.cjs.js",
+      "types": "./dist/__tests__/scripts/types/__tests__/scripts/utils.d.ts"
+    }
+  },
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "rollup --config --watch",
