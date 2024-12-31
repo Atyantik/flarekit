@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AnyD1Database, drizzle } from 'drizzle-orm/d1';
 import { storageSchema } from '@schema/storage.schema';
 import {
+  clearStorageRecords,
   createStorageRecord,
   getStorageRecordFromKey,
   listStorageRecords,
@@ -247,6 +248,60 @@ describe('Storage Service Tests', () => {
       // we expect the promise to reject
       await expect(listStorageRecords(db)).rejects.toThrow(
         'List records query failed',
+      );
+    });
+  });
+
+  describe('clearStorageRecords', () => {
+    it('should return an empty array after clearing the storage', async () => {
+      // listStorageRecords should return []
+      const mockRecords = [
+        {
+          id: 'record-1',
+          key: 'key-1',
+          originalName: 'file1.txt',
+          size: 100,
+          mimeType: 'text/plain',
+          hash: 'hash1',
+          createdAt: new Date().toISOString(),
+          updatedAt: null,
+          deletedAt: null,
+        },
+        {
+          id: 'record-2',
+          key: 'key-2',
+          originalName: 'file2.txt',
+          size: 200,
+          mimeType: 'text/plain',
+          hash: 'hash2',
+          createdAt: new Date().toISOString(),
+          updatedAt: null,
+          deletedAt: null,
+        },
+      ];
+      // Insert multiple records
+      await db.insert(storageSchema).values(mockRecords);
+      // Retrieve them
+      const records = await listStorageRecords(db);
+
+      // Expect to find both since none are deleted
+      expect(records).toHaveLength(2);
+      clearStorageRecords(db);
+
+      const postDeletedRecords = await listStorageRecords(db);
+      expect(postDeletedRecords).toHaveLength(0);
+    });
+
+    it('should throw an error if the delete fails', async () => {
+      // Mock (or spy on) db.select() so it throws an error
+      vi.spyOn(db, 'delete').mockImplementationOnce(() => {
+        throw new Error('Delete records query failed');
+      });
+
+      // Because listStorageRecords() re-throws the error,
+      // we expect the promise to reject
+      await expect(clearStorageRecords(db)).rejects.toThrow(
+        'Delete records query failed',
       );
     });
   });
