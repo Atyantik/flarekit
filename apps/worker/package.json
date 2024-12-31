@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "deploy": "npm run setup && wrangler deploy",
-    "dev": "npm run setup && wrangler dev --persist-to=../../.wrangler/state",
+    "dev": "npm run setup && wrangler dev --test-scheduled --persist-to=../../.wrangler/state",
     "start": "npm run setup && wrangler dev",
     "test": "npm run setup && CI=true vitest run",
     "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"

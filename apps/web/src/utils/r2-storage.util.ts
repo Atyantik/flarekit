@@ -8,7 +8,7 @@ import type { R2Bucket } from "@cloudflare/workers-types";
  */
 export function validateFile(file: File | null): File {
   if (!file || !(file instanceof File)) {
-    throw new Error("No image file provided or invalid file type.");
+    throw new Error("No file provided or invalid file type.");
   }
   return file;
 }
@@ -49,26 +49,4 @@ export async function uploadFile(
       contentType,
     },
   });
-}
-
-/**
- * Constructs the CDN URL based on the environment.
- * @param mode - The current environment mode ('production' or others).
- * @param cdnUrl - The CDN base URL from environment variables.
- * @param requestUrl - The original request URL.
- * @param key - The unique key of the uploaded file.
- * @returns The full CDN URL as a string.
- */
-export function constructCdnUrl(
-  mode: string,
-  cdnUrl: string | undefined,
-  requestUrl: string,
-  key: string,
-): string {
-  const isProduction = mode === "production";
-  const baseCdnUrl =
-    isProduction && typeof cdnUrl === "string" && cdnUrl.length
-      ? cdnUrl
-      : new URL("/cdn/", requestUrl);
-  return new URL(key, baseCdnUrl).toString();
 }

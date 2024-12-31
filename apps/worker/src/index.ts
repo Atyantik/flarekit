@@ -43,20 +43,18 @@ export default {
     ctx.waitUntil(
       (async () => {
         // Clear the storage every 5th minute
-        if (new Date().getMinutes() % 5 === 0) {
+        if (event.cron.startsWith('*/5')) {
           const DB = await getDBClient(this, env.DB);
           const STORAGE = env.STORAGE;
           const CACHE = env.CACHE;
-          DB.transaction(async (tx) => {
-            // Get all storage Records
-            const storageRecords = await listStorageRecords(tx);
-            // Remove each storage record from
-            for (const record of storageRecords) {
-              await STORAGE.delete(record.key);
-            }
-            await clearStorageRecords(tx);
-            await CACHE.delete('storage_records');
-          });
+          // Get all storage Records
+          const storageRecords = await listStorageRecords(DB);
+          // Remove each storage record from
+          for (const record of storageRecords) {
+            await STORAGE.delete(record.key);
+          }
+          await clearStorageRecords(DB);
+          await CACHE.delete('storage_records');
         }
       })(),
     );

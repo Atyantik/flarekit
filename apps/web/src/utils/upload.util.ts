@@ -1,11 +1,5 @@
-import type { APIRoute } from "astro";
 import type { R2Bucket } from "@cloudflare/workers-types";
-import {
-  constructCdnUrl,
-  fileExists,
-  uploadFile,
-  validateFile,
-} from "@utils/r2-storage.util";
+import { fileExists, uploadFile, validateFile } from "@utils/r2-storage.util";
 import { computeShortHash } from "@utils/hash.util";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import {
@@ -35,15 +29,12 @@ function generateKey(hashHex: string, fileName: string): string {
  * @throws Error if any step fails.
  */
 async function handleUpload(
-  formData: FormData,
+  formFile: File,
   storage: R2Bucket,
-  cdnUrlEnv: string | undefined,
-  mode: string,
-  requestUrl: string,
   db: DrizzleD1Database,
 ): Promise<SelectStorageType & { url: string }> {
   // Validate the image
-  const file = validateFile(formData.get("file") as File);
+  const file = validateFile(formFile);
 
   // Read the file content as ArrayBuffer
   const arrayBuffer = await file.arrayBuffer();
@@ -79,7 +70,7 @@ async function handleUpload(
   }
 
   // Construct the CDN URL
-  const fileUrl = constructCdnUrl(mode, cdnUrlEnv, requestUrl, key);
+  const fileUrl = `/cdn/${key}`;
   return {
     ...fileFromKey,
     url: fileUrl,
@@ -87,10 +78,13 @@ async function handleUpload(
 }
 
 /**
- * POST route handler for uploading images to R2.
+ * Handles the File Upload from the request.
+ * @param file - The uploaded file.
+ * @param locals - The request locals.
+ * @returns The URL of the uploaded image.
+ * @throws Error if any step fails.
  */
-export const POST: APIRoute = async ({ request, locals }) => {
-  const { PUBLIC_CDN_URL } = locals.runtime.env;
+export const handleFile = async (file: File, locals: globalThis.App.Locals) => {
   // @ts-expect-error we are using STORAGE from wrangler and types which has different
   // signatures than the one from the worker
   const storage = locals.runtime.env.STORAGE as R2Bucket;
@@ -99,28 +93,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
     throw new Error("You need to add storage binding to the environment.");
   }
   const { dbClient } = locals;
-  const mode = import.meta.env.MODE;
-  const requestUrl = request.url;
-
   try {
-    // Parse form data
-    const formData = await request.formData();
     // Handle the upload process
-    const fileData = await handleUpload(
-      formData,
-      storage,
-      PUBLIC_CDN_URL,
-      mode,
-      requestUrl,
-      dbClient,
-    );
+    const fileData = await handleUpload(file, storage, dbClient);
     // Empty the cache
     cache.delete("storage_records");
     // Respond with the image URL
-    return new Response(JSON.stringify(fileData), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return fileData;
   } catch (error) {
     let errorMessage = "Failed to upload image. Please try again later.";
     let status = 500;
@@ -134,10 +113,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
           ? error.message
           : "Failed to upload image. Please try again later.";
     }
-
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      status,
-      headers: { "Content-Type": "application/json" },
-    });
+    throw new Error(errorMessage);
   }
 };
