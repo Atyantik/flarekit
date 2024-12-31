@@ -24,12 +24,14 @@ export default {
 		});
 	},
 
+	/* istanbul ignore next: Cannot test Queue invocation */
 	// async queue( batch: MessageBatch, env: Environment, ctx: ExecutionContext)
 	async queue(batch): Promise<void> {
 		let messages = JSON.stringify(batch.messages);
 		console.log(`Consumed from our queue: ${messages}`);
 		batch.ackAll();
 	},
+	/* istanbul ignore next: Cannot test scheduled invocation */
 	// scheduled(event: ScheduledEvent, env: Environment, ctx: ExecutionContext)
 	async scheduled(event, env, ctx) {
 		// Pass a promise
