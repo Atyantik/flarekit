@@ -1,7 +1,9 @@
 import { storageSchema, type InsertStorageType } from '@schema/storage.schema';
 import { and, eq, isNull } from 'drizzle-orm';
-import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import { v7 as uuidv7 } from 'uuid';
+import { DB } from '../@types/database.type';
+
+// type DB = DrizzleD1Database;
 
 /**
  * Creates a new storage record in the database.
@@ -12,7 +14,7 @@ import { v7 as uuidv7 } from 'uuid';
  */
 export const createStorageRecord = async (
   storageRecord: Omit<InsertStorageType, 'id'>,
-  db: DrizzleD1Database,
+  db: DB,
 ) => {
   try {
     const uid = uuidv7();
@@ -40,10 +42,7 @@ export const createStorageRecord = async (
  * @returns The storage record if found, otherwise null.
  * @throws Error if the retrieval fails.
  */
-export const getStorageRecordFromKey = async (
-  key: string,
-  db: DrizzleD1Database,
-) => {
+export const getStorageRecordFromKey = async (key: string, db: DB) => {
   try {
     return (
       (
@@ -68,12 +67,27 @@ export const getStorageRecordFromKey = async (
  * @returns Array of all Storage Records.
  * @throws Error if the listing fails.
  */
-export const listStorageRecords = async (db: DrizzleD1Database) => {
+export const listStorageRecords = async (db: DB) => {
   try {
     return await db
       .select()
       .from(storageSchema)
       .where(isNull(storageSchema.deletedAt));
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+/**
+ * Clears the storage table.
+ * @param db - The Drizzle database instance.
+ * @returns The number of records deleted.
+ * @throws Error if the deletion fails.
+ */
+export const clearStorageRecords = async (db: DB) => {
+  try {
+    return await db.delete(storageSchema);
   } catch (err) {
     console.error(err);
     throw err;

@@ -1,28 +1,28 @@
 {
-	"$schema": "../../node_modules/wrangler/config-schema.json",
-	"name": "astroflare-worker",
-	"main": "src/index.ts",
-	"workers_dev": false,
-	"observability": {
-		"enabled": true,
-		"head_sampling_rate": 1
-	},
-	"triggers": {
-		"crons": ["*/2 * * * *", "*/7 * * * *"]
-	},
-	"queues": {
-		"consumers": [
-			{
-				"queue": "astroflare-queue",
-				"max_batch_size": 10,
-				"max_batch_timeout": 5
-			}
-		]
-	},
-	"routes": [
-		{
-			"pattern": "astroflare-api.atyantik.com",
-			"custom_domain": true
-		}
-	]
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "astroflare-worker",
+  "main": "src/index.ts",
+  "workers_dev": false,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "queues": {
+    "consumers": [
+      {
+        "queue": "astroflare-queue",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5
+      }
+    ]
+  },
+  "routes": [
+    {
+      "pattern": "astroflare-api.atyantik.com",
+      "custom_domain": true
+    }
+  ]
 }
