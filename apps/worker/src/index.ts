@@ -30,5 +30,14 @@ export default {
 		console.log(`Consumed from our queue: ${messages}`);
 		batch.ackAll();
 	},
+	// scheduled(event: ScheduledEvent, env: Environment, ctx: ExecutionContext)
+	async scheduled(event, env, ctx) {
+		// Pass a promise
+		ctx.waitUntil(
+			(async () => {
+				console.log(`Scehduler triggered at UTC: ${new Date().toUTCString()}`);
+			})(),
+		);
+	},
 	// eslint-disable-next-line no-undef
 } satisfies ExportedHandler<Env>;

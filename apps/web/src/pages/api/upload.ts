@@ -43,7 +43,7 @@ async function handleUpload(
   db: DrizzleD1Database,
 ): Promise<SelectStorageType & { url: string }> {
   // Validate the image
-  const file = validateFile(formData.get("file"));
+  const file = validateFile(formData.get("file") as File);
 
   // Read the file content as ArrayBuffer
   const arrayBuffer = await file.arrayBuffer();
@@ -59,7 +59,6 @@ async function handleUpload(
 
   if (!exists) {
     // Upload the file if it doesn't exist
-
     await uploadFile(storage, key, arrayBuffer, file.type);
   }
 
@@ -95,6 +94,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   // @ts-expect-error we are using STORAGE from wrangler and types which has different
   // signatures than the one from the worker
   const storage = locals.runtime.env.STORAGE as R2Bucket;
+  const cache = locals.runtime.env.CACHE;
   if (!storage) {
     throw new Error("You need to add storage binding to the environment.");
   }
@@ -114,7 +114,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
       requestUrl,
       dbClient,
     );
-
+    // Empty the cache
+    cache.delete("storage_records");
     // Respond with the image URL
     return new Response(JSON.stringify(fileData), {
       status: 200,
