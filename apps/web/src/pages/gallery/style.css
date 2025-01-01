@@ -1,0 +1,112 @@
+/* 
+  .notification 
+  Used for the maroon banner stating gallery info 
+*/
+.notification {
+  display: flex;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  background-color: maroon;
+  color: white;
+}
+
+/* 
+  .center 
+  Centers its children, used for the upload form 
+*/
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  text-align: center;
+  background-color: #f7f7f7; /* optional background color */
+}
+
+form {
+  width: 100%;
+  display: block;
+}
+
+/*
+  .upload-box 
+  The “clickable” label that triggers file upload 
+*/
+.upload-box {
+  display: block;
+  text-align: center;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #555;
+  background-color: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+}
+.upload-box:hover {
+  border-color: #6100ee;
+  background-color: #f0f8ff; /* light highlight */
+}
+.upload-box span {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+/* Hide the real file input visually, but keep it accessible for screen readers */
+.upload-box input[type="file"] {
+  display: none;
+}
+
+/* 
+  .container 
+  A generic container with padding
+*/
+.container {
+  padding: 2rem;
+}
+
+/* 
+  .masonry 
+  Pure CSS "masonry" using multi-column layout 
+*/
+.masonry {
+  column-count: 1; /* Default: 1 column on very small screens */
+  column-gap: 1rem; /* Gutter size */
+}
+.masonry img {
+  width: 100%;
+  display: block;
+  margin-bottom: 1rem;
+  border-radius: 4px; /* optional styling */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive breakpoints for more columns */
+@media (min-width: 600px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+@media (min-width: 900px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+@media (min-width: 1200px) {
+  .masonry {
+    column-count: 4;
+  }
+}
+@media (min-width: 1500px) {
+  .masonry {
+    column-count: 5;
+  }
+}

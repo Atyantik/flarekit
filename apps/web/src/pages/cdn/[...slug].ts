@@ -14,6 +14,8 @@ export const GET: APIRoute = async ({ params, locals }) => {
       headers: {
         "Content-Type":
           object.httpMetadata?.contentType || "application/octet-stream",
+        "Cache-Control": "public, max-age=31536000, immutable",
+        Expires: "Fri, 31 Dec 9999 23:59:59 GMT", // or any date far in the future
       },
     });
   } catch (err) {

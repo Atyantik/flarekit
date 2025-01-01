@@ -1,3 +1,7 @@
+---
+import { ClientRouter } from "astro:transitions";
+---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -10,6 +14,7 @@
       rel="stylesheet"
       type="text/css"
     />
+    <ClientRouter />
   </head>
   <body>
     <slot />
@@ -17,6 +22,11 @@
 </html>
 
 <style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
   html,
   body {
     font-family: "Raleway", serif;

@@ -1,0 +1,91 @@
+---
+import Layout from "@layouts/Layout.astro";
+import "./style.css";
+
+import { listStorageRecords } from "@services/database";
+
+const MAX_FILE_SIZE = 1024 * 1024 * 2; // 2MB
+
+const cache = Astro.locals.runtime.env.CACHE;
+let cachedStorageRecords = await cache.get("storage_records");
+if (!cachedStorageRecords) {
+  const storageRecords = await listStorageRecords(Astro.locals.dbClient);
+  await cache.put("storage_records", JSON.stringify(storageRecords));
+  cachedStorageRecords = JSON.stringify(storageRecords);
+}
+const records = JSON.parse(cachedStorageRecords) as Awaited<
+  ReturnType<typeof listStorageRecords>
+>;
+---
+
+<Layout>
+  <div transition:persist="gallery-header">
+    <div class="notification">
+      <p>
+        The gallery resets in every 2 minutes. All the uploaded assets would be
+        deleted.
+      </p>
+    </div>
+    <div class="center">
+      <form method="post" enctype="multipart/form-data" action="/upload">
+        <label class="upload-box" for="file">
+          <span>Click to Upload</span>
+          Max image size 2MB
+          <input type="file" id="file" name="image" accept="image/*" />
+        </label>
+      </form>
+    </div>
+  </div>
+  <div class="container">
+    <div class="masonry">
+      {
+        records.map((record) => (
+          <img
+            loading="lazy"
+            src={`/cdn/${record.key}`}
+            alt={record.originalName}
+          />
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+<script is:inline define:vars={{ MAX_FILE_SIZE }}>
+  document
+    .querySelector("input[type=file]")
+    ?.addEventListener?.("change", async (e) => {
+      if (e?.target instanceof HTMLInputElement) {
+        const form = e.target.closest("form");
+        if (e.target.type === "file") {
+          for (const file of e.target.files) {
+            if (!file.type.startsWith("image/")) {
+              alert("Only images are allowed");
+              form?.reset();
+              return;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+              alert("File size too large. Max 2MB allowed");
+              form?.reset();
+              return;
+            }
+          }
+        }
+        if (form) {
+          form.disabled = true;
+          form.classList.add("loading");
+          const formData = new FormData(form);
+
+          try {
+            await fetch(form.action, {
+              method: form.method,
+              body: formData,
+            });
+            window.location.reload();
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+    });
+</script>

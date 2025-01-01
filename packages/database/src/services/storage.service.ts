@@ -1,5 +1,5 @@
 import { storageSchema, type InsertStorageType } from '@schema/storage.schema';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, desc } from 'drizzle-orm';
 import { v7 as uuidv7 } from 'uuid';
 import { DB } from '../@types/database.type';
 
@@ -72,7 +72,8 @@ export const listStorageRecords = async (db: DB) => {
     return await db
       .select()
       .from(storageSchema)
-      .where(isNull(storageSchema.deletedAt));
+      .where(isNull(storageSchema.deletedAt))
+      .orderBy(desc(storageSchema.createdAt));
   } catch (err) {
     console.error(err);
     throw err;
