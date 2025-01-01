@@ -4,6 +4,7 @@ import { listStorageRecords } from "@services/database";
 
 const cache = Astro.locals.runtime.env.CACHE;
 let cachedStorageRecords = await cache.get("storage_records");
+console.log("cachedStorageRecords", cachedStorageRecords);
 if (!cachedStorageRecords) {
   const storageRecords = await listStorageRecords(Astro.locals.dbClient);
   await cache.put("storage_records", JSON.stringify(storageRecords));

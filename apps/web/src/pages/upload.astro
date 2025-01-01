@@ -2,7 +2,7 @@
 import Layout from "@layouts/Layout.astro";
 import { handleFile } from "../utils/upload.util";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
+const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
@@ -57,7 +57,7 @@ if (Astro.request.method === "POST") {
           }
 
           if (e.target.size > MAX_FILE_SIZE) {
-            alert("File size too large. Max 5MB allowed");
+            alert("File size too large. Max 1MB allowed");
             form?.reset();
             return;
           }

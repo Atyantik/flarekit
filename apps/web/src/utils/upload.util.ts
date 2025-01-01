@@ -97,7 +97,7 @@ export const handleFile = async (file: File, locals: globalThis.App.Locals) => {
     // Handle the upload process
     const fileData = await handleUpload(file, storage, dbClient);
     // Empty the cache
-    cache.delete("storage_records");
+    await cache.delete("storage_records");
     // Respond with the image URL
     return fileData;
   } catch (error) {
