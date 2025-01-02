@@ -1,5 +1,5 @@
 {
-  "name": "@flarekit/api",
+  "name": "@flarekit/backend",
   "scripts": {
     "dev": "npm run setup && wrangler dev --test-scheduled --persist-to=../../.wrangler/state",
     "deploy": "npm run setup && wrangler deploy",

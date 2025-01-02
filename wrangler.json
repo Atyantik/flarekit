@@ -6,14 +6,14 @@
   "kv_namespaces": [
     {
       "binding": "CACHE",
-      "id": "a85ba274f085448595d36befbe9bb798"
+      "id": "d06fcc7d24994be0a8caeb16280079ac"
     }
   ],
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "cf-astro-d1",
-      "database_id": "f8763464-9a96-40d8-a492-f737027a15ef",
+      "database_name": "flarekit-d1",
+      "database_id": "07245e83-0bbd-4459-8322-ba1c28a617ac",
       "migrations_table": "astro_migrations",
       "migrations_dir": "./packages/database/migrations"
     }
@@ -21,7 +21,7 @@
   "r2_buckets": [
     {
       "binding": "STORAGE",
-      "bucket_name": "cf-astro-storage"
+      "bucket_name": "flarekit-storage"
     }
   ],
   "queues": {
