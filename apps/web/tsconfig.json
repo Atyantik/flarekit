@@ -1,6 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*", "../../scripts", ".prettierrc.mjs"],
+  "include": [
+    ".astro/types.d.ts",
+    "**/*",
+    "../../scripts",
+    ".prettierrc.mjs",
+    "../../packages/database/dist/types/index.d.ts"
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "lib": ["DOM", "ESNext"],

@@ -4,16 +4,12 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "declarationDir": "./dist/types",
-    "outDir": "dist",
+    "skipLibCheck": true,
     "lib": ["ESNext"],
     "types": ["@cloudflare/workers-types"],
-    "paths": {
-      "@schema/*": ["./src/schema/*"],
-      "@services/*": ["./src/services/*"]
-    }
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx"
   },
+  "exclude": ["test"],
   "include": ["worker-configuration.d.ts", "src/**/*.ts"]
 }

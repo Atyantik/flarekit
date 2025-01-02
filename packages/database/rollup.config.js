@@ -24,27 +24,4 @@ export default [
       typescript(),
     ],
   },
-  {
-    input: 'src/__tests__/scripts/utils.ts', // Test Utils Entry point
-    output: [
-      {
-        file: 'dist/__tests__/scripts/test-utils.cjs.js',
-        format: 'cjs', // CommonJS format
-      },
-      {
-        file: 'dist/__tests__/scripts/test-utils.esm.js',
-        format: 'esm', // ES Module format
-      },
-    ],
-    plugins: [
-      // Resolves node_modules imports
-      resolve(),
-      // Converts CommonJS modules to ES6
-      commonjs(),
-      // Compiles TypeScript
-      typescript({
-        tsconfig: './tsconfig.test.json',
-      }),
-    ],
-  },
 ];

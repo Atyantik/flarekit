@@ -18,7 +18,7 @@ export default defineConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["@services/database"],
+      include: ["@flarekit/database"],
     },
   },
 });

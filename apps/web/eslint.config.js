@@ -2,10 +2,13 @@ import globals from "globals";
 import eslintPluginAstro from "eslint-plugin-astro";
 import astroParser from "astro-eslint-parser";
 import tsParser from "@typescript-eslint/parser";
-import rootConfig from "../../eslint.config.js";
+import {
+  defaultRootConfig,
+  eslintConfigPrettier,
+} from "../../eslint.config.js";
 
 export default [
-  ...rootConfig,
+  ...defaultRootConfig,
   {
     settings: {
       react: {
@@ -38,4 +41,5 @@ export default [
   // add more generic rule sets here, such as:
   // js.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
+  eslintConfigPrettier,
 ];

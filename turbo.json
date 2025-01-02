@@ -2,32 +2,32 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "@services/database#build": {
+    "@flarekit/database#build": {
       "cache": false,
       "outputs": ["dist/**"]
     },
-    "@services/database#dev": {
-      "dependsOn": ["@services/database#build"],
+    "@flarekit/database#dev": {
+      "dependsOn": ["@flarekit/database#build"],
       "cache": false,
       "persistent": true,
       "outputs": []
     },
-    "@apps/web#dev": {
-      "dependsOn": ["@services/database#build"],
+    "@flarekit/web#dev": {
+      "dependsOn": ["@flarekit/database#build"],
       "cache": false,
       "persistent": true,
       "outputs": []
     },
     "dev": {
-      "dependsOn": ["@services/database#build"],
+      "dependsOn": ["@flarekit/database#build"],
       "cache": false,
       "outputs": []
     },
     "dev:web": {
       "dependsOn": [
-        "@services/database#dev",
-        "@apps/web#dev",
-        "@apps/worker#dev"
+        "@flarekit/database#dev",
+        "@flarekit/web#dev",
+        "@flarekit/worker#dev"
       ],
       "persistent": true,
       "cache": false,
@@ -40,7 +40,7 @@
       "outputs": []
     },
     "deploy:web": {
-      "dependsOn": ["@services/database#build", "@apps/web#build"],
+      "dependsOn": ["@flarekit/database#build", "@flarekit/web#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
     },

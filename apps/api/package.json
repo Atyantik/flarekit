@@ -1,0 +1,20 @@
+{
+  "name": "@flarekit/api",
+  "scripts": {
+    "dev": "npm run setup && wrangler dev --test-scheduled --persist-to=../../.wrangler/state",
+    "deploy": "npm run setup && wrangler deploy",
+    "test": "npm run setup && CI=true vitest run",
+    "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"
+  },
+  "dependencies": {
+    "@flarekit/database": "*",
+    "hono": "^4.6.15"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20241230.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "wrangler": "^3.99.0"
+  }
+}

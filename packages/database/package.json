@@ -1,5 +1,5 @@
 {
-  "name": "@services/database",
+  "name": "@flarekit/database",
   "version": "1.0.0",
   "description": "DB Schema and Services",
   "type": "module",
@@ -11,20 +11,16 @@
       "import": "./dist/bundle.esm.js",
       "require": "./dist/bundle.cjs.js",
       "types": "./dist/types/index.d.ts"
-    },
-    "./test-utils": {
-      "import": "./dist/__tests__/scripts/test-utils.esm.js",
-      "require": "./dist/__tests__/scripts/test-utils.cjs.js",
-      "types": "./dist/__tests__/scripts/types/__tests__/scripts/utils.d.ts"
     }
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "dev": "rollup --config --watch",
+    "dev": "npm run setup && rollup --config --watch",
     "build": "npm run build:distribution && npm run build:migrations",
-    "build:migrations": "drizzle-kit generate",
-    "build:distribution": "npm run clean && rollup --config",
-    "test": "CI=true vitest run --coverage"
+    "build:migrations": "npm run setup && drizzle-kit generate",
+    "build:distribution": "npm run setup && npm run clean && rollup --config",
+    "test": "npm run setup && CI=true vitest --run --coverage",
+    "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
@@ -32,14 +28,19 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20241230.0",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "@vitest/coverage-istanbul": "^2.1.8",
     "drizzle-kit": "^0.30.1",
+    "eslint": "^9.17.0",
     "miniflare": "^3.20241218.0",
     "rollup": "^4.29.1",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^2.1.8",
+    "wrangler": "^3.99.0"
   }
 }

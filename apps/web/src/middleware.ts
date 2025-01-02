@@ -1,13 +1,12 @@
 import { defineMiddleware } from "astro:middleware";
-import { getDBClient } from "@services/database";
+import { initDBInstance } from "@flarekit/database";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // intercept data from a request
   // optionally, modify the properties in `locals`
-  context.locals.dbClient = await getDBClient(
-    context,
-    context.locals.runtime.env.DB,
-  );
+  context.locals.DB = await initDBInstance(context, context.locals.runtime.env);
+
+  context.locals.DB.storage;
 
   // return a Response or the result of calling `next()`
   return next();

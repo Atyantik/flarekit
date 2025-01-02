@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://cdn.atyantik.com/Astroflare.webp" alt="Astroflare" width="200" style="border-radius: 20px;"
+  <img src="https://cdn.atyantik.com/Flarekit.webp" alt="Flarekit" width="200" style="border-radius: 20px;"
   >
 </p>
 
-# **Astroflare**
+# **Flarekit**
 
-Astroflare is a scalable and modular monorepo ecosystem for building modern, edge-first web applications using **Astro** and **Cloudflare Workers**. It’s designed to simplify the development of performant, globally distributed applications while promoting code reusability and maintainability.
+Flarekit is a scalable and modular monorepo ecosystem for building modern, edge-first web applications using **Astro** and **Cloudflare Workers**. It’s designed to simplify the development of performant, globally distributed applications while promoting code reusability and maintainability.
 
 This project is supported and sponsored by [Atyantik Technologies](https://atyantik.com/). 🚀
 
@@ -37,7 +37,7 @@ This project is supported and sponsored by [Atyantik Technologies](https://atyan
 
 ## **Current Structure**
 
-Astroflare is currently focused on providing:
+Flarekit is currently focused on providing:
 
 - A **web application** built with Astro.
 - A basic structure for future apps and services.
@@ -45,9 +45,9 @@ Astroflare is currently focused on providing:
 ### **Directory Layout**
 
 ```
-astroflare/
+flarekit/
 ├── apps/
-│   └── web/              # Astro-based frontend (@apps/web)
+│   └── web/              # Astro-based frontend (@flarekit/web)
 ├── packages/
 │   └── db/               # Database schema and utilities (@services/db)
 ├── turbo.json            # Turborepo configuration
@@ -57,19 +57,19 @@ astroflare/
 
 ### **Available Packages**
 
-| Package        | Description                                    |
-| -------------- | ---------------------------------------------- |
-| `@apps/web`    | The primary web frontend built with Astro.     |
-| `@services/db` | Database utilities and schema for the project. |
+| Package         | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `@flarekit/web` | The primary web frontend built with Astro.     |
+| `@services/db`  | Database utilities and schema for the project. |
 
 ---
 
 ## **Future Scope**
 
-Astroflare is designed with extensibility in mind. Future plans include:
+Flarekit is designed with extensibility in mind. Future plans include:
 
 - **New Applications**:
-  - `@apps/api`: Cloudflare Worker-based API services.
+  - `@flarekit/api`: Cloudflare Worker-based API services.
 - **Reusable Services**:
   - `@services/auth`: Authentication utilities and middleware.
   - `@services/utils`: Shared utility functions for applications.
@@ -84,8 +84,8 @@ These features will be introduced incrementally, and contributions are welcome!
 ### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/Atyantik/astroflare.git
-cd astroflare
+git clone https://github.com/Atyantik/flarekit.git
+cd flarekit
 ```
 
 ### **2. Install Dependencies**
@@ -133,7 +133,7 @@ Each app or package may have its own configuration file. For example:
 
 ## **Contributing**
 
-We’re building Astroflare to support modern, scalable web development. Contributions are welcome to help improve its features and extend its scope.
+We’re building Flarekit to support modern, scalable web development. Contributions are welcome to help improve its features and extend its scope.
 
 ### **How to Contribute**
 
@@ -156,13 +156,13 @@ We’re building Astroflare to support modern, scalable web development. Contrib
 
 ## **License**
 
-Astroflare is licensed under the [MIT License](LICENSE).
+Flarekit is licensed under the [MIT License](LICENSE).
 
 ---
 
 ## **About Atyantik Technologies**
 
-Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**, a leading software development company specializing in scalable web applications, cloud services, and cutting-edge technologies.
+Flarekit is proudly supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**, a leading software development company specializing in scalable web applications, cloud services, and cutting-edge technologies.
 
 ### **Contact Atyantik**
 
@@ -176,10 +176,10 @@ Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https
 
 ---
 
-Astroflare – Simplifying Edge-First Development with Cloudflare 🌍✨
+Flarekit – Simplifying Edge-First Development with Cloudflare 🌍✨
 
 ---
 
 ### **Feedback and Support**
 
-If you have suggestions or run into issues, please [open an issue](https://github.com/Atyantik/astroflare/issues) or contact us directly. We value your feedback and contributions!
+If you have suggestions or run into issues, please [open an issue](https://github.com/Atyantik/flarekit/issues) or contact us directly. We value your feedback and contributions!

@@ -1,9 +1,7 @@
 import { storageSchema, type InsertStorageType } from '@schema/storage.schema';
 import { and, eq, isNull, desc } from 'drizzle-orm';
 import { v7 as uuidv7 } from 'uuid';
-import { DB } from '../@types/database.type';
-
-// type DB = DrizzleD1Database;
+import { Ctx } from '../types';
 
 /**
  * Creates a new storage record in the database.
@@ -14,11 +12,11 @@ import { DB } from '../@types/database.type';
  */
 export const createStorageRecord = async (
   storageRecord: Omit<InsertStorageType, 'id'>,
-  db: DB,
+  ctx: Ctx,
 ) => {
   try {
     const uid = uuidv7();
-    const response = await db.insert(storageSchema).values({
+    const response = await ctx.db.insert(storageSchema).values({
       ...storageRecord,
       id: uid,
     });
@@ -42,11 +40,11 @@ export const createStorageRecord = async (
  * @returns The storage record if found, otherwise null.
  * @throws Error if the retrieval fails.
  */
-export const getStorageRecordFromKey = async (key: string, db: DB) => {
+export const getStorageRecordFromKey = async (key: string, ctx: Ctx) => {
   try {
     return (
       (
-        await db
+        await ctx.db
           .select()
           .from(storageSchema)
           .where(
@@ -67,9 +65,9 @@ export const getStorageRecordFromKey = async (key: string, db: DB) => {
  * @returns Array of all Storage Records.
  * @throws Error if the listing fails.
  */
-export const listStorageRecords = async (db: DB) => {
+export const listStorageRecords = async (ctx: Ctx) => {
   try {
-    return await db
+    return await ctx.db
       .select()
       .from(storageSchema)
       .where(isNull(storageSchema.deletedAt))
@@ -86,9 +84,9 @@ export const listStorageRecords = async (db: DB) => {
  * @returns The number of records deleted.
  * @throws Error if the deletion fails.
  */
-export const clearStorageRecords = async (db: DB) => {
+export const clearStorageRecords = async (ctx: Ctx) => {
   try {
-    return await db.delete(storageSchema);
+    return await ctx.db.delete(storageSchema);
   } catch (err) {
     console.error(err);
     throw err;

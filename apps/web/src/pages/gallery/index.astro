@@ -2,19 +2,19 @@
 import Layout from "@layouts/Layout.astro";
 import "./style.css";
 
-import { listStorageRecords } from "@services/database";
+const { DB } = Astro.locals;
 
 const MAX_FILE_SIZE = 1024 * 1024 * 2; // 2MB
 
 const cache = Astro.locals.runtime.env.CACHE;
 let cachedStorageRecords = await cache.get("storage_records");
 if (!cachedStorageRecords) {
-  const storageRecords = await listStorageRecords(Astro.locals.dbClient);
+  const storageRecords = await DB.storage.listStorageRecords();
   await cache.put("storage_records", JSON.stringify(storageRecords));
   cachedStorageRecords = JSON.stringify(storageRecords);
 }
 const records = JSON.parse(cachedStorageRecords) as Awaited<
-  ReturnType<typeof listStorageRecords>
+  ReturnType<typeof DB.storage.listStorageRecords>
 >;
 ---
 

@@ -1,12 +1,8 @@
 import type { R2Bucket } from "@cloudflare/workers-types";
 import { fileExists, uploadFile, validateFile } from "@utils/r2-storage.util";
 import { computeShortHash } from "@utils/hash.util";
-import type { DrizzleD1Database } from "drizzle-orm/d1";
-import {
-  createStorageRecord,
-  getStorageRecordFromKey,
-  type SelectStorageType,
-} from "@services/database";
+
+type DB = globalThis.App.Locals["DB"];
 
 /**
  * Generates a unique key for the file using its hash and name.
@@ -28,11 +24,7 @@ function generateKey(hashHex: string, fileName: string): string {
  * @returns The URL of the uploaded image.
  * @throws Error if any step fails.
  */
-async function handleUpload(
-  formFile: File,
-  storage: R2Bucket,
-  db: DrizzleD1Database,
-): Promise<SelectStorageType & { url: string }> {
+async function handleUpload(formFile: File, storage: R2Bucket, db: DB) {
   // Validate the image
   const file = validateFile(formFile);
 
@@ -54,19 +46,16 @@ async function handleUpload(
   }
 
   // Check if the DB Entry exists!
-  let fileFromKey = await getStorageRecordFromKey(key, db);
+  let fileFromKey = await db.storage.getStorageRecordFromKey(key);
   if (!fileFromKey) {
-    await createStorageRecord(
-      {
-        key,
-        originalName: file.name,
-        size: file.size,
-        mimeType: file.type,
-        hash: hashHex,
-      },
-      db,
-    );
-    fileFromKey = await getStorageRecordFromKey(key, db);
+    await db.storage.createStorageRecord({
+      key,
+      originalName: file.name,
+      size: file.size,
+      mimeType: file.type,
+      hash: hashHex,
+    });
+    fileFromKey = await db.storage.getStorageRecordFromKey(key);
   }
 
   // Construct the CDN URL
@@ -92,10 +81,10 @@ export const handleFile = async (file: File, locals: globalThis.App.Locals) => {
   if (!storage) {
     throw new Error("You need to add storage binding to the environment.");
   }
-  const { dbClient } = locals;
+  const { DB } = locals;
   try {
     // Handle the upload process
-    const fileData = await handleUpload(file, storage, dbClient);
+    const fileData = await handleUpload(file, storage, DB);
     // Empty the cache
     await cache.delete("storage_records");
     // Respond with the image URL

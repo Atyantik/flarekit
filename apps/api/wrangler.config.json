@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
-  "name": "astroflare-worker",
+  "name": "flarekit-backend",
   "main": "src/index.ts",
   "workers_dev": false,
   "observability": {
@@ -13,7 +13,7 @@
   "queues": {
     "consumers": [
       {
-        "queue": "astroflare-queue",
+        "queue": "flarekit-queue",
         "max_batch_size": 10,
         "max_batch_timeout": 5
       }
@@ -21,7 +21,7 @@
   },
   "routes": [
     {
-      "pattern": "astroflare-api.atyantik.com",
+      "pattern": "flarekit-api.atyantik.com",
       "custom_domain": true
     }
   ]

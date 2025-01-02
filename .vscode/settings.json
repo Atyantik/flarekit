@@ -1,5 +1,10 @@
 {
-  "coverage-gutters.coverageFilePaths": ["./coverage/lcov.info"],
+  "coverage-gutters.coverageFileNames": [
+    "clover.xml",
+    "lcov.info",
+    "coverage.xml",
+    "cov.xml"
+  ],
   "coverage-gutters.showGutterCoverage": true,
   "editor.formatOnSave": true,
   "eslint.validate": [

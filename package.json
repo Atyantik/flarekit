@@ -1,5 +1,5 @@
 {
-  "name": "cloudflare-astro-apps",
+  "name": "flarekit",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,21 +8,18 @@
     "deploy:web": "turbo deploy:web",
     "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
     "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
-    "test": "npm run setup && turbo run @services/database#build && CI=true vitest run",
+    "test": "npm run setup && turbo run @flarekit/database#build && CI=true vitest run",
     "test:coverage": "npm run setup && CI=true vitest --run --coverage",
     "prepare": "npm exec husky || echo 'Husky not found, skipping...'",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
     "@types/eslint-config-prettier": "^6.11.3",
-    "@typescript-eslint/eslint-plugin": "^8.18.2",
-    "@typescript-eslint/parser": "^8.18.2",
+    "@types/node": "^22.10.3",
     "@vitest/coverage-istanbul": "^2.1.8",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-astro": "^1.3.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.3",
@@ -32,7 +29,6 @@
     "tsc-alias": "^1.8.10",
     "turbo": "^2.3.3",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.18.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
     "wrangler": "^3.99.0"

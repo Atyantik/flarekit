@@ -16,7 +16,6 @@ if (Astro.request.method === "POST") {
         throw new Error("File size too large");
       }
       const fileData = await handleFile(image, Astro.locals);
-      console.log(fileData);
       return Astro.redirect("/gallery");
     }
   } catch {

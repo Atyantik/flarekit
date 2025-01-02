@@ -1,6 +1,6 @@
-# **Astroflare Web App**
+# **Flarekit Web App**
 
-This repository contains the **Astroflare Web App**, a high-performance, edge-first web application built with **Astro** and deployed on **Cloudflare Pages**. It includes serverless API routes, R2 integration, and D1 database management, making it an ideal choice for scalable web applications.
+This repository contains the **Flarekit Web App**, a high-performance, edge-first web application built with **Astro** and deployed on **Cloudflare Pages**. It includes serverless API routes, R2 integration, and D1 database management, making it an ideal choice for scalable web applications.
 
 ---
 
@@ -18,7 +18,7 @@ This repository contains the **Astroflare Web App**, a high-performance, edge-fi
 
 ## **Overview**
 
-The Astroflare Web App is part of the Astroflare ecosystem. This project leverages:
+The Flarekit Web App is part of the Flarekit ecosystem. This project leverages:
 
 - **Astro**: For creating fast, SEO-friendly frontends.
 - **Cloudflare Pages**: For edge-first deployment and serverless APIs.
@@ -42,7 +42,7 @@ The Astroflare Web App is part of the Astroflare ecosystem. This project leverag
 ### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/Atyantik/astroflare.git
+git clone https://github.com/Atyantik/flarekit.git
 cd apps/web
 ```
 
@@ -116,7 +116,7 @@ src/
 
 ## **Contributing**
 
-We welcome contributions to improve Astroflare. Please follow these steps:
+We welcome contributions to improve Flarekit. Please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch:
@@ -137,7 +137,7 @@ We welcome contributions to improve Astroflare. Please follow these steps:
 
 ## **About Atyantik Technologies**
 
-Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**, a leading software development company specializing in scalable web applications, cloud services, and cutting-edge technologies.
+Flarekit is proudly supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**, a leading software development company specializing in scalable web applications, cloud services, and cutting-edge technologies.
 
 <p align="center">
   <img src="https://cdn.atyantik.com/atyantik-logo.png" alt="Atyantik Technologies" width="200">
@@ -149,4 +149,4 @@ Astroflare is proudly supported and sponsored by **[Atyantik Technologies](https
 - 💼 [LinkedIn](https://www.linkedin.com/company/atyantik-technologies/)
 - 🐦 [Twitter](https://twitter.com/atyantik_tech)
 
-Astroflare Web App – Simplifying Edge-First Development with Cloudflare 🌍✨
+Flarekit Web App – Simplifying Edge-First Development with Cloudflare 🌍✨
