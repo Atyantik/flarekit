@@ -1,21 +1,13 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import "./style.css";
+import { getCdnUrl } from "@utils/cdn.util";
 
 const { DB } = Astro.locals;
 
 const MAX_FILE_SIZE = 1024 * 1024 * 2; // 2MB
 
-const cache = Astro.locals.runtime.env.CACHE;
-let cachedStorageRecords = await cache.get("storage_records");
-if (!cachedStorageRecords) {
-  const storageRecords = await DB.storage.listStorageRecords();
-  await cache.put("storage_records", JSON.stringify(storageRecords));
-  cachedStorageRecords = JSON.stringify(storageRecords);
-}
-const records = JSON.parse(cachedStorageRecords) as Awaited<
-  ReturnType<typeof DB.storage.listStorageRecords>
->;
+const records = await DB.storage.listStorageRecords();
 ---
 
 <Layout>
@@ -42,7 +34,7 @@ const records = JSON.parse(cachedStorageRecords) as Awaited<
         records.map((record) => (
           <img
             loading="lazy"
-            src={`/cdn/${record.key}`}
+            src={getCdnUrl(Astro.locals.runtime.env, record.key)}
             alt={record.originalName}
           />
         ))

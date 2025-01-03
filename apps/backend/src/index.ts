@@ -1,5 +1,5 @@
+import { initDBInstance } from '@flarekit/database';
 import { Handler, Hono } from 'hono';
-// import { clearStorageRecords, getDBClient, listStorageRecords } from '@flarekit/database';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -23,23 +23,19 @@ export default {
   /* istanbul ignore next: Cannot test scheduled invocation */
   // scheduled(event: ScheduledEvent, env: Environment, ctx: ExecutionContext)
   async scheduled(event, env, ctx) {
+    const db = initDBInstance(ctx, env);
     // Pass a promise
     ctx.waitUntil(
       (async () => {
-        // Clear the storage every 5th minute
-        // if (event.cron.startsWith('*/5')) {
-        //   const DB = await getDBClient(this, env.DB);
-        //   const STORAGE = env.STORAGE;
-        //   const CACHE = env.CACHE;
-        //   // Get all storage Records
-        //   const storageRecords = await listStorageRecords(DB);
-        //   // Remove each storage record from
-        //   for (const record of storageRecords) {
-        //     await STORAGE.delete(record.key);
-        //   }
-        //   await clearStorageRecords(DB);
-        //   await CACHE.delete('storage_records');
-        // }
+        // Clear the storage every 2th minute
+        if (event.cron.startsWith('*/2')) {
+          const storageRecords = await db.storage.listStorageRecords();
+          // Remove each storage record from
+          for (const record of storageRecords) {
+            await env.STORAGE.delete(record.key);
+          }
+          await db.storage.clearStorageRecords();
+        }
       })(),
     );
   },

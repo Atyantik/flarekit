@@ -8,7 +8,7 @@
     "head_sampling_rate": 1
   },
   "triggers": {
-    "crons": ["*/5 * * * *"]
+    "crons": ["*/2 * * * *"]
   },
   "queues": {
     "consumers": [

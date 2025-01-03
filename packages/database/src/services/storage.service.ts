@@ -1,4 +1,8 @@
-import { storageSchema, type InsertStorageType } from '@schema/storage.schema';
+import {
+  SelectStorageType,
+  storageSchema,
+  type InsertStorageType,
+} from '@schema/storage.schema';
 import { and, eq, isNull, desc } from 'drizzle-orm';
 import { v7 as uuidv7 } from 'uuid';
 import { Ctx } from '../types';
@@ -21,6 +25,9 @@ export const createStorageRecord = async (
       id: uid,
     });
     if (response.success) {
+      if (ctx.cache) {
+        await ctx.cache.delete('storage_records');
+      }
       return {
         ...storageRecord,
         id: uid,
@@ -65,13 +72,30 @@ export const getStorageRecordFromKey = async (key: string, ctx: Ctx) => {
  * @returns Array of all Storage Records.
  * @throws Error if the listing fails.
  */
-export const listStorageRecords = async (ctx: Ctx) => {
+export const listStorageRecords = async (
+  ctx: Ctx,
+): Promise<SelectStorageType[]> => {
   try {
-    return await ctx.db
+    if (ctx.cache) {
+      const cachedRecords = await ctx.cache.get('storage_records');
+      if (cachedRecords) {
+        try {
+          return JSON.parse(cachedRecords) as SelectStorageType[];
+        } catch {
+          // do nothing - cache miss
+        }
+      }
+    }
+    const records = await ctx.db
       .select()
       .from(storageSchema)
       .where(isNull(storageSchema.deletedAt))
       .orderBy(desc(storageSchema.createdAt));
+
+    if (ctx.cache) {
+      await ctx.cache.put('storage_records', JSON.stringify(records));
+    }
+    return records;
   } catch (err) {
     console.error(err);
     throw err;
