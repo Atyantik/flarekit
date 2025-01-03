@@ -25,6 +25,7 @@ describe('storage.service', () => {
       };
 
       const result = await db.storage.createStorageRecord(input);
+      expect(env.CACHE.get('storage_records')).resolves.toBeNull();
       expect(validate(result.id)).toBe(true);
     });
 
@@ -142,14 +143,58 @@ describe('storage.service', () => {
         hash: 'aaa',
       };
       await db.storage.clearStorageRecords();
+      expect(env.CACHE.get('storage_records')).resolves.toBeNull();
       const record1 = await db.storage.createStorageRecord(input);
       const record2 = await db.storage.createStorageRecord(input2);
 
       const result = await db.storage.listStorageRecords();
 
       expect(result).toHaveLength(2);
+      expect(env.CACHE.get('storage_records')).resolves.toBe(
+        JSON.stringify(result),
+      );
+
+      const cachedResult = await db.storage.listStorageRecords();
+      expect(env.CACHE.get('storage_records')).resolves.toBe(
+        JSON.stringify(result),
+      );
+      expect(result).toMatchObject(cachedResult);
       expect(result[0].id).eq(record1.id);
       expect(result[1].id).eq(record2.id);
+    });
+
+    it('should list all records even it cache is not present', async () => {
+      const instance = getInstance(ctx);
+      if (!instance) {
+        throw new Error(
+          'Ctx instance not found. Make sure initDatabase is implemented',
+        );
+      }
+      const cache = instance.cache;
+      delete instance.cache;
+      const input = {
+        key: 'test-key-1',
+        originalName: 'somefile',
+        size: 100,
+        mimeType: 'application/json',
+        hash: 'zzz',
+      };
+      const input2 = {
+        key: 'test-key-2',
+        originalName: 'somefile',
+        size: 100,
+        mimeType: 'application/json',
+        hash: 'aaa',
+      };
+      await db.storage.clearStorageRecords();
+      expect(env.CACHE.get('storage_records')).resolves.toBeNull();
+      await db.storage.createStorageRecord(input);
+      await db.storage.createStorageRecord(input2);
+
+      const result = await db.storage.listStorageRecords();
+
+      expect(result).toHaveLength(2);
+      instance.cache = cache;
     });
 
     it('should throw if the listing fails', async () => {

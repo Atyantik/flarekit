@@ -110,7 +110,11 @@ export const listStorageRecords = async (
  */
 export const clearStorageRecords = async (ctx: Ctx) => {
   try {
-    return await ctx.db.delete(storageSchema);
+    const deleteResult = await ctx.db.delete(storageSchema);
+    if (ctx.cache) {
+      await ctx.cache.delete('storage_records');
+    }
+    return deleteResult;
   } catch (err) {
     console.error(err);
     throw err;
