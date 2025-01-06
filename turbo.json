@@ -50,7 +50,7 @@
       "outputs": []
     },
     "test": {
-      "dependsOn": ["^test"],
+      "dependsOn": ["@flarekit/database#build", "^test"],
       "cache": false,
       "outputs": []
     }
