@@ -10,7 +10,7 @@ const { PUBLIC_BACKEND_ENDPOINT, PUBLIC_CDN_URL } = Astro.locals.runtime.env;
 
 <Layout showNotification>
   <div class="container">
-    {!records.length && <div>No Images uploaded yet.</div>}
+    {!records.length && <div class="no-image">No Images uploaded yet.</div>}
     <div class="masonry">
       {
         records.map((record) => (

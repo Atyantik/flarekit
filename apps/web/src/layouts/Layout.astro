@@ -1,8 +1,5 @@
 ---
-import { boolean } from "astro:schema";
-import { ClientRouter } from "astro:transitions";
-
-interface props {
+export interface props {
   showNotification?: boolean;
 }
 
@@ -22,7 +19,6 @@ const { showNotification } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap"
       rel="stylesheet"
     />
-    <ClientRouter />
   </head>
   <body>
     {

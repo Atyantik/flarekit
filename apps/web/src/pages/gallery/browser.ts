@@ -42,6 +42,7 @@ if (masonry && inputField) {
 
               masonry.prepend(img as any);
             });
+            document.querySelector(".no-image")?.remove();
           }
         } catch (e) {
           console.error(e);
