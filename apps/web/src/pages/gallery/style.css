@@ -1,95 +1,33 @@
-/* 
-  .notification 
-  Used for the maroon banner stating gallery info 
-*/
 .notification {
   display: flex;
-  font-weight: bold;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-  background-color: maroon;
+  background-color: var(--primary);
   color: white;
 }
-
-/* 
-  .center 
-  Centers its children, used for the upload form 
-*/
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  text-align: center;
-  background-color: #f7f7f7; /* optional background color */
+.notification p {
+  margin: 0;
+  padding: 5px;
 }
 
-form {
-  width: 100%;
-  display: block;
-}
-
-/*
-  .upload-box 
-  The “clickable” label that triggers file upload 
-*/
-.upload-box {
-  display: block;
-  text-align: center;
-  border: 2px dashed #ccc;
-  border-radius: 10px;
-  padding: 2rem;
-  font-size: 1.2rem;
-  color: #555;
-  background-color: #fff;
-  cursor: pointer;
-  transition:
-    border-color 0.2s ease-in-out,
-    background-color 0.2s ease-in-out;
-}
-.upload-box:hover {
-  border-color: #6100ee;
-  background-color: #f0f8ff; /* light highlight */
-}
-.upload-box span {
-  display: block;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-/* Hide the real file input visually, but keep it accessible for screen readers */
-.upload-box input[type="file"] {
-  display: none;
-}
-
-/* 
-  .container 
-  A generic container with padding
-*/
 .container {
   padding: 2rem;
 }
-
-/* 
-  .masonry 
-  Pure CSS "masonry" using multi-column layout 
-*/
 .masonry {
-  column-count: 1; /* Default: 1 column on very small screens */
-  column-gap: 1rem; /* Gutter size */
+  column-count: 1;
+  column-gap: 1rem;
 }
 .masonry img {
   width: 100%;
   display: block;
   margin-bottom: 1rem;
-  border-radius: 4px; /* optional styling */
+  border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive breakpoints for more columns */
+/* Responsive breakpoints */
 @media (min-width: 600px) {
   .masonry {
     column-count: 2;
@@ -109,4 +47,42 @@ form {
   .masonry {
     column-count: 5;
   }
+}
+
+/* Floating Upload Button */
+.floating-upload-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--primary);
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  border: 1px solid var(--primary);
+}
+
+.floating-upload-btn:hover {
+  background-color: white;
+  color: var(--primary);
+}
+
+.floating-upload-btn input[type="file"] {
+  display: none;
+}
+
+.loading .btn {
+  display: none;
+}
+.loader {
+  display: none;
+}
+.loading .loader {
+  display: block;
 }

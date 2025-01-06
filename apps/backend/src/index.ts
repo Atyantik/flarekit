@@ -1,14 +1,23 @@
 import { initDBInstance } from '@flarekit/database';
 import { Handler, Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { uploadHandler } from './routes/upload.route';
 
 const app = new Hono<{ Bindings: Env }>();
+app.use(cors());
 
 const honoHomeRoute: Handler = (c) => {
   return c.json({
-    message: 'Welcome to Hono!',
+    success: true,
+    message: 'Welcome to Flarekit Backend!',
   });
 };
+
+app.post('/upload', uploadHandler);
+
 app.get('/', honoHomeRoute);
+
+export { app };
 
 export default {
   fetch: app.fetch,

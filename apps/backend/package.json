@@ -1,9 +1,10 @@
 {
   "name": "@flarekit/backend",
+  "type": "module",
   "scripts": {
-    "dev": "npm run setup && wrangler dev --test-scheduled --persist-to=../../.wrangler/state",
+    "dev": "npm run setup && wrangler dev --test-scheduled --persist-to=../../.wrangler/state --port=8000",
     "deploy": "npm run setup && wrangler deploy",
-    "test": "npm run setup && CI=true vitest run",
+    "test": "npm run setup && CI=true vitest run --coverage",
     "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"
   },
   "dependencies": {
@@ -13,7 +14,9 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.5.40",
     "@cloudflare/workers-types": "^4.20241230.0",
+    "@types/node": "^22.10.5",
     "typescript": "^5.7.2",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
     "wrangler": "^3.99.0"
   }

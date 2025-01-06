@@ -3,32 +3,14 @@ import Layout from "@layouts/Layout.astro";
 import "./style.css";
 import { getCdnUrl } from "@utils/cdn.util";
 
-const { DB } = Astro.locals;
-
-const MAX_FILE_SIZE = 1024 * 1024 * 2; // 2MB
-
+const DB = Astro.locals.DB;
 const records = await DB.storage.listStorageRecords();
+const { PUBLIC_BACKEND_ENDPOINT, PUBLIC_CDN_URL } = Astro.locals.runtime.env;
 ---
 
-<Layout>
-  <div transition:persist="gallery-header">
-    <div class="notification">
-      <p>
-        The gallery resets in every 2 minutes. All the uploaded assets would be
-        deleted.
-      </p>
-    </div>
-    <div class="center">
-      <form method="post" enctype="multipart/form-data" action="/upload">
-        <label class="upload-box" for="file">
-          <span>Click to Upload</span>
-          Max image size 2MB
-          <input type="file" id="file" name="image" accept="image/*" />
-        </label>
-      </form>
-    </div>
-  </div>
+<Layout showNotification>
   <div class="container">
+    {!records.length && <div>No Images uploaded yet.</div>}
     <div class="masonry">
       {
         records.map((record) => (
@@ -41,43 +23,31 @@ const records = await DB.storage.listStorageRecords();
       }
     </div>
   </div>
+
+  <form
+    method="post"
+    enctype="multipart/form-data"
+    action="/upload"
+    id="upload-form"
+  >
+    <label class="floating-upload-btn">
+      <div class="btn">
+        <input
+          type="file"
+          id="file"
+          name="images[]"
+          accept="image/*"
+          multiple
+        />
+        <span>+ Upload Images</span>
+      </div>
+      <span class="loader">Uploading Images...</span>
+    </label>
+  </form>
 </Layout>
-<script is:inline define:vars={{ MAX_FILE_SIZE }}>
-  document
-    .querySelector("input[type=file]")
-    ?.addEventListener?.("change", async (e) => {
-      if (e?.target instanceof HTMLInputElement) {
-        const form = e.target.closest("form");
-        if (e.target.type === "file") {
-          for (const file of e.target.files) {
-            if (!file.type.startsWith("image/")) {
-              alert("Only images are allowed");
-              form?.reset();
-              return;
-            }
 
-            if (file.size > MAX_FILE_SIZE) {
-              alert("File size too large. Max 2MB allowed");
-              form?.reset();
-              return;
-            }
-          }
-        }
-        if (form) {
-          form.disabled = true;
-          form.classList.add("loading");
-          const formData = new FormData(form);
-
-          try {
-            await fetch(form.action, {
-              method: form.method,
-              body: formData,
-            });
-            window.location.reload();
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      }
-    });
+<script is:inline define:vars={{ PUBLIC_BACKEND_ENDPOINT, PUBLIC_CDN_URL }}>
+  window.PUBLIC_BACKEND_ENDPOINT = PUBLIC_BACKEND_ENDPOINT;
+  window.PUBLIC_CDN_URL = PUBLIC_CDN_URL;
 </script>
+<script src="./browser.ts"></script>

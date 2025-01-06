@@ -7,13 +7,13 @@ const serverTime = Date.now();
 
 <Layout>
   <div class="center">
-    <h1>Cloudflare + Astro</h1>
+    <h1>Flarekit</h1>
     <div>
       ⚡ Blazing Fast, Budget Friendly, Built to Scale
       <p id="loadTime"></p>
     </div>
     <p>
-      <a href="/gallery">Checkout Gallery Example</a>
+      <a href="/gallery">Checkout Gallery Example →</a>
     </p>
   </div>
 </Layout>
@@ -23,16 +23,17 @@ const serverTime = Date.now();
     `Page Load Time: ${loadTime}ms`;
 </script>
 <style>
-  a {
-    color: #6100ee;
-    font-weight: bold;
+  h1 {
+    font-size: 3rem;
+    color: var(--primary);
+    letter-spacing: 1.5px;
   }
+
   .center {
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     flex-direction: column;
     padding: 10px;
     text-align: center;

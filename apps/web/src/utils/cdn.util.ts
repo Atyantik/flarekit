@@ -7,6 +7,7 @@ export const getCdnUrl = (
   if (!key) {
     return "";
   }
+  console.log("PUBLIC_CDN_URL:: ", ctx.PUBLIC_CDN_URL);
   if (!ctx.PUBLIC_CDN_URL) {
     return `/cdn/${key}`;
   }

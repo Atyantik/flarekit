@@ -3,6 +3,7 @@
 interface Env {
 	CACHE: KVNamespace;
 	PUBLIC_CDN_URL: string;
+	PUBLIC_BACKEND_ENDPOINT: string;
 	STORAGE: R2Bucket;
 	DB: D1Database;
 	QUEUE: Queue;
