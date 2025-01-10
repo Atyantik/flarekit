@@ -194,6 +194,9 @@ jobs:
       - name: Setup Wrangler
         run: npm run setup
 
+      - name: Build Database
+        run: npx flarekit build --filter="@flarekit/database"
+
       - name: Deploy to @flarekit/backend
         uses: cloudflare/wrangler-action@v3
         with:
