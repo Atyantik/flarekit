@@ -126,7 +126,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  deploy:
+  deploy_web:
     runs-on: ubuntu-24.04
     needs: [migrate]
     steps:
@@ -166,6 +166,33 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/web
           command: pages deploy ./dist
+
+  deploy_backend:
+    runs-on: ubuntu-24.04
+    needs: [migrate]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Wrangler
+        run: npm run setup
 
       - name: Deploy to @flarekit/backend
         uses: cloudflare/wrangler-action@v3
