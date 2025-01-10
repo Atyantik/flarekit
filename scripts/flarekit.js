@@ -18,6 +18,7 @@ async function main() {
   const turboProcess = spawn('npx', ['turbo', ...turboArgs], {
     cwd: rootDir,
     stdio: 'inherit',
+    env: { ...process.env },
   });
 
   // 4. Cleanup function
