@@ -15,12 +15,15 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "dev": "npm run setup && rollup --config --watch",
+    "migrate:d1:test": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local --persist-to=../../.wrangler/.test/state",
+    "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
+    "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
+    "dev": "rollup --config --watch",
     "build": "npm run build:distribution && npm run build:migrations",
-    "build:migrations": "npm run setup && drizzle-kit generate",
-    "build:distribution": "npm run setup && npm run clean && rollup --config",
-    "test": "npm run setup && CI=true vitest --run --coverage",
-    "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"
+    "build:migrations": "drizzle-kit generate",
+    "build:distribution": "npm run clean && rollup --config",
+    "test": "CI=true vitest --run --coverage",
+    "test:watch": "CI=true vitest"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
@@ -28,19 +31,19 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.5.40",
-    "@cloudflare/workers-types": "^4.20241230.0",
+    "@cloudflare/vitest-pool-workers": "^0.5.41",
+    "@cloudflare/workers-types": "^4.20250109.0",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "@vitest/coverage-istanbul": "^2.1.8",
     "drizzle-kit": "^0.30.1",
     "eslint": "^9.17.0",
-    "miniflare": "^3.20241218.0",
-    "rollup": "^4.29.1",
-    "typescript": "^5.7.2",
+    "miniflare": "^3.20241230.0",
+    "rollup": "^4.30.1",
+    "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
-    "wrangler": "^3.99.0"
+    "wrangler": "^3.100.0"
   }
 }

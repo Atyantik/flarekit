@@ -13,6 +13,7 @@ build/
 
 # Wrangler cache and settings
 .wrangler/
+worker-configuration.d.ts
 
 # Vercel settings
 .vercel/

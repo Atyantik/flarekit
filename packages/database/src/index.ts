@@ -24,3 +24,8 @@ export const initDBInstance = (reference: object, env: Env) => {
   // Wrap the "services" in the "createFlarekitServices" proxy
   return createFlarekitServices(instance, services);
 };
+
+export default {
+  initDBInstance,
+  getInstance,
+};

@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 wrangler.json
 .dev.vars
+.test.vars

@@ -14,11 +14,13 @@ dist/
 # deps
 node_modules/
 .wrangler
+worker-configuration.d.ts
 
 # env
 .env
 .env.production
 .dev.vars
+.test.vars
 wrangler.json
 
 # logs

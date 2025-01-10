@@ -15,7 +15,7 @@
       "database_name": "flarekit-d1",
       "database_id": "07245e83-0bbd-4459-8322-ba1c28a617ac",
       "migrations_table": "astro_migrations",
-      "migrations_dir": "./packages/database/migrations"
+      "migrations_dir": "./migrations"
     }
   ],
   "r2_buckets": [

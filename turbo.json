@@ -2,57 +2,56 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
+    "setup": {
+      "outputs": []
+    },
+    "build": {
+      "dependsOn": ["@flarekit/database#build"],
+      "cache": false,
+      "outputs": []
+    },
+    "preview": {
+      "dependsOn": ["@flarekit/database#build", "build"],
+      "outputs": [],
+      "persistent": true
+    },
+    "test:e2e": {
+      "dependsOn": [],
+      "outputs": []
+    },
+    "test:e2e:watch": {
+      "dependsOn": [],
+      "outputs": []
+    },
+    "migrate:d1:test": {
+      "outputs": []
+    },
     "@flarekit/database#build": {
       "cache": false,
       "outputs": ["dist/**"]
     },
-    "@flarekit/database#dev": {
-      "dependsOn": ["@flarekit/database#build"],
-      "cache": false,
-      "persistent": true,
-      "outputs": []
-    },
-    "@flarekit/web#dev": {
-      "dependsOn": ["@flarekit/database#build"],
-      "cache": false,
-      "persistent": true,
-      "outputs": []
-    },
     "dev": {
       "dependsOn": ["@flarekit/database#build"],
-      "cache": false,
-      "outputs": []
-    },
-    "dev:web": {
-      "dependsOn": [
-        "@flarekit/database#dev",
-        "@flarekit/web#dev",
-        "@flarekit/worker#dev"
-      ],
       "persistent": true,
       "cache": false,
       "inputs": [],
       "outputs": []
     },
-    "build": {
+    "deploy": {
       "dependsOn": ["^build"],
-      "cache": false,
-      "outputs": []
-    },
-    "deploy:web": {
-      "dependsOn": ["@flarekit/database#build", "@flarekit/web#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
     },
-    "setup": {
-      "dependsOn": ["^setup"],
+    "test": {
+      "dependsOn": ["@flarekit/database#build"],
       "cache": false,
       "outputs": []
     },
-    "test": {
-      "dependsOn": ["@flarekit/database#build", "^test"],
+    "test:watch": {
+      "dependsOn": ["@flarekit/database#build"],
       "cache": false,
-      "outputs": []
+      "outputs": [],
+      "persistent": true
     }
   }
 }

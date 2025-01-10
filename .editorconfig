@@ -1,0 +1,26 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Specific settings for Markdown files
+[*.md]
+max_line_length = 80
+trim_trailing_whitespace = false
+
+# Specific settings for JSON and JavaScript files
+[*.{js,jsx,ts,tsx,json}]
+# No additional rules; inherit from [*] section
+
+# Ignore specific files and directories
+[{**/dist/**,**/build/**,**/coverage/**,**/public/**,**/.astro/**,**/.wrangler/**,.turbo,.cache,**/*.d.ts}]
+# No EditorConfig settings needed as these are ignored by ESLint

@@ -161,7 +161,7 @@ Deploy your applications with ease:
 - **Deploy Web Application**
 
   ```bash
-  npm run deploy:web
+  npm run deploy
   ```
 
   - **What It Does:**
@@ -201,7 +201,7 @@ A summary of the key scripts available in the root `package.json`:
 | ----------------------- | --------------------------------------------------------------------- |
 | `setup`                 | Initializes Turborepo and prepares the environment.                   |
 | `dev`                   | Runs the development servers for all applications and services.       |
-| `deploy:web`            | Builds and deploys the Astro-based frontend application.              |
+| `deploy`                | Builds and deploys all applications.                                  |
 | `migrate:d1:local`      | Applies database migrations to the local Cloudflare D1 instance.      |
 | `migrate:d1:production` | Applies database migrations to the production Cloudflare D1 instance. |
 | `test`                  | Builds necessary packages and runs the test suites in CI mode.        |

@@ -57,12 +57,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Test
-        run: npm run test
+      - name: Test all packages
+        run: npm test
 
-  build_web:
+  build:
     runs-on: ubuntu-24.04
-    needs: [lint, 'test'] # Only build if lint_and_test passed
+    needs: [lint, 'test']
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -84,13 +84,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # @todo improve below to build all apps, including workers
-      - name: Build Web
-        run: npm run deploy:web
+      - name: Build all applications
+        run: npm run build
 
-      # Optionally store build artifacts for subsequent jobs
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
+      - name: Archive web artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: web-dist
           path: ./apps/web/dist
@@ -98,7 +96,7 @@ jobs:
 
   migrate:
     runs-on: ubuntu-24.04
-    needs: [build_web]
+    needs: [build]
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -126,7 +124,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  deploy_web:
+  deploy:
     runs-on: ubuntu-24.04
     needs: [migrate]
     steps:
@@ -150,11 +148,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Setup
-        run: npm run setup
-
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: web-dist
           path: './apps/web/dist'
@@ -162,7 +157,7 @@ jobs:
       - name: Display CP and Wrangler versions
         run: ls -al . && ls -al ./apps/web/dist && cat ./apps/web/wrangler.json
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to @flarekit/web
         uses: cloudflare/wrangler-action@v3
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -170,37 +165,7 @@ jobs:
           workingDirectory: ./apps/web
           command: pages deploy ./dist
 
-  deploy_backend:
-    runs-on: ubuntu-24.04
-    needs: [migrate]
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Use Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Setup
-        run: npm run setup
-
-      - name: Run Setup
-        run: npm run build --workspace=@flarekit/database
-
-      - name: Deploy to Cloudflare Workers
+      - name: Deploy to @flarekit/backend
         uses: cloudflare/wrangler-action@v3
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

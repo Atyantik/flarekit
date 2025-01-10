@@ -1,26 +1,27 @@
 {
   "name": "@flarekit/web",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm run setup && astro dev",
-    "build": "npm run setup && astro build",
-    "preview": "npm run setup && wrangler pages dev ./dist",
-    "astro": "npm run setup && astro",
-    "setup": "node ../../scripts/generate-wrangler.json.js && wrangler types"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler pages dev --persist-to=../../.wrangler/.test/state --port=7001 --show-interactive-dev-session=false",
+    "test:e2e": "playwright test",
+    "test:e2e:watch": "playwright test --ui"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.1.0",
-    "@flarekit/database": "*",
-    "astro": "^5.1.1",
+    "@flarekit/database": "^1.0.0",
+    "astro": "^5.1.3",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.49.1",
     "@types/node": "^22.10.2",
-    "@typescript-eslint/eslint-plugin": "^8.19.0",
-    "@typescript-eslint/parser": "^8.19.0",
+    "@typescript-eslint/eslint-plugin": "^8.19.1",
+    "@typescript-eslint/parser": "^8.19.1",
     "astro-eslint-parser": "^1.1.0",
     "eslint-plugin-astro": "^1.3.1",
     "prettier": "^3.4.2",

@@ -37,4 +37,6 @@ async function getD1DatabaseName(binding) {
 
 // Use the binding name "DB" to fetch the database_name
 const databaseName = await getD1DatabaseName('DB');
+
+// Do not remove this console.log as this is used by stdin to get the database name
 console.log(databaseName);
