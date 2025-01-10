@@ -10,11 +10,15 @@ const rootDir = resolve(dirname(new URL(import.meta.url).pathname), '..');
 
 /**
  * This function is a deep merge function that merges two objects
- * @param object originalConfig
- * @param object packageConfig
+ * @param object oConfig
+ * @param object pConfig
  * @returns
  */
-function deepMerge(originalConfig, packageConfig) {
+function deepMerge(oConfig, pConfig) {
+  let originalConfig =
+    typeof oConfig === 'object' ? JSON.parse(JSON.stringify(oConfig)) : oConfig;
+  let packageConfig =
+    typeof pConfig === 'object' ? JSON.parse(JSON.stringify(pConfig)) : pConfig;
   // If `source` is null/undefined, we simply return it
   // so that it can override an existing value in `target`.
   if (packageConfig === null || packageConfig === undefined) {
