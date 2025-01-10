@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev --test-scheduled --persist-to=../../.wrangler/state --port=8000",
-    "preview": "wrangler dev --test-scheduled --persist-to=../../.wrangler/.test/state --port=7000 --show-interactive-dev-session=false",
+    "preview": "wrangler dev --test-scheduled --persist-to=../../.wrangler/.test/state --port=7000 --inspector-port=9230 --show-interactive-dev-session=false",
     "deploy": "wrangler deploy",
     "test": "CI=true vitest run --coverage",
     "test:watch": "CI=true vitest"

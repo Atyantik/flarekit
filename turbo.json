@@ -11,7 +11,11 @@
       "outputs": []
     },
     "preview": {
-      "dependsOn": ["@flarekit/database#build", "build"],
+      "dependsOn": [
+        "@flarekit/database#build",
+        "@flarekit/database#migrate:d1:test",
+        "build"
+      ],
       "outputs": [],
       "persistent": true
     },

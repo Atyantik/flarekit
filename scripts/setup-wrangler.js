@@ -101,7 +101,6 @@ const setupWranglerInPackage = async (packageDir) => {
       outputWranglerConfigPath,
       JSON.stringify(packageWrangler, null, 2),
     );
-    console.log('Written: ', outputWranglerConfigPath);
     await writeFile(outputDevVarsPath, rootDevVarsContent);
   } catch (error) {
     console.error(error);

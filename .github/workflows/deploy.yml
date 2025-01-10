@@ -60,6 +60,8 @@ jobs:
       - name: Test all packages
         run: npm test
 
+      - name: Run E2E Testing
+        run: npm run test:e2e
   build:
     runs-on: ubuntu-24.04
     needs: [lint, 'test']
@@ -153,9 +155,6 @@ jobs:
         with:
           name: web-dist
           path: './apps/web/dist'
-
-      - name: Display CP and Wrangler versions
-        run: ls -al . && ls -al ./apps/web/dist && cat ./apps/web/wrangler.json
 
       - name: Deploy to @flarekit/web
         uses: cloudflare/wrangler-action@v3
