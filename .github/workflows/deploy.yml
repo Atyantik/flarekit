@@ -121,7 +121,7 @@ jobs:
         run: npm install
 
       - name: Run migrations on production
-        run: npm run migrate:d1:production
+        run: npx flarekit migrate:d1:production
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

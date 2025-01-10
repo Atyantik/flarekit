@@ -30,6 +30,12 @@
     "migrate:d1:test": {
       "outputs": []
     },
+    "migrate:d1:local": {
+      "outputs": []
+    },
+    "migrate:d1:production": {
+      "outputs": []
+    },
     "@flarekit/database#build": {
       "cache": false,
       "outputs": ["dist/**"]
@@ -40,11 +46,6 @@
       "cache": false,
       "inputs": [],
       "outputs": []
-    },
-    "deploy": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**"]
     },
     "test": {
       "dependsOn": ["@flarekit/database#build"],

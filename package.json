@@ -10,7 +10,6 @@
     "cleanup": "node ./scripts/cleanup.js",
     "setup": "node ./scripts/setup-wrangler.js",
     "dev": "npx flarekit dev",
-    "deploy": "npx flarekit deploy",
     "build": "npx flarekit build",
     "preview": "npx flarekit --ui=stream preview",
     "test": "npx flarekit test",
