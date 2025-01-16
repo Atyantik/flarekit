@@ -1,0 +1,71 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Develop",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev"
+    },
+    {
+      "name": "Build",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run build"
+    },
+    {
+      "name": "Preview",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run preview"
+    },
+    {
+      "name": "Test",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run test"
+    },
+    {
+      "name": "Test (Watch)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run test:watch"
+    },
+    {
+      "name": "Test E2E",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run test:e2e"
+    },
+    {
+      "name": "Test E2E (Watch With UI)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run test:e2e:watch"
+    },
+    {
+      "name": "Lint",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run lint"
+    },
+    {
+      "name": "Format",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run format"
+    },
+    {
+      "name": "Build & Migrate Locally",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npx flarekit build:migrations && npx flarekit migrate:d1:local"
+    },
+    {
+      "name": "Build Migrations",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npx flarekit build:migrations"
+    }
+  ]
+}

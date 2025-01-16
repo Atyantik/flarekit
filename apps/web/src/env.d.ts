@@ -6,6 +6,7 @@ declare global {
   // or "declare module 'astro' { ... }" if you’re augmenting Astro’s types
   namespace App {
     interface Locals extends Runtime<Env> {
+      REQUEST_TIME: number;
       // If initDBInstance is async, you might need Awaited<>
       DB: ReturnType<typeof initDBInstance>;
     }

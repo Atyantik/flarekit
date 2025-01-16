@@ -2,63 +2,74 @@
   "version": "2.0.0",
   "tasks": [
     {
-      // 1) Dev server
-      "label": "dev",
+      "label": "Develop",
+      "detail": "Run all packages in development mode",
       "type": "shell",
       "command": "npm run dev",
-      "group": {
-        // This lets VS Code consider it a "build" task
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "group": "build"
     },
     {
-      // 2) Run normal tests (no coverage)
-      "label": "test",
+      "label": "Build",
+      "detail": "Build all packages in production mode",
       "type": "shell",
+      "command": "npm run build",
+      "group": "build"
+    },
+    {
+      "label": "Preview",
+      "detail": "Build and preview all packages",
+      "type": "shell",
+      "command": "npm run preview"
+    },
+    {
+      "label": "Test",
+      "type": "shell",
+      "detail": "Test all packages",
       "command": "npm run test",
-      "group": {
-        // Typically a "test" group
-        "kind": "test",
-        "isDefault": true
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "group": "test"
     },
     {
-      // 3) Run tests with coverage
-      "label": "test:coverage",
+      "label": "Test (Watch)",
       "type": "shell",
-      "command": "npm run test:coverage",
-      "group": {
-        "kind": "test",
-        "isDefault": false
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "detail": "Run Test in watch mode",
+      "command": "npm run test:watch",
+      "group": "test"
     },
     {
-      // 4) Display coverage (depends on test:coverage)
-      "label": "coverage:display",
+      "label": "Test E2E",
       "type": "shell",
-      "command": "code --command coverage-gutters.displayCoverage",
-      "problemMatcher": [],
-      "dependsOn": "test:coverage",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "detail": "Run End to End Tests for the packages",
+      "command": "npm run test:e2e",
+      "group": "test"
+    },
+    {
+      "label": "Test E2E (UI Mode)",
+      "type": "shell",
+      "detail": "Run End to End Tests for the packages with Playwright UI",
+      "command": "npm run test:e2e:watch",
+      "group": "test"
+    },
+    {
+      "label": "Lint",
+      "type": "shell",
+      "command": "npm run lint"
+    },
+    {
+      "label": "Format",
+      "type": "shell",
+      "command": "npm run format"
+    },
+
+    // --- Extra Flarekit Commands ---
+    {
+      "label": "Build & Migrate Locally",
+      "type": "shell",
+      "command": "npx flarekit build:migrations && npx flarekit migrate:d1:local"
+    },
+    {
+      "label": "Build Migrations",
+      "type": "shell",
+      "command": "npx flarekit build:migrations"
     }
   ]
 }

@@ -1,8 +1,5 @@
 ---
 import Layout from "@layouts/Layout.astro";
-
-// Get the server time to calculate approx page load time
-const serverTime = Date.now();
 ---
 
 <Layout>
@@ -17,10 +14,10 @@ const serverTime = Date.now();
     </p>
   </div>
 </Layout>
-<script is:inline define:vars={{ serverTime }}>
-  const loadTime = Date.now() - serverTime;
+<script is:inline define:vars={{ requestTime: Astro.locals.REQUEST_TIME }}>
+  const loadTime = Math.abs(Date.now() - requestTime);
   document.querySelector("#loadTime").innerText =
-    `Page Load Time: ${loadTime}ms`;
+    `Page Execution Time: ${loadTime}ms`;
 </script>
 <style>
   h1 {

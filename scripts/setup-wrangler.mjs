@@ -2,8 +2,16 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { exec } from 'node:child_process';
 import { glob } from 'glob';
-import rootWranglerConfig from '../wrangler.json' with { type: 'json' };
-import packageJson from '../package.json' with { type: 'json' };
+
+const rootWranglerConfig = await import('../wrangler.json', {
+  with: { type: 'json' },
+  assert: { type: 'json' },
+}).then((module) => module.default);
+
+const packageJson = await import('../package.json', {
+  with: { type: 'json' },
+  assert: { type: 'json' },
+}).then((module) => module.default);
 
 const workspaces = packageJson?.workspaces ?? [];
 const rootDir = resolve(dirname(new URL(import.meta.url).pathname), '..');

@@ -223,7 +223,7 @@ async function main() {
   if (hostPorts.length === 0) {
     if (!loggingDisabled) {
       console.info(
-        'Usage: node ./scripts/e2e-workflow.js ' +
+        'Usage: npx e2e ' +
           '--wait-for="http://<host>:<port>" ' +
           '--wait-for="http://<host2>:<port2>" --timeout=<seconds>',
       );

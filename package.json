@@ -3,16 +3,17 @@
   "private": true,
   "type": "module",
   "bin": {
-    "flarekit": "./scripts/flarekit.js",
-    "e2e": "./scripts/e2e-workflow.js"
+    "flarekit": "./scripts/flarekit.mjs",
+    "e2e": "./scripts/e2e-workflow.mjs"
   },
   "scripts": {
-    "cleanup": "node ./scripts/cleanup.js",
-    "setup": "node ./scripts/setup-wrangler.js",
+    "cleanup": "node ./scripts/cleanup.mjs",
+    "setup": "node ./scripts/setup-wrangler.mjs",
     "dev": "npx flarekit dev",
     "build": "npx flarekit build",
     "preview": "npx flarekit --ui=stream preview",
     "test": "npx flarekit test",
+    "test:coverage": "npx flarekit test:coverage",
     "test:watch": "npx flarekit test:watch",
     "test:e2e": "npx e2e --wait-for=http://localhost:7000 --wait-for=http://localhost:7001 --timeout=120",
     "test:e2e:watch": "npx e2e --wait-for=http://localhost:7000 --wait-for=http://localhost:7001 --timeout=120 --watch",

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
-import { init } from './setup-wrangler.js';
+import { init } from './setup-wrangler.mjs';
 
 const rootDir = resolve(dirname(new URL(import.meta.url).pathname), '..');
 

@@ -16,14 +16,16 @@
   "scripts": {
     "clean": "rm -rf dist",
     "migrate:d1:test": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local --persist-to=../../.wrangler/.test/state",
-    "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local",
+    "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --local --persist-to=../../.wrangler/state",
     "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply $(node scripts/parse-d1.js) --remote",
     "dev": "rollup --config --watch",
     "build": "npm run build:distribution && npm run build:migrations",
     "build:migrations": "drizzle-kit generate",
     "build:distribution": "npm run clean && rollup --config",
-    "test": "CI=true vitest --run --coverage",
-    "test:watch": "CI=true vitest"
+    "test": "vitest run",
+    "pretest:coverage": "rm -rf coverage",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "wrangler pages dev --persist-to=../../.wrangler/.test/state --port=7001 --inspector-port=9231 --show-interactive-dev-session=false --live-reload=false",
+    "preview": "wrangler pages dev --persist-to=../../.wrangler/.test/state --port=7001 --inspector-port=9231 --show-interactive-dev-session=false",
     "test:e2e": "playwright test --reporter=dot",
     "test:e2e:watch": "playwright test --ui"
   },

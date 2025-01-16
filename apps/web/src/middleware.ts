@@ -2,6 +2,7 @@ import { defineMiddleware } from "astro:middleware";
 import { initDBInstance } from "@flarekit/database";
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  context.locals.REQUEST_TIME = Date.now();
   // intercept data from a request
   // optionally, modify the properties in `locals`
   context.locals.DB = initDBInstance(context, context.locals.runtime.env);

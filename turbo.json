@@ -20,12 +20,31 @@
       "outputs": [],
       "persistent": true
     },
+    "test": {
+      "dependsOn": ["@flarekit/database#build"],
+      "cache": false,
+      "outputs": []
+    },
+    "test:coverage": {
+      "dependsOn": ["@flarekit/database#build"],
+      "cache": false,
+      "outputs": []
+    },
+    "test:watch": {
+      "dependsOn": ["@flarekit/database#build"],
+      "cache": false,
+      "outputs": [],
+      "persistent": true
+    },
     "test:e2e": {
       "dependsOn": [],
       "outputs": []
     },
     "test:e2e:watch": {
       "dependsOn": [],
+      "outputs": []
+    },
+    "build:migrations": {
       "outputs": []
     },
     "migrate:d1:test": {
@@ -47,17 +66,6 @@
       "cache": false,
       "inputs": [],
       "outputs": []
-    },
-    "test": {
-      "dependsOn": ["@flarekit/database#build"],
-      "cache": false,
-      "outputs": []
-    },
-    "test:watch": {
-      "dependsOn": ["@flarekit/database#build"],
-      "cache": false,
-      "outputs": [],
-      "persistent": true
     }
   }
 }

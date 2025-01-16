@@ -25,7 +25,7 @@ describe('storage.service', () => {
       };
 
       const result = await db.storage.createStorageRecord(input);
-      expect(env.CACHE.get('storage_records')).resolves.toBeNull();
+      await expect(env.CACHE.get('storage_records')).resolves.toBeNull();
       expect(validate(result.id)).toBe(true);
     });
 
@@ -143,7 +143,7 @@ describe('storage.service', () => {
         hash: 'aaa',
       };
       await db.storage.clearStorageRecords();
-      expect(env.CACHE.get('storage_records')).resolves.toBeNull();
+      await expect(env.CACHE.get('storage_records')).resolves.toBeNull();
       const record1 = await db.storage.createStorageRecord(input);
       const record2 = await db.storage.createStorageRecord(input2);
 
@@ -187,7 +187,7 @@ describe('storage.service', () => {
         hash: 'aaa',
       };
       await db.storage.clearStorageRecords();
-      expect(env.CACHE.get('storage_records')).resolves.toBeNull();
+      await expect(env.CACHE.get('storage_records')).resolves.toBeNull();
       await db.storage.createStorageRecord(input);
       await db.storage.createStorageRecord(input2);
 
