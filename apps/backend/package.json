@@ -15,12 +15,12 @@
     "hono": "^4.6.15"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.5.41",
+    "@cloudflare/vitest-pool-workers": "^0.6.1",
     "@cloudflare/workers-types": "^4.20250109.0",
-    "@types/node": "^22.10.5",
+    "@types/node": "^22.10.7",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
-    "wrangler": "^3.100.0"
+    "wrangler": "^3.102.0"
   }
 }
