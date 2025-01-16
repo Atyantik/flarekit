@@ -15,8 +15,8 @@
     "test": "npx flarekit test",
     "test:coverage": "npx flarekit test:coverage",
     "test:watch": "npx flarekit test:watch",
-    "test:e2e": "npx e2e --wait-for=http://localhost:7000 --wait-for=http://localhost:7001 --timeout=120",
-    "test:e2e:watch": "npx e2e --wait-for=http://localhost:7000 --wait-for=http://localhost:7001 --timeout=120 --watch",
+    "test:e2e": "npx e2e --wait-for=http://localhost:8000 --wait-for=http://localhost:7001 --timeout=120",
+    "test:e2e:watch": "npx e2e --wait-for=http://localhost:8000 --wait-for=http://localhost:7001 --timeout=120 --watch",
     "prepare": "npm exec husky || echo 'Husky not found, skipping...'",
     "lint": "eslint .",
     "format": "prettier --write ."
