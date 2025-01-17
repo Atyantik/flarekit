@@ -6,7 +6,7 @@
 
 ![License](https://img.shields.io/github/license/Atyantik/flarekit)
 
-Flarekit is a **scalable and modular monorepo** designed to build modern, **edge-first** web applications using **[Astro](https://astro.build/)** and **[Cloudflare Workers](https://workers.cloudflare.com/)**. It streamlines the development process by providing a unified structure for frontend, backend, and shared services, ensuring **code reusability**, **maintainability**, and **performance** across globally distributed applications.
+Flarekit is a **scalable and modular monorepo** designed to build modern, **edge-first** web applications using **[Cloudflare Infrastructure](https://developers.cloudflare.com/)**. It provides a unified structure for developing frontend, backend, and shared services, ensuring **code reusability**, **maintainability**, and **performance** across distributed applications.
 
 Supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**. 🚀
 
@@ -14,266 +14,275 @@ Supported and sponsored by **[Atyantik Technologies](https://atyantik.com)**. �
 
 ## Table of Contents
 
-- [Key Features](#key-features)
-- [Available Packages & Apps](#available-packages--apps)
-  - [Applications](#applications)
-  - [Packages](#packages)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Local Development](#local-development)
-- [Testing & Coverage](#testing--coverage)
-- [Deployment](#deployment)
-- [Database & Migrations](#database--migrations)
-- [Scripts Overview](#scripts-overview)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
-- [About Atyantik Technologies](#about-atyantik-technologies)
+1. [Introduction](#introduction)
+2. [Project Structure](#project-structure)
+3. [Prerequisites](#prerequisites)
+4. [Setup Instructions](#setup-instructions)
+5. [Development](#development)
+6. [Testing](#testing)
+7. [Deployment](#deployment)
+8. [Manual Deployment](#manual-deployment)
+9. [Working with Database Services](#working-with-database-services)
+10. [Contribution Guidelines](#contribution-guidelines)
+11. [License](#license)
 
 ---
 
-## Key Features
+## Introduction
 
-- **Monorepo Architecture with [Turborepo](https://turbo.build/)**  
-  Efficiently manage multiple applications and packages within a single repository, ensuring consistent tooling and streamlined workflows.
+Flarekit simplifies the complexities of building interconnected apps for **[Cloudflare Infrastructure](https://developers.cloudflare.com/)**. While Cloudflare provides excellent production-ready tools, local development and testing often pose challenges. Flarekit addresses this by providing:
 
-- **Edge-Optimized Backend**  
-  Leverage **[Cloudflare Workers](https://workers.cloudflare.com/)** to deploy backend services globally, ensuring low-latency responses and high availability.
+- Predefined commands for managing apps and databases.
+- Integrated developer tools like **[ESLint](https://eslint.org/)**, **[Prettier](https://prettier.io/)**, and examples using **[Astro](https://astro.build/)** (frontend) and **[Hono](https://hono.dev/)** (backend).
+- Shared infrastructure setup supporting **[D1 databases](https://developers.cloudflare.com/d1/)**, **[R2 storage](https://developers.cloudflare.com/r2/)**, and **[Queues](https://developers.cloudflare.com/queues/)** for seamless local and production environments.
 
-- **Astro-Powered Frontend**  
-  Build highly performant and SEO-friendly websites using **[Astro’s island architecture](https://docs.astro.build/en/core-concepts/islands/)**, minimizing client-side JavaScript and enhancing load times.
-
-- **Centralized Database Management**  
-  Utilize the `@flarekit/database` package for managing schemas, migrations, and database interactions with **[Cloudflare D1](https://developers.cloudflare.com/d1/)**.
-
-- **TypeScript Excellence**  
-  Embrace **TypeScript-first** development for type safety, improved developer experience, and robust codebases.
-
-- **Comprehensive Testing & Coverage**  
-  Integrated with **[Vitest](https://vitest.dev/)** and Istanbul to ensure your code is reliable and well-tested across the entire monorepo.
-
-- **Advanced Cloudflare Integrations**
-
-  - **[KV Namespaces](https://developers.cloudflare.com/workers/runtime-apis/kv/)**: Utilize Cloudflare KV for caching to enhance performance.
-  - **[R2 Buckets](https://developers.cloudflare.com/r2/)**: Seamlessly integrate with Cloudflare R2 for scalable object storage.
-  - **[Queues](https://developers.cloudflare.com/workers/learning/queues/)**: Implement robust queueing systems for background tasks and event-driven workflows.
-
-- **Extensible and Modular**  
-  Easily add new applications or services without disrupting existing workflows, thanks to Flarekit’s modular design.
+By enabling an edge-first development model, Flarekit ensures developers can create scalable, maintainable, and testable applications for Cloudflare.
 
 ---
 
-## Available Packages & Apps
+## Project Structure
 
-### Applications
+The monorepo is organized as follows:
 
-- **`@flarekit/web`**  
-  The **Astro-based frontend** application.
+```
+flarekit/
+├── apps/
+│   ├── backend/   # Backend services
+│   └── web/       # Frontend application
+├── packages/
+│   └── database/  # Shared database layer
+├── scripts/       # Utility scripts
+├── .github/       # GitHub Actions workflows
+├── turbo.json     # TurboRepo configuration
+└── package.json   # Root package manager configuration
+```
 
-  - **Features:**
-    - Utilizes Astro’s island architecture for optimized performance.
-    - Deployed to **[Cloudflare Pages](https://pages.cloudflare.com/)** or other hosting services.
-    - Includes built-in utilities for handling uploads, CDN interactions, and more.
-
-- **`@flarekit/backend`**  
-  The **Cloudflare Worker–based backend** service.
-  - **Features:**
-    - Implements API endpoints and backend logic using **Cloudflare Workers**.
-    - Seamlessly integrates with the `@flarekit/database` package for data persistence.
-    - Supports advanced Cloudflare features like KV caching, R2 storage, and queue management.
-
-### Packages
-
-- **`@flarekit/database`**  
-  Centralized **database management** package.
-  - **Features:**
-    - Manages **[Drizzle](https://drizzle.team/)** configurations, schemas, and migrations.
-    - Supports **[Cloudflare D1](https://developers.cloudflare.com/d1/)** for data storage.
-    - Provides utility functions and services for database interactions.
+- **apps/backend**: Cloudflare Worker API built with **[Hono](https://hono.dev/)**.
+- **apps/web**: Frontend application using **[Astro](https://astro.build/)**.
+- **packages/database**: Centralized database layer with **[D1](https://developers.cloudflare.com/d1/)** and **[Drizzle ORM](https://github.com/drizzle-team/drizzle-orm)**.
 
 ---
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+Ensure the following tools are installed:
 
-Ensure you have the following installed:
+- **[Node.js](https://nodejs.org/)**: v18 or higher
+- **[npm](https://www.npmjs.com/)**: Latest version
 
-- **[Node.js v18+](https://nodejs.org/)**
-- **npm v7+** (or another modern package manager)
-- **[Wrangler CLI](https://developers.cloudflare.com/workers/tooling/wrangler/)** (Cloudflare’s developer tool)
-  ```bash
-  npm install -g wrangler
-  ```
+---
 
-### Installation
+## Setup Instructions
 
-1. **Clone the Repository**
+1. **Clone the Repository**:
 
    ```bash
    git clone https://github.com/Atyantik/flarekit.git
    cd flarekit
    ```
 
-2. **Install Dependencies**
+2. **Install Dependencies**:
+
    ```bash
    npm install
    ```
 
-### Local Development
+3. **Start the Development Environment**:
 
-Start developing with a single command that handles setup and launches all necessary services:
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run dev
-```
-
-**What It Does:**
-
-- Automatically handles the **setup** tasks required by Turborepo.
-- Starts the **Astro frontend** (`@flarekit/web`) and **Cloudflare Worker backend** (`@flarekit/backend`) in development mode.
-- Watches for file changes and reloads services as needed.
+   **[TurboRepo](https://turbo.build/)** ensures all apps and services start seamlessly.
 
 ---
 
-## Testing & Coverage
+## Development
 
-Ensure your code is robust and reliable with integrated testing tools:
+### Backend Development
 
-- **Run All Tests**
+```bash
+npx flarekit dev --filter="@flarekit/backend"
+```
 
-  ```bash
-  npm run test
-  ```
+### Frontend Development
 
-- **Generate Test Coverage Report**
-  ```bash
-  npm run test:coverage
-  ```
+```bash
+npx flarekit dev --filter="@flarekit/web"
+```
+
+---
+
+## Testing
+
+### Run Unit Tests
+
+```bash
+npm test
+```
+
+### Run End-to-End Tests (Playwright)
+
+```bash
+npx playwright install && npm run test:e2e
+```
 
 ---
 
 ## Deployment
 
-Deploy your applications with ease:
+### Automated Deployment (GitHub Actions)
 
-- **Deploy Web Application**
+Flarekit leverages **[GitHub Actions](https://docs.github.com/en/actions)** for automated deployments:
 
-  ```bash
-  npm run deploy
-  ```
+1. Linting and testing ensure code quality.
+2. Builds separate deployable applications for backend and frontend.
+3. Deploys to Cloudflare environments using **[Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/)**.
 
-  - **What It Does:**
-    - Builds the `@flarekit/web` Astro application.
-    - Deploys the built frontend to **[Cloudflare Pages](https://pages.cloudflare.com/)** or your configured hosting provider.
+### Manual Deployment
 
-- **Deploy Backend Services**  
-  _Currently, backend deployment is managed manually via Wrangler commands within the `@flarekit/backend` directory. Future updates may include automated deployment scripts._
+In cases where manual deployment is necessary:
 
----
+1. Run linting:
 
-## Database & Migrations
+   ```bash
+   npm run lint
+   ```
 
-Manage your database schemas and migrations effortlessly:
+2. Build applications:
 
-- **Apply Migrations Locally**
+   ```bash
+   npm run build
+   ```
 
-  ```bash
-  npm run migrate:d1:local
-  ```
+3. Run tests:
 
-- **Apply Migrations to Production**
-  ```bash
-  npm run migrate:d1:production
-  ```
+   ```bash
+   npm test
+   ```
 
-> **Note:**  
-> The migration scripts utilize `scripts/parse-d1.js` to automatically configure and apply migrations based on your environment settings.
+4. Deploy database migrations:
 
----
+   ```bash
+   CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=<account_id> npx flarekit migrate:d1:production
+   ```
 
-## Scripts Overview
+5. Deploy frontend:
 
-A summary of the key scripts available in the root `package.json`:
+   ```bash
+   cd apps/web
+   CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=<account_id> npx wrangler pages deploy ./dist
+   cd ../..
+   ```
 
-| Script                  | Description                                                           |
-| ----------------------- | --------------------------------------------------------------------- |
-| `setup`                 | Initializes Turborepo and prepares the environment.                   |
-| `dev`                   | Runs the development servers for all applications and services.       |
-| `deploy`                | Builds and deploys all applications.                                  |
-| `migrate:d1:local`      | Applies database migrations to the local Cloudflare D1 instance.      |
-| `migrate:d1:production` | Applies database migrations to the production Cloudflare D1 instance. |
-| `test`                  | Builds necessary packages and runs the test suites in CI mode.        |
-| `test:coverage`         | Executes tests with coverage reporting enabled.                       |
-| `lint`                  | Analyzes code for linting errors using ESLint.                        |
-| `format`                | Formats the codebase according to Prettier configurations.            |
+6. Deploy backend:
 
----
-
-## Configuration
-
-Flarekit leverages several configuration files to manage different aspects of the monorepo:
-
-- **[Turborepo](https://turbo.build/)** (`turbo.json`)  
-  Orchestrates build, development, and deployment tasks across the monorepo.
-
-- **TypeScript** (`tsconfig.json`)  
-  Shared and project-specific TypeScript configurations ensure type safety and consistent development practices.
-
-- **ESLint & Prettier**  
-  Maintains code quality and consistency across all projects with shared ESLint and Prettier configurations.
-
-- **[Wrangler](https://developers.cloudflare.com/workers/tooling/wrangler/)** (`wrangler.config.json` & `wrangler.json`)  
-  Configures Cloudflare Worker deployments for backend services, including:
-
-  - **KV Namespaces (Cache):** Enhances performance with [Cloudflare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/) caching.
-  - **R2 Buckets (Storage):** Provides scalable object storage solutions with [Cloudflare R2](https://developers.cloudflare.com/r2/).
-  - **Queues:** Manages background tasks and event-driven workflows using [Cloudflare Queues](https://developers.cloudflare.com/workers/runtime-apis/queues/).
-
-- **Environment Variables**  
-  Manage sensitive data and environment-specific settings using `.env` files or Cloudflare’s environment variables.
+   ```bash
+   cd apps/backend
+   CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=<account_id> npx wrangler deploy
+   cd ../..
+   ```
 
 ---
 
-## Contributing
+## Working with Database Services
 
-We welcome contributions to enhance Flarekit! Whether you’re fixing bugs, adding new features, or improving documentation, your efforts are appreciated.
+The database package (`@flarekit/database`) is a lightweight library built with **[Rollup](https://rollupjs.org/)**, ensuring compatibility with all monorepo apps.
 
-### How to Contribute
+### Why Drizzle ORM?
 
-1. **Fork the Repository**  
-   Click the "Fork" button at the top-right corner of the repository page.
+**[Drizzle ORM](https://github.com/drizzle-team/drizzle-orm)** is edge-deployable, making it ideal for Cloudflare’s infrastructure. Avoid non-edge-compatible ORMs.
 
-2. **Create a New Branch**
+### Creating a Schema
+
+Define a schema in `packages/database/src/schema`:
+
+```typescript
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
+
+export const userSchema = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  createdAt: text('created_at').default(sql`(current_timestamp)`),
+});
+```
+
+### Generating Migrations
+
+Generate migrations:
+
+```bash
+npx flarekit build:migrations
+```
+
+### Applying Local Migrations
+
+Run migrations locally:
+
+```bash
+npx flarekit migrate:d1:local
+```
+
+---
+
+## Contribution Guidelines
+
+1. **Fork the Repository**:
+   Fork the Flarekit repository to your GitHub account and clone it locally:
+
+   ```bash
+   git clone https://github.com/<your-username>/flarekit.git
+   cd flarekit
+   ```
+
+2. **Create a Feature Branch**:
+   Create a branch for your feature or bug fix:
 
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-3. **Commit Your Changes**
+3. **Implement Changes**:
+
+   - Write your code following the project's style and guidelines.
+   - Pre-commit and pre-push hooks will automatically ensure linting and quality checks. You can also run them manually:
+     ```bash
+     npm run lint
+     ```
+
+4. **Write Tests**:
+   Add unit and integration tests for your changes:
 
    ```bash
-   git commit -m "Add your feature"
+   npm test
    ```
 
-4. **Push to Your Fork**
+5. **Push Your Changes**:
+   Push your feature branch to your forked repository:
 
    ```bash
    git push origin feature/your-feature-name
    ```
 
-5. **Open a Pull Request**  
-   Navigate to the original repository and open a pull request against the `main` branch.
+6. **Submit a Pull Request**:
 
-> **Note:**  
-> Please ensure your code adheres to the existing style guidelines and passes all tests before submitting a pull request.
+   - Open a pull request from your branch to the main Flarekit repository.
+   - Include a clear and detailed description of your changes, linking any relevant issues.
+   - Provide steps for testing your contribution if necessary.
+
+By following these steps, you contribute to the success and quality of the Flarekit project.
 
 ---
 
 ## License
 
-Flarekit is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this software as per the license terms.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+For further assistance, refer to the **[Cloudflare Developers Documentation](https://developers.cloudflare.com/)** or contact the maintainers.
 
 ---
 
