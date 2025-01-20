@@ -2,6 +2,7 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { exec } from 'node:child_process';
 import { glob } from 'glob';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const rootWranglerConfig = await import('../wrangler.json', {
   with: { type: 'json' },
@@ -14,7 +15,7 @@ const packageJson = await import('../package.json', {
 }).then((module) => module.default);
 
 const workspaces = packageJson?.workspaces ?? [];
-const rootDir = resolve(dirname(new URL(import.meta.url).pathname), '..');
+const rootDir = resolve(dirname(dirname(fileURLToPath(import.meta.url))));
 
 /**
  * This function is a deep merge function that merges two objects
@@ -69,7 +70,9 @@ const getValidPackages = async () => {
   const validPackages = [];
   for (const workspace of workspaces) {
     // Pattern to match files
-    const paths = await glob(resolve(rootDir, workspace));
+    const paths = await glob(workspace, {
+      cwd: rootDir,
+    });
     for (const path of paths) {
       try {
         const pathFiles = await readdir(path);
@@ -82,7 +85,6 @@ const getValidPackages = async () => {
       } catch {
         // do nothing
       }
-      // console.log(pathStat);
     }
   }
   return validPackages;
@@ -91,15 +93,21 @@ const getValidPackages = async () => {
 const setupWranglerInPackage = async (packageDir) => {
   try {
     const packageWranglerConfigPath = resolve(
+      rootDir,
       packageDir,
       'wrangler.config.json',
     );
-    const outputWranglerConfigPath = resolve(packageDir, 'wrangler.json');
+    const outputWranglerConfigPath = resolve(
+      rootDir,
+      packageDir,
+      'wrangler.json',
+    );
     const rootDevVars = resolve(rootDir, '.dev.vars');
     const rootDevVarsContent = await readFile(rootDevVars, 'utf8');
-    const outputDevVarsPath = resolve(packageDir, '.dev.vars');
+    const outputDevVarsPath = resolve(rootDir, packageDir, '.dev.vars');
+
     const packageWranglerConfig = (
-      await import(packageWranglerConfigPath, {
+      await import(pathToFileURL(packageWranglerConfigPath), {
         with: {
           type: 'json',
         },
@@ -120,13 +128,13 @@ const setupWranglerInPackage = async (packageDir) => {
 };
 
 // Path to wrangler
-const wranglerPath = resolve('node_modules/.bin/wrangler');
+const wranglerPath = resolve(rootDir, 'node_modules', '.bin', 'wrangler');
 
 export const init = async () => {
   const packages = await getValidPackages();
   for (const packageDir of packages) {
     await setupWranglerInPackage(packageDir);
-    await new Promise((resolve, reject) => {
+    await new Promise((presolve, reject) => {
       exec(`${wranglerPath} types`, { cwd: packageDir }, (error, _, stderr) => {
         if (error) {
           console.error(`Error: ${packageDir}: ${error.message}`);
@@ -137,7 +145,7 @@ export const init = async () => {
           console.error(`Stderr: ${packageDir}: ${stderr}`);
         }
       });
-      resolve();
+      presolve();
     });
   }
 };

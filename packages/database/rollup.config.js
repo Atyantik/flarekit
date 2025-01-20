@@ -7,10 +7,12 @@ export default [
     input: 'src/index.ts', // Entry point
     output: [
       {
+        exports: 'named',
         file: 'dist/bundle.cjs.js',
         format: 'cjs', // CommonJS format
       },
       {
+        exports: 'named',
         file: 'dist/bundle.esm.js',
         format: 'esm', // ES Module format
       },

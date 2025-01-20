@@ -27,6 +27,7 @@ function spawnProcess(command, args = [], processName = '') {
   const child = spawn(command, args, {
     stdio: ['ignore', 'pipe', 'pipe'],
     env: { ...process.env, FORCE_COLOR: 'true' },
+    shell: true,
   });
 
   // Capture child's stdout

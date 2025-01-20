@@ -2,8 +2,9 @@
 import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import { init } from './setup-wrangler.mjs';
+import { fileURLToPath } from 'node:url';
 
-const rootDir = resolve(dirname(new URL(import.meta.url).pathname), '..');
+const rootDir = resolve(dirname(dirname(fileURLToPath(import.meta.url))));
 
 async function main() {
   // 1. Run setup
@@ -18,6 +19,7 @@ async function main() {
   const turboProcess = spawn('npx', ['turbo', ...turboArgs], {
     cwd: rootDir,
     stdio: 'inherit',
+    shell: true,
     env: { ...process.env },
   });
 

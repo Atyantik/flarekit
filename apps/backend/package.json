@@ -12,16 +12,16 @@
   },
   "dependencies": {
     "@flarekit/database": "*",
-    "hono": "^4.6.15"
+    "hono": "^4.6.17"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.6.1",
+    "@cloudflare/vitest-pool-workers": "^0.6.4",
     "@cloudflare/workers-types": "^4.20250109.0",
     "@types/node": "^22.10.7",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
-    "wrangler": "^3.102.0"
+    "wrangler": "^3.103.2"
   },
   "version": "1.0.0"
 }
