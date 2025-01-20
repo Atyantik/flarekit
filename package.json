@@ -38,7 +38,7 @@
     "wrangler": "^3.103.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.17.1"
   },
   "packageManager": "npm@11.0.0",
   "workspaces": [

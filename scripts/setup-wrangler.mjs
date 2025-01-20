@@ -108,6 +108,9 @@ const setupWranglerInPackage = async (packageDir) => {
 
     const packageWranglerConfig = (
       await import(pathToFileURL(packageWranglerConfigPath), {
+        assert: {
+          type: 'json',
+        },
         with: {
           type: 'json',
         },

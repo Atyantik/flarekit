@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "migrate:d1:test": "echo 'Y' | wrangler d1 migrations apply DB --local --persist-to=../../.wrangler/.test/state",
     "migrate:d1:local": "echo 'Y' | wrangler d1 migrations apply DB --local --persist-to=../../.wrangler/state",
     "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply DB --remote",
@@ -43,6 +43,7 @@
     "drizzle-kit": "^0.30.2",
     "eslint": "^9.18.0",
     "miniflare": "^3.20241230.2",
+    "rimraf": "^6.0.1",
     "rollup": "^4.31.0",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
