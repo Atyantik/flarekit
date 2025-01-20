@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://cdn.atyantik.com/Flarekit.webp" alt="Flarekit" width="200" style="border-radius: 20px;">
+  <img src="https://cdn.atyantik.com/flarekit-logo-480p.webp" alt="Flarekit" width="200">
 </p>
 
 # Flarekit
