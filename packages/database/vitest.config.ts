@@ -3,10 +3,11 @@ import {
   defineWorkersConfig,
   readD1Migrations,
 } from '@cloudflare/vitest-pool-workers/config';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { configDefaults } from 'vitest/config';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = new URL('.', import.meta.url).pathname;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineWorkersConfig(async (_) => {
   const migrationsPath = join(__dirname, 'migrations');

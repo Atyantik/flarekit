@@ -4,9 +4,10 @@ import {
   defineWorkersConfig,
   readD1Migrations,
 } from '@cloudflare/vitest-pool-workers/config';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = new URL('.', import.meta.url).pathname;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const assetsPath = join(__dirname, 'test', 'assets');
 const databasePackagePath = join(__dirname, '..', '..', 'packages', 'database');
 const assets: Record<string, string> = {};

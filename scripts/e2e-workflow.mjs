@@ -201,7 +201,7 @@ async function main() {
   let timeout = DEFAULT_TIMEOUT;
   let watch = false;
 
-  args.forEach((arg) => {
+  for (const arg of args) {
     if (arg.startsWith('--wait-for=')) {
       const urlStr = arg.split('=', 2)[1];
       const parsed = new URL(urlStr);
@@ -213,13 +213,13 @@ async function main() {
         process.exit(1);
       }
 
-      hostPorts.push([parsed.hostname, parseInt(parsed.port, 10)]);
+      hostPorts.push([parsed.hostname, Number.parseInt(parsed.port, 10)]);
     } else if (arg.startsWith('--timeout=')) {
-      timeout = parseInt(arg.split('=', 2)[1], 10) * 1000;
+      timeout = Number.parseInt(arg.split('=', 2)[1], 10) * 1000;
     } else if (arg.startsWith('--watch')) {
       watch = true;
     }
-  });
+  }
 
   if (hostPorts.length === 0) {
     if (!loggingDisabled) {
