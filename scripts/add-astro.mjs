@@ -6,6 +6,7 @@ import yaml from 'js-yaml';
 import { updatedConfig } from '../utils/templates/astro/astroConfig.js';
 import { pagesWorkflow } from '../utils/templates/workflow/pagesWorkflow.js';
 import { buildArtifacts } from '../utils/templates/workflow/buildArtifacts.js';
+import { wranglerConfig } from '../utils/templates/wranglerConfig.js';
 import Logger from '../utils/logger.js';
 import Spinner from '../utils/spinner.js';
 /**
@@ -122,6 +123,12 @@ function updateWorkflowScript(rootDir, projectDir) {
   }
 }
 
+/**
+ * Install the `wrangler` package in the project.
+ * @param {string} rootDir - The root directory of the project.
+ * @param {Spinner} spinner - The spinner instance.
+ * @throws {Error} If failed to install wrangler.
+ */
 const installWranglerPkg = (projectDir, spinner) => {
   return new Promise((resolve, reject) => {
     try {
@@ -166,6 +173,29 @@ const installWranglerPkg = (projectDir, spinner) => {
   });
 };
 
+/**
+ * Configure wrangler.config.json file to the project.
+ * @param {string} rootDir - The root directory of the project.
+ * @throws {Error} If failed to configure wrangler.config.json file.
+ */
+const addWranflerConfig = (projectDir) => {
+  const wranglerConfigFilePath = path.join(projectDir, 'wrangler.config.json');
+  try {
+    const projectName = path.basename(projectDir);
+    const wranglerConfigContent = wranglerConfig(projectName);
+
+    fs.writeFileSync(
+      wranglerConfigFilePath,
+      JSON.stringify(wranglerConfigContent, null, 2),
+      'utf-8',
+    );
+    Logger.info('Wrangler config added successfully!');
+    return true;
+  } catch (error) {
+    Logger.error(`Failed to add wrangler.config.json: ${error.message}`);
+    throw error;
+  }
+};
 /**
  * Create a new Astro project with flarekit configurations.
  * @param {string} rootDir - The root directory for the project.
@@ -232,6 +262,7 @@ export async function addAstroProject(rootDir) {
             const projectDir = await getCreatedProjectDir(appDir);
             updateAstroConfig(projectDir);
             await installWranglerPkg(projectDir, spinner);
+            addWranflerConfig(projectDir);
             updatePreviewScript(projectDir);
             updateWorkflowScript(rootDir, projectDir);
 
