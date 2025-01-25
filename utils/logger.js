@@ -1,5 +1,4 @@
 class Logger {
-  x;
   static info(message) {
     console.log(`\x1b[36m✔️ ${message}\x1b[0m`);
   }
@@ -9,7 +8,7 @@ class Logger {
   }
 
   static error(message) {
-    console.error(`\x1b[31m❌ ${message}\x1b[0m`);
+    console.error(`\n\x1b[31m❌ ${message}\x1b[0m`);
   }
 
   static warn(message) {

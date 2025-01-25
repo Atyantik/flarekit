@@ -10,6 +10,47 @@ import { wranglerConfig } from '../utils/templates/wranglerConfig.js';
 import Logger from '../utils/logger.js';
 import Spinner from '../utils/spinner.js';
 /**
+ * Run the `npm create astro@latest` command to create a new Astro project.
+ * @param {string} appDir - The directory where the project will be created.
+ * @param {string} projectName - The name of the new project.
+ * @returns {Promise} - A promise that resolves when process exits.
+ * */
+async function runAstroCreate(appDir, projectName) {
+  return new Promise((resolve, reject) => {
+    const astroProcess = spawn(
+      'npm',
+      [
+        'create',
+        'astro@latest',
+        projectName,
+        '--',
+        '--template',
+        'basics',
+        '--no-git',
+        '--install',
+        '--add',
+        'cloudflare',
+        '--yes',
+      ],
+      {
+        cwd: appDir,
+        stdio: 'pipe',
+        shell: true,
+      },
+    );
+
+    astroProcess.on('error', (error) => reject(new Error(error.message)));
+    astroProcess.on('exit', (code) => {
+      if (code === 0) resolve();
+      else
+        reject(
+          new Error(`Astro project creation process failed with code ${code}`),
+        );
+    });
+  });
+}
+
+/**
  * Get the directory of the newly created project.
  * @param {string} appDir - The root directory where the project is created.
  * @returns {Promise<string>} - The full path of the most recently created project directory.
@@ -53,8 +94,7 @@ import cloudflare from '@astrojs/cloudflare';${updatedConfig}
     Logger.info('Configuration updated successfully!');
     return true;
   } catch (error) {
-    Logger.error(`Failed to update Astro configuration: ${error.message}`);
-    throw error;
+    throw new Error(`Failed to update Astro configuration: ${error.message}`);
   }
 }
 
@@ -84,8 +124,7 @@ function updatePreviewScript(projectDir) {
     Logger.info('Preview script updated successfully!');
     return true;
   } catch (error) {
-    Logger.error(`Failed to update package.json: ${error.message}`);
-    throw error;
+    throw new Error(`Failed to update package.json.`);
   }
 }
 
@@ -117,9 +156,9 @@ function updateWorkflowScript(rootDir, projectDir) {
 
     fs.writeFileSync(workflowPath, yaml.dump(existingWorkflow), 'utf-8');
     Logger.info('Workflow script updated successfully!');
+    return true;
   } catch (error) {
-    Logger.error(`Failed to update workflow script: ${error.message}`);
-    throw error;
+    throw new Error(`Failed to update workflow script.`);
   }
 }
 
@@ -146,18 +185,14 @@ const installWranglerPkg = (projectDir, spinner) => {
       );
 
       addWranglerProcess.stderr.on('data', (data) => {
-        spinner.stop();
         Logger.warn(`Unexpected output: ${data.toString()}`);
       });
 
       addWranglerProcess.on('error', (error) => {
-        spinner.stop();
-        Logger.error(`Process spawn error: ${error.message}`);
-        reject(error);
+        reject(new Error(`Process spawn error: ${error.message}`));
       });
 
       addWranglerProcess.on('exit', (code) => {
-        spinner.stop();
         if (code === 0) {
           Logger.info('Wrangler installed successfully!');
           resolve();
@@ -167,8 +202,7 @@ const installWranglerPkg = (projectDir, spinner) => {
       });
     } catch (error) {
       spinner.stop();
-      Logger.error(`Failed to install wrangler: ${error.message}`);
-      reject(error);
+      reject(new Error(`Failed to install wrangler: ${error.message}`));
     }
   });
 };
@@ -192,8 +226,7 @@ const addWranflerConfig = (projectDir) => {
     Logger.info('Wrangler config added successfully!');
     return true;
   } catch (error) {
-    Logger.error(`Failed to add wrangler.config.json: ${error.message}`);
-    throw error;
+    throw new Error(`Failed to add wrangler.config.json.`);
   }
 };
 /**
@@ -210,82 +243,39 @@ export async function addAstroProject(rootDir) {
     output: process.stdout,
   });
 
-  return new Promise((resolve, reject) => {
-    rl.question('\n📝 Enter the project name: ', (inputName) => {
-      const projectName = inputName.trim().replace(/\s+/g, '-').toLowerCase();
+  const promptUser = (query) =>
+    new Promise((resolve) =>
+      rl.question(query, (prompt) =>
+        resolve(prompt.trim().replace(/\s+/g, '-').toLowerCase()),
+      ),
+    );
 
-      const astroProcess = spawn(
-        'npm',
-        [
-          'create',
-          'astro@latest',
-          projectName,
-          '--',
-          '--template',
-          'basics',
-          '--no-git',
-          '--install',
-          '--add',
-          'cloudflare',
-          '--yes',
-        ],
-        {
-          cwd: appDir,
-          stdio: 'pipe',
-          shell: true,
-          env: { ...process.env },
-        },
-      );
-      process.stdout.write('\n');
-      astroProcess.stdout.on('data', () => {
-        spinner.start('🔥 Creating your Astro app...');
-      });
+  try {
+    const projectName = await promptUser('\n📝 Enter the project name: ');
+    rl.close();
 
-      astroProcess.stderr.on('data', (data) => {
-        spinner.stop();
-        Logger.warn(`Unexpected output: ${data.toString()}`);
-      });
+    const projectPath = path.join(appDir, projectName);
 
-      astroProcess.on('error', (error) => {
-        spinner.stop();
-        rl.close();
-        Logger.error(`Process spawn error: ${error.message}`);
-        reject(error);
-      });
+    if (fs.existsSync(projectPath)) {
+      throw new Error(`Project with name "${projectName}" already exists.`);
+    }
 
-      astroProcess.on('exit', async (code) => {
-        spinner.stop();
-        rl.close();
+    spinner.start('🔥 Creating your Astro app...');
+    await runAstroCreate(appDir, projectName);
+    spinner.stop();
 
-        if (code === 0) {
-          try {
-            const projectDir = await getCreatedProjectDir(appDir);
-            updateAstroConfig(projectDir);
-            await installWranglerPkg(projectDir, spinner);
-            addWranflerConfig(projectDir);
-            updatePreviewScript(projectDir);
-            updateWorkflowScript(rootDir, projectDir);
+    const projectDir = await getCreatedProjectDir(appDir);
+    updateAstroConfig(projectDir);
+    await installWranglerPkg(projectDir, spinner);
+    addWranflerConfig(projectDir);
+    updatePreviewScript(projectDir);
+    updateWorkflowScript(rootDir, projectDir);
 
-            Logger.success(
-              'Astro project created and configured successfully!',
-            );
-            spinner.stop();
-            resolve(projectDir);
-          } catch (configError) {
-            Logger.error(
-              `Project configuration failed: ${configError.message}`,
-            );
-            reject(configError);
-          }
-        } else {
-          Logger.error('Astro project creation failed.');
-          reject(
-            new Error(
-              'Astro project creation process exited with non-zero status',
-            ),
-          );
-        }
-      });
-    });
-  });
+    Logger.success('Astro project created and configured successfully!');
+    return projectDir;
+  } catch (error) {
+    spinner.stop();
+    console.error(`\nError: ${error.message}`);
+    throw error;
+  }
 }
