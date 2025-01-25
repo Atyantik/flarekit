@@ -40,7 +40,7 @@ async function main() {
 
   // If no continuation with default turbo command
   // 2. Build the turbo command + arguments
-  const turboArgs = args; // e.g. ['run', 'preview'] or whatever you pass
+  const turboArgs = [command, args]; // e.g. ['run', 'preview'] or whatever you pass
   console.log(`Executing turbo with args: ${turboArgs.join(' ')}`);
 
   // 3. Spawn Turbo
