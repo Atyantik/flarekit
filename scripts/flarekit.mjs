@@ -3,15 +3,43 @@ import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import { init } from './setup-wrangler.mjs';
 import { fileURLToPath } from 'node:url';
+import { addAstroProject } from './add-astro.mjs';
 
 const rootDir = resolve(dirname(dirname(fileURLToPath(import.meta.url))));
+// Custom commands
+const commands = {
+  add: {
+    astro: async () => {
+      addAstroProject(rootDir);
+      return true;
+    },
+    default: (project) => {
+      console.log(`Unknown project ${project}...`);
+    },
+  },
+  default: (command) => {
+    console.log(`Unknown command ${command}...`);
+  },
+};
 
 async function main() {
   // 1. Run setup
   await init();
 
+  const [, , command = 'default', ...args] = process.argv;
+  // Check for custom command
+  if (commands[command]) {
+    const result = await (
+      commands[command][args[0]] || commands[command].default
+    )(args[0]);
+
+    if (result) {
+      return;
+    }
+  }
+
+  // If no continuation with default turbo command
   // 2. Build the turbo command + arguments
-  const [, , ...args] = process.argv;
   const turboArgs = args; // e.g. ['run', 'preview'] or whatever you pass
   console.log(`Executing turbo with args: ${turboArgs.join(' ')}`);
 
