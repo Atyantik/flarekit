@@ -193,6 +193,7 @@ const installWranglerPkg = (projectDir, spinner) => {
       });
 
       addWranglerProcess.on('exit', (code) => {
+        spinner.stop();
         if (code === 0) {
           Logger.info('Wrangler installed successfully!');
           resolve();
