@@ -26,10 +26,7 @@
       "outputs": []
     },
     "test:coverage": {
-      "dependsOn": [
-        "@flarekit/database#build",
-        "@flarekit/database#test:coverage"
-      ],
+      "dependsOn": ["@flarekit/database#build"],
       "cache": false,
       "outputs": []
     },

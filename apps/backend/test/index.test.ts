@@ -8,7 +8,7 @@ describe('Example', () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
       success: true,
-      message: 'Welcome to Flarekit Backend!',
+      message: 'Welcome to Flarekit APIs!',
     });
   });
 });
