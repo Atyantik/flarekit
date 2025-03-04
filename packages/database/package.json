@@ -8,9 +8,9 @@
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/bundle.esm.js",
-      "require": "./dist/bundle.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "require": "./dist/bundle.cjs.js"
     }
   },
   "scripts": {
@@ -27,26 +27,26 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.13.5",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.38.4",
-    "uuid": "^11.0.3"
+    "drizzle-orm": "^0.40.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.6.4",
-    "@cloudflare/workers-types": "^4.20250109.0",
+    "@cloudflare/vitest-pool-workers": "^0.7.3",
+    "@cloudflare/workers-types": "^4.20250224.0",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@vitest/coverage-istanbul": "^2.1.8",
-    "drizzle-kit": "^0.30.2",
-    "eslint": "^9.18.0",
-    "miniflare": "^3.20241230.2",
+    "@vitest/coverage-istanbul": "^3.0.7",
+    "drizzle-kit": "^0.30.5",
+    "eslint": "^9.21.0",
+    "miniflare": "^3.20250214.1",
     "rimraf": "^6.0.1",
-    "rollup": "^4.31.0",
+    "rollup": "^4.34.8",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^2.1.8",
-    "wrangler": "^3.103.2"
+    "vitest": "^3.0.7",
+    "wrangler": "^3.110.0"
   }
 }

@@ -9,7 +9,7 @@ app.use(cors());
 const honoHomeRoute: Handler = (c) => {
   return c.json({
     success: true,
-    message: 'Welcome to Flarekit Backend!',
+    message: 'Welcome to Flarekit APIs!',
   });
 };
 

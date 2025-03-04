@@ -11,16 +11,16 @@
   },
   "dependencies": {
     "@flarekit/database": "*",
-    "hono": "^4.6.17"
+    "hono": "^4.7.2"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.6.4",
-    "@cloudflare/workers-types": "^4.20250109.0",
-    "@types/node": "^22.10.7",
+    "@cloudflare/vitest-pool-workers": "^0.7.3",
+    "@cloudflare/workers-types": "^4.20250224.0",
+    "@types/node": "^22.13.5",
     "typescript": "^5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^2.1.8",
-    "wrangler": "^3.103.2"
+    "vitest": "^3.0.7",
+    "wrangler": "^3.110.0"
   },
   "version": "1.0.1"
 }
