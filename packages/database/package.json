@@ -27,26 +27,26 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.11",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.40.0",
+    "drizzle-orm": "^0.41.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.7.5",
-    "@cloudflare/workers-types": "^4.20250303.0",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.3",
+    "@cloudflare/workers-types": "^4.20250320.0",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@vitest/coverage-istanbul": "^3.0.7",
+    "@vitest/coverage-istanbul": "^3.0.9",
     "drizzle-kit": "^0.30.5",
-    "eslint": "^9.21.0",
-    "miniflare": "^3.20250214.2",
+    "eslint": "^9.22.0",
+    "miniflare": "^4.20250319.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.34.9",
+    "rollup": "^4.36.0",
     "typescript": "^5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.7",
-    "wrangler": "^3.112.0"
+    "vitest": "^3.0.9",
+    "wrangler": "^4.3.0"
   }
 }
