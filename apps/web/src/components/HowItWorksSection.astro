@@ -2,49 +2,38 @@
 const stepsData = [
   {
     id: "1",
-    title: "Initialize Flarekit",
+    title: "Clone the Flarekit Starter",
     description: `
       <div class="bg-secondary-50 p-3 rounded">
-        <code class="text-secondary font-bold">npx flarekit init my-project</code>
+        <code class="text-secondary font-bold">git clone https://github.com/Atyantik/flarekit.git<br/>cd flarekit</code>
       </div>
       <p class="mt-4">
-        Generate a monorepo scaffold with Turborepo and GitHub Actions included.
+        Get started with a ready-to-use monorepo structure using Turborepo.
       </p>
     `,
   },
   {
     id: "2",
-    title: "Add/Configure Your Apps",
+    title: "Install All Dependencies",
     description: `
-      <p>
-        Add frontend frameworks (React, Next, Astro) and backends (Hono, Node-based APIs) in a single repository.
+      <div class="bg-secondary-50 p-3 rounded">
+        <code class="text-secondary font-bold">npm install</code>
+      </div>
+      <p class="mt-4">
+        Installs all packages and dependencies across the monorepo.
       </p>
     `,
   },
   {
     id: "3",
-    title: "Develop & Test",
+    title: "Start the Development Workspace",
     description: `
-      <p>
-        Leverage Turborepo's parallel builds and caching for near-instant feedback.
-      </p>
-    `,
-  },
-  {
-    id: "4",
-    title: "Automated CI/CD",
-    description: `
-      <p>
-        Push to GitHub, and Flarekit's pre-configured Actions run tests, build, and deploy your apps to Cloudflare (or your preferred environment).
-      </p>
-    `,
-  },
-  {
-    id: "5",
-    title: "Edge Deployment",
-    description: `
-      <p>
-        Enjoy globally distributed applications with Cloudflare's edge network—no extra steps required.
+      <div class="bg-secondary-50 p-3 rounded">
+        <code class="text-secondary font-bold">npm run dev</code>
+      </div>
+      <p class="mt-4">
+        Launches all configured apps and services with a single command.
+        <a href="https://turbo.build" target="_blank">TurboRepo</a> intelligently watches for changes, rebuilds only what's needed, and keeps your workflow blazing fast.
       </p>
     `,
   },
@@ -54,7 +43,6 @@ const stepsData = [
 <section id="how-it-works" class="section">
   <div class="container">
     <h2 class="section-title">How It Works</h2>
-
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
       {
         stepsData.map((step, index) => (
