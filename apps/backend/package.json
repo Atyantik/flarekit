@@ -10,10 +10,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^9.2.1",
     "@flarekit/database": "*",
     "@vitest/coverage-istanbul": "^3.0.9",
-    "drizzle-kit": "0.19.1",
     "hono": "^4.7.5"
   },
   "devDependencies": {
