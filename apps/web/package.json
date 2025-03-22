@@ -13,7 +13,10 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.3.0",
     "@flarekit/database": "^1.0.0",
+    "@splidejs/splide": "^4.1.4",
+    "@tailwindcss/vite": "^4.0.15",
     "astro": "^5.5.4",
+    "tailwindcss": "^4.0.15",
     "typescript": "^5.8.2"
   },
   "devDependencies": {

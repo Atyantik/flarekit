@@ -1,0 +1,43 @@
+---
+import FeaturesSection from "./FeaturesSection.astro";
+---
+
+<section id="overview">
+  <div
+    class="section relative pt-20 sm:pt-28 lg:pt-36 overflow-hidden lg:bg-[url(/hero.png)] lg:bg-no-repeat bg-right lg:bg-[auto_80%] 2xl:bg-contain"
+  >
+    <div class="container">
+      <div class="flex flex-col lg:flex-row items-start lg:items-end gap-5">
+        <div
+          class="w-full lg:w-3/5 xl:w-2xl flex flex-col space-y-4 sm:space-y-5 items-start"
+        >
+          <h1
+            class="font-heading text-4xl lg:text-7xl xl:text-8xl font-semibold tracking-[-0.025em]"
+          >
+            <span class="block">Monorepo,</span>{" "}
+            <span class="block">Turborepo,</span>{" "}
+            <span class="block">and Cloudflare</span>
+          </h1>
+          <p class="lg:text-base text-lg">
+            Flarekit simplifies building and deploying high-performance
+            applications on Cloudflare&apos;s global network with built-in
+            Turborepo integration and ready-to-use GitHub Actions.
+          </p>
+          <a href="#" class="btn-secondary"> View on github </a>
+        </div>
+        <div
+          class="hidden w-full lg:absolute bottom-0 right-0 lg:w-1/2 mt-8 lg:mt-0"
+        >
+          <img
+            src="/hero.png"
+            class="w-full block"
+            alt="Flowbite Logo"
+            width={678}
+            height={594}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <FeaturesSection />
+</section>

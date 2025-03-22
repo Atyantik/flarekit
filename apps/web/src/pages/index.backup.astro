@@ -1,0 +1,38 @@
+---
+import Layout from "@layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="center">
+    <h1>Flarekit</h1>
+    <div>
+      ⚡ Blazing Fast, Budget Friendly, Built to Scale
+      <p id="loadTime"></p>
+    </div>
+    <p>
+      <a href="/gallery">Checkout Gallery Example →</a>
+    </p>
+  </div>
+</Layout>
+<script is:inline define:vars={{ requestTime: Astro.locals.REQUEST_TIME }}>
+  const loadTime = Math.abs(Date.now() - requestTime);
+  document.querySelector("#loadTime").innerText =
+    `Page Execution Time: ${loadTime}ms`;
+</script>
+<style>
+  h1 {
+    font-size: 3rem;
+    color: var(--primary);
+    letter-spacing: 1.5px;
+  }
+
+  .center {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    text-align: center;
+  }
+</style>

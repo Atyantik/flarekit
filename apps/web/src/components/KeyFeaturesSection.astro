@@ -1,0 +1,157 @@
+---
+const features = [
+  {
+    title: "Cloudflare Edge Integration",
+    description: `
+      <div class="space-y-5">
+        <div>
+          <p class="text-secondary">What it Does?</p>
+          <p class="mt-2">
+            Flarekit optimizes and bundles your apps for Cloudflare's edge network, ensuring sub-second responses and minimal latency worldwide.
+          </p>
+        </div>
+        <div>
+          <p class="text-secondary">Why it Matters?</p>
+          <p class="mt-2">
+            Edge deployments mean better user experiences, improved SEO, and scalability without complicated infrastructure overhead.
+          </p>
+        </div>
+      </div>
+    `,
+  },
+  {
+    title: "Built-In Turborepo Support",
+    description: `
+      <p>
+        Leverage Turborepo's powerful build system for faster development and deployments. Get intelligent caching, parallel execution, and optimized builds out of the box.
+      </p>
+    `,
+  },
+  {
+    title: "Pre-Configured GitHub Actions",
+    description: `
+      <p>
+        Get started with CI/CD immediately using our pre-configured GitHub Actions workflows. Automated testing, building, and deployment pipelines ready to go.
+      </p>
+    `,
+  },
+  {
+    title: "Monorepo Architecture",
+    description: `
+      <p>
+        Manage all your projects in a single repository with our optimized monorepo setup. Share code, maintain consistency, and streamline your development workflow.
+      </p>
+    `,
+  },
+  {
+    title: "Multi-Framework Flexibility",
+    description: `
+      <p>
+        Build with your preferred frameworks while maintaining consistency across projects. Support for Next.js, React, Vue, and more - all working together seamlessly.
+      </p>
+    `,
+  },
+];
+---
+
+<section id="key-features" class="section">
+  <div class="container">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-[33%_minmax(66%,_1fr)] gap-4 sm:gap-5"
+    >
+      <!-- Left visual -->
+      <div
+        class="flex flex-col items-center justify-center bg-secondary-100 rounded-lg overflow-clip p-3 sm:p-4"
+      >
+        <h2 class="section-title">Key Features</h2>
+        <img
+          src="/key-features.svg"
+          alt="Key Features Illustration"
+          width="600"
+          height="400"
+          class="w-full h-auto"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Accordion items -->
+      <div class="space-y-3 sm:space-y-4" id="features-accordion">
+        {
+          features.map((feature, index) => (
+            <div
+              class="feature-item bg-white rounded-lg shadow-md shadow-primary-200 overflow-hidden"
+              data-index={index}
+            >
+              <div
+                class="toggle-header p-4 sm:p-6 flex items-center justify-between cursor-pointer hover:bg-secondary-50"
+                role="button"
+                tabindex="0"
+              >
+                <h3 class="text-lg sm:text-xl">{feature.title}</h3>
+                <svg
+                  class="w-5 h-5 sm:w-6 sm:h-6 text-secondary transition-transform duration-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div class="description px-4 sm:px-6 overflow-hidden transition-all duration-200 max-h-0">
+                <div
+                  class="space-y-3 sm:space-y-4"
+                  set:html={feature.description}
+                />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Accordion logic -->
+<script type="module">
+  const container = document.getElementById("features-accordion");
+  const items = container.querySelectorAll(".feature-item");
+
+  let openIndex = 0;
+  const updateAccordion = () => {
+    items.forEach((item, index) => {
+      const desc = item.querySelector(".description");
+      const svg = item.querySelector("svg");
+      if (index === openIndex) {
+        desc.classList.remove("max-h-0");
+        desc.classList.add("pb-4", "sm:pb-6", "pt-2", "sm:pt-4", "max-h-96");
+        svg.classList.add("rotate-180");
+      } else {
+        desc.classList.remove("pb-4", "sm:pb-6", "pt-2", "sm:pt-4", "max-h-96");
+        desc.classList.add("max-h-0");
+        svg.classList.remove("rotate-180");
+      }
+    });
+  };
+
+  updateAccordion();
+
+  items.forEach((item, index) => {
+    const header = item.querySelector(".toggle-header");
+    header.addEventListener("click", () => {
+      openIndex = openIndex === index ? -1 : index;
+      updateAccordion();
+    });
+    header.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openIndex = openIndex === index ? -1 : index;
+        updateAccordion();
+      }
+    });
+  });
+</script>

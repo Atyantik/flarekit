@@ -1,0 +1,84 @@
+---
+const formId = "maneejpe"; // your Formspree form ID
+---
+
+<form
+  id="contact-form"
+  action={`https://formspree.io/f/${formId}`}
+  method="POST"
+  class="mx-auto w-full"
+>
+  <div class="mb-5">
+    <label for="email" class="block mb-2 text-sm font-medium">
+      Email Address
+    </label>
+    <input
+      id="email"
+      type="email"
+      name="email"
+      required
+      placeholder="Enter your email"
+      class="tw-input-text"
+    />
+  </div>
+
+  <div class="mb-5">
+    <label for="message" class="block mb-2 text-sm font-medium">
+      Message
+    </label>
+    <textarea
+      id="message"
+      name="message"
+      required
+      placeholder="Enter your message"
+      class="tw-input-text"></textarea>
+  </div>
+
+  <button type="submit" class="btn-secondary" id="contact-form-button">
+    Submit
+  </button>
+  <p id="contact-form-status" class="mt-3 text-sm text-center"></p>
+</form>
+
+<!-- Inline AJAX logic -->
+<script type="module">
+  const form = document.getElementById("contact-form");
+  const status = document.getElementById("contact-form-status");
+  const button = document.getElementById("contact-form-button");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    button.disabled = true;
+    status.textContent = "Submitting...";
+
+    const data = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        status.textContent = "Thanks for your submission!";
+        form.reset();
+      } else {
+        const result = await response.json();
+        if (result.errors) {
+          status.textContent = result.errors
+            .map((error) => error.message)
+            .join(", ");
+        } else {
+          status.textContent =
+            "Oops! There was a problem submitting your form.";
+        }
+      }
+    } catch (error) {
+      status.textContent = "Oops! There was a problem submitting your form.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>

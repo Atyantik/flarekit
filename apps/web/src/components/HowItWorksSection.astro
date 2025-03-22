@@ -1,0 +1,71 @@
+---
+const stepsData = [
+  {
+    id: "1",
+    title: "Initialize Flarekit",
+    description: `
+      <div class="bg-secondary-50 p-3 rounded">
+        <code class="text-secondary font-bold">npx flarekit init my-project</code>
+      </div>
+      <p class="mt-4">
+        Generate a monorepo scaffold with Turborepo and GitHub Actions included.
+      </p>
+    `,
+  },
+  {
+    id: "2",
+    title: "Add/Configure Your Apps",
+    description: `
+      <p>
+        Add frontend frameworks (React, Next, Astro) and backends (Hono, Node-based APIs) in a single repository.
+      </p>
+    `,
+  },
+  {
+    id: "3",
+    title: "Develop & Test",
+    description: `
+      <p>
+        Leverage Turborepo's parallel builds and caching for near-instant feedback.
+      </p>
+    `,
+  },
+  {
+    id: "4",
+    title: "Automated CI/CD",
+    description: `
+      <p>
+        Push to GitHub, and Flarekit's pre-configured Actions run tests, build, and deploy your apps to Cloudflare (or your preferred environment).
+      </p>
+    `,
+  },
+  {
+    id: "5",
+    title: "Edge Deployment",
+    description: `
+      <p>
+        Enjoy globally distributed applications with Cloudflare's edge network—no extra steps required.
+      </p>
+    `,
+  },
+];
+---
+
+<section id="how-it-works" class="section">
+  <div class="container">
+    <h2 class="section-title">How It Works (Simplified Flow)</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
+      {
+        stepsData.map((step, index) => (
+          <div class="card">
+            <h3 class="text-xl font-medium text-black">
+              <span class="font-bold">{index + 1}.</span> {step.title}
+            </h3>
+            <div class="mt-4" set:html={step.description} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

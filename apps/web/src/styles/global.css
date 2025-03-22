@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@config "../../tailwind.config.js";
+
+:root {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply font-body text-primary bg-[#FFFAF6];
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-heading tracking-[0.01em];
+}
+
+@layer components {
+  .section {
+    @apply pt-16 lg:pt-32;
+  }
+
+  .section-title {
+    @apply font-semibold md:font-normal text-2xl md:text-3xl lg:text-5xl text-center mb-6 lg:mb-14;
+  }
+
+  .btn-primary {
+    @apply cursor-pointer inline-flex bg-primary font-medium text-white px-6 py-2 rounded-md hover:bg-primary-600 hover:text-white transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply cursor-pointer inline-flex bg-secondary font-medium text-white px-6 py-2 rounded-md hover:bg-secondary-600 hover:text-white transition-colors duration-200;
+  }
+
+  .btn-outline-primary {
+    @apply cursor-pointer inline-flex border-solid border-2 border-primary font-medium text-primary px-6 py-2 rounded-md hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200;
+  }
+
+  .btn-outline-secondary {
+    @apply cursor-pointer inline-flex border-solid border-2 border-secondary font-medium text-secondary px-6 py-2 rounded-md hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200;
+  }
+
+  .btn-text-primary {
+    @apply cursor-pointer inline-flex text-primary font-medium hover:text-primary-600 transition-colors duration-200;
+  }
+
+  .btn-text-secondary {
+    @apply cursor-pointer inline-flex text-secondary font-medium hover:text-secondary-600 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white px-6 py-4 rounded-lg shadow-md shadow-primary-200 flex flex-col;
+  }
+
+  .tw-input-text {
+    @apply bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary focus-visible:ring-primary focus-visible:border-primary focus-visible:outline-primary block w-full p-2.5;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.testimonialSlider {
+  @apply pb-20;
+}
+
+.testimonialSlider .splide__arrows {
+  @apply absolute bottom-0 left-0 w-full flex items-center justify-center gap-10;
+}
+.testimonialSlider .splide__arrow {
+  @apply static w-10 h-10 bg-secondary transform-none;
+}
+
+.testimonialSlider .splide__arrow svg {
+  fill: white;
+}

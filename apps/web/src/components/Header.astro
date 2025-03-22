@@ -1,0 +1,132 @@
+<header
+  class="header fixed w-full top-0 z-10 transition-all duration-300 py-2 lg:py-10 lg:bg-transparent bg-[#FFFAF6]"
+>
+  <div class="container">
+    <nav class="flex items-center justify-between">
+      <a href="#">
+        <img
+          src="/Flarekit-logo.svg"
+          class="w-auto block h-10 lg:h-14"
+          alt="Flarekit Logo"
+          width="136"
+          height="50"
+          loading="eager"
+        />
+      </a>
+
+      <!-- Desktop Nav -->
+      <ul
+        id="desktop-nav"
+        class="hidden lg:flex items-center space-x-10 uppercase font-semibold text-sm"
+      >
+        <li><a href="#overview" class="nav-link">Overview</a></li>
+        <li><a href="#key-features" class="nav-link">Key features</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
+        <li><a href="#documentation" class="nav-link">Documentation</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Mobile Nav -->
+    <div
+      class="lg:hidden bg-[rgba(60,60,60,0.5)] backdrop-blur-sm rounded-xl transition-all duration-300 ease-in-out overflow-hidden fixed bottom-4 left-4 right-4 z-20 p-4"
+    >
+      <ul
+        id="mobile-nav"
+        class="uppercase text-white font-semibold text-sm flex gap-4 overflow-x-scroll flex-nowrap text-nowrap no-scrollbar"
+      >
+        <li><a href="#overview" class="nav-link snap-start">Overview</a></li>
+        <li>
+          <a href="#key-features" class="nav-link snap-start">Key features</a>
+        </li>
+        <li>
+          <a href="#how-it-works" class="nav-link snap-start">How It Works</a>
+        </li>
+        <li><a href="#use-cases" class="nav-link snap-start">Use Cases</a></li>
+        <li>
+          <a href="#documentation" class="nav-link snap-start">Documentation</a>
+        </li>
+        <li><a href="#contact" class="nav-link snap-start">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- Inline script for client-side logic -->
+<script type="module">
+  const header = document.querySelector(".header");
+  const desktopLinks = document.querySelectorAll("#desktop-nav .nav-link");
+  const mobileLinks = document.querySelectorAll("#mobile-nav .nav-link");
+  const sections = document.querySelectorAll("section[id]");
+
+  const updateActiveLink = (id) => {
+    [...desktopLinks, ...mobileLinks].forEach((link) => {
+      const hrefId = link.getAttribute("href").slice(1);
+      if (hrefId === id) {
+        link.classList.add("opacity-100");
+        link.classList.remove("opacity-50");
+        if (link.closest("#mobile-nav")) {
+          link.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+          });
+        }
+      } else {
+        link.classList.add("opacity-50");
+        link.classList.remove("opacity-100");
+      }
+    });
+  };
+
+  // Intersection Observer for sections
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          updateActiveLink(entry.target.id);
+        }
+      });
+    },
+    {
+      rootMargin: "-10% 0px -90% 0px",
+      threshold: 0.2,
+    },
+  );
+
+  sections.forEach((section) => observer.observe(section));
+
+  // Scroll event for background toggle
+  let scrollTimeout;
+  const handleScroll = () => {
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      if (window.scrollY > 0) {
+        header.classList.add("bg-[#FFFAF6]", "py-2", "lg:py-4", "shadow-md");
+        header.classList.remove("lg:py-10", "lg:bg-transparent");
+      } else {
+        header.classList.remove("shadow-md", "lg:py-4");
+        header.classList.add("lg:py-10", "lg:bg-transparent");
+      }
+    }, 10);
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll(); // initial check
+</script>
+
+<style>
+  .nav-link {
+    transition: opacity 0.3s ease;
+  }
+  .nav-link.opacity-100 {
+    opacity: 1;
+  }
+  .nav-link.opacity-50 {
+    opacity: 0.5;
+  }
+  .nav-link.opacity-50:hover {
+    opacity: 1;
+  }
+</style>

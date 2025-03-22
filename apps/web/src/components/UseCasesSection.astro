@@ -1,0 +1,67 @@
+---
+import TestimonialsSection from "./TestimonialsSection.astro";
+
+const data = [
+  {
+    id: "1",
+    title: "Global E-Commerce Stores",
+    description: `
+      <p>
+        Speed is paramount for customer conversions—Cloudflare’s edge combined
+        with Flarekit’s monorepo means ultra-low latency.
+      </p>
+    `,
+  },
+  {
+    id: "2",
+    title: "Multi-App Microservices",
+    description: `
+      <p>
+        Unify multiple micro-services or frontends in a single code base;
+        deploy them simultaneously with pre-built GitHub Actions.
+      </p>
+    `,
+  },
+  {
+    id: "3",
+    title: "Enterprise-Scale Platforms",
+    description: `
+      <p>
+        Manage large teams and complex workflows more effectively with robust
+        caching and consistent CI/CD pipelines.
+      </p>
+    `,
+  },
+  {
+    id: "4",
+    title: "High-Performance Marketing Sites",
+    description: `
+      <p>
+        Ship static or SSR content from Cloudflare’s edge, giving visitors
+        lightning-fast load times no matter their location.
+      </p>
+    `,
+  },
+];
+---
+
+<section id="use-cases">
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">Use Cases & Real-World Scenarios</h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+        {
+          data.map((item, index) => (
+            <div class="card">
+              <h3 class="text-xl font-medium text-black">
+                <span class="font-bold">{index + 1}.</span> {item.title}
+              </h3>
+              <div class="mt-4" set:html={item.description} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

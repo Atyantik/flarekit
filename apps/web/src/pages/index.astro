@@ -1,38 +1,24 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import HeroSection from "@components/HeroSection.astro";
+import FeaturesSection from "@components/FeaturesSection.astro";
+import HowItWorksSection from "@components/HowItWorksSection.astro";
+import UseCasesSection from "@components/UseCasesSection.astro";
+import TestimonialsSection from "@components/TestimonialsSection.astro";
+import QuickstartSection from "@components/QuickstartSection.astro";
+import Footer from "@components/Footer.astro";
+import "@splidejs/splide/dist/css/splide.min.css";
+import KeyFeaturesSection from "@components/KeyFeaturesSection.astro";
 ---
 
 <Layout>
-  <div class="center">
-    <h1>Flarekit</h1>
-    <div>
-      ⚡ Blazing Fast, Budget Friendly, Built to Scale
-      <p id="loadTime"></p>
-    </div>
-    <p>
-      <a href="/gallery">Checkout Gallery Example →</a>
-    </p>
-  </div>
+  <Header />
+  <HeroSection />
+  <KeyFeaturesSection />
+  <HowItWorksSection />
+  <UseCasesSection />
+  <TestimonialsSection />
+  <QuickstartSection />
+  <Footer />
 </Layout>
-<script is:inline define:vars={{ requestTime: Astro.locals.REQUEST_TIME }}>
-  const loadTime = Math.abs(Date.now() - requestTime);
-  document.querySelector("#loadTime").innerText =
-    `Page Execution Time: ${loadTime}ms`;
-</script>
-<style>
-  h1 {
-    font-size: 3rem;
-    color: var(--primary);
-    letter-spacing: 1.5px;
-  }
-
-  .center {
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 10px;
-    text-align: center;
-  }
-</style>

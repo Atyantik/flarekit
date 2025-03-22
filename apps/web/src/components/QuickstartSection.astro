@@ -1,0 +1,48 @@
+---
+const data = [
+  {
+    id: "1",
+    title: "Easy Installation",
+    description: `
+      <div class="bg-gray-800 text-white p-3 rounded">
+        <code>npm install flarekit</code>
+      </div>
+      <p class="my-2"><strong>or</strong></p>
+      <div class="bg-gray-800 text-white p-3 rounded">
+        <code>yarn add flarekit</code>
+      </div>
+    `,
+  },
+  {
+    id: "2",
+    title: "One-Click Setup",
+    description: `
+      <div class="h-full flex flex-col">
+        <p>
+          Get a fully working monorepo with Turbo repo and GitHub Actions integrated in minutes.
+        </p>
+        <div class="mt-4 lg:mt-auto">
+          <a href="#" class="btn-outline-secondary">Explore Documentation</a>
+        </div>
+      </div>
+    `,
+  },
+];
+---
+
+<section id="documentation" class="section">
+  <div class="container">
+    <h2 class="section-title">Quickstart & Documentation</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+      {
+        data.map((item) => (
+          <div class="card">
+            <h3 class="text-xl font-medium text-black">{item.title}</h3>
+            <div class="mt-4 flex-1" set:html={item.description} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

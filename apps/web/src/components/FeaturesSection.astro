@@ -1,0 +1,55 @@
+---
+import FeatureItem from "./FeatureItem.astro";
+---
+
+<div class="section">
+  <div class="container">
+    <div class="flex flex-col-reverse md:flex-row items-start gap-10">
+      <div class="w-full lg:w-3/5">
+        <h2 class="text-3xl md:text-4xl leading-[1.4]">
+          Flarekit is a powerful monorepo framework designed for modern edge
+          deployments.
+        </h2>
+        <p class="mt-5 text-base md:text-lg">
+          Harness Turborepo&apos;s caching and build optimization, seamlessly
+          deploy to Cloudflare, and ship multiple apps at once with minimal
+          configuration. Make your development cycle faster, leaner, and
+          infinitely scalable
+        </p>
+      </div>
+      <div class="w-full md:w-2/5">
+        <img
+          src="/features.svg"
+          class="w-full h-auto block"
+          alt="Flarekit Features Illustration"
+          width={463}
+          height={396}
+        />
+      </div>
+    </div>
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 md:gap-y-10 mt-10"
+    >
+      <FeatureItem
+        title="Cloudflare-Ready"
+        description="Native compatibility with Cloudflare's edge network for lightning-fast global performance."
+      />
+      <FeatureItem
+        title="Turborepo Integration"
+        description="Automated caching and parallelization for shorter build times, even at scale."
+      />
+      <FeatureItem
+        title="Pre-Setup GitHub Actions"
+        description="Plug-and-play CI/CD to effortlessly deploy multiple apps within a single codebase."
+      />
+      <FeatureItem
+        title="Monorepo Simplicity"
+        description="Manage frontends, backends, and shared modules under one roof for easier maintenance."
+      />
+      <FeatureItem
+        title="Flexible Framework Support"
+        description="Works with Next, Astro, React-Vite, Hono, and more, so you never feel locked in."
+      />
+    </div>
+  </div>
+</div>

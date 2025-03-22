@@ -1,0 +1,43 @@
+---
+import ContactForm from "./ContactForm.astro";
+---
+
+<section id="contact" class="section">
+  <div class="container">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+      <div class="flex flex-col justify-center items-start">
+        <h2 class="text-3xl md:text-4xl leading-[1.4] mb-6">
+          Flarekit is free and open-source under MIT License. Contribute or join
+          the community to shape its future.
+        </h2>
+        <a href={"#"} class="btn-secondary"> View on github </a>
+      </div>
+      <div class="card p-6 sm:p-8 lg:p-10">
+        <p class="font-heading text-3xl md:text-4xl mb-4 lg:mb-6">
+          Get in touch
+        </p>
+        <ContactForm />
+      </div>
+    </div>
+  </div>
+  <footer class="pt-10 pb-30 lg:py-10">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <p class="text-primary-400 text-sm md:text-base">
+          &copy; 2025 Flarekit by Atyantik. All rights reserved.
+        </p>
+        <div class="flex justify-center md:justify-end items-center gap-4">
+          <a href={"#"}>
+            <img
+              src="/github.svg"
+              class="w-auto block h-5"
+              alt="Flowbite Logo"
+              width={88}
+              height={24}
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</section>

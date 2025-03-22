@@ -1,0 +1,99 @@
+---
+const data = [
+  {
+    id: "1",
+    title: "Tirth Bodawala",
+    designation: "CTO, Atyantik Technologies",
+    profileImage: "/michael-gouch.png",
+    description:
+      "Moving to Flarekit drastically cut our build times. Now everything—frontends, microservices—updates and deploys to Cloudflare with a single push.",
+  },
+  {
+    id: "2",
+    title: "Tirth Bodawala",
+    designation: "CTO, Atyantik Technologies",
+    profileImage: "/michael-gouch.png",
+    description:
+      "Moving to Flarekit drastically cut our build times. Now everything—frontends, microservices—updates and deploys to Cloudflare with a single push.",
+  },
+  {
+    id: "3",
+    title: "Tirth Bodawala",
+    designation: "CTO, Atyantik Technologies",
+    profileImage: "/michael-gouch.png",
+    description:
+      "Moving to Flarekit drastically cut our build times. Now everything—frontends, microservices—updates and deploys to Cloudflare with a single push.",
+  },
+];
+---
+
+<section id="testimonials" class="section">
+  <div class="container">
+    <h2 class="section-title">Testimonials & Social Proof</h2>
+
+    <div class="splide testimonialSlider" aria-label="Testimonials">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {
+            data.map((item) => (
+              <li class="splide__slide">
+                <figure class="max-w-screen-md mx-auto text-center">
+                  <svg
+                    class="w-7 h-7 mx-auto mb-3 text-secondary"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 18 14"
+                    aria-hidden="true"
+                  >
+                    <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
+                  </svg>
+                  <blockquote>
+                    <p class="text-xl italic font-medium text-gray-900">
+                      {item.description}
+                    </p>
+                  </blockquote>
+                  <figcaption class="flex items-center justify-center mt-6 space-x-3 rtl:space-x-reverse">
+                    <img
+                      class="w-6 h-6 rounded-full"
+                      src={item.profileImage}
+                      alt="Profile picture of {item.title}"
+                      width="60"
+                      height="60"
+                    />
+                    <div class="flex items-center divide-x-2 divide-gray-500 rtl:divide-x-reverse">
+                      <cite class="pe-3 font-medium">{item.title}</cite>
+                      <cite class="ps-3 text-sm text-gray-500">
+                        {item.designation}
+                      </cite>
+                    </div>
+                  </figcaption>
+                </figure>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Splide from "@splidejs/splide";
+
+  new Splide(".testimonialSlider", {
+    type: "loop",
+    perPage: 3,
+    perMove: 1,
+    gap: "2rem",
+    pagination: false,
+    arrows: true,
+    breakpoints: {
+      1023: {
+        perPage: 2,
+      },
+      768: {
+        perPage: 1,
+      },
+    },
+  }).mount();
+</script>
