@@ -38,7 +38,8 @@
     "wrangler": "^4.13.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.9.6"
+    "@rollup/rollup-linux-x64-gnu": "^4.9.6",
+    "@esbuild/linux-x64": "^0.20.2"
   },
   "engines": {
     "node": ">=18.17.1"
