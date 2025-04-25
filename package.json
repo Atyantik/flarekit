@@ -54,11 +54,5 @@
   },
   "dependencies": {
     "@types/node": "^22.15.2"
-  },
-  "overrides": {
-    "esbuild": "^0.25.0"
-  },
-  "resolutions": {
-    "esbuild": "^0.25.0"
   }
 }
