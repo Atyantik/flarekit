@@ -1,5 +1,5 @@
 import { readFile, writeFile, readdir } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, join, isAbsolute } from 'node:path';
 import { exec } from 'node:child_process';
 import { glob } from 'glob';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -130,25 +130,66 @@ const setupWranglerInPackage = async (packageDir) => {
   }
 };
 
-// Path to wrangler
-const wranglerPath = resolve(rootDir, 'node_modules', '.bin', 'wrangler');
+// Add a path validation function
+const isValidPath = (path) => {
+  if (!path) return false;
+  // Check if path contains any shell special characters
+  if (/[;&|`$()\\]/.test(path)) return false;
+  // Ensure path is within the project directory
+  const normalizedPath = resolve(path);
+  return normalizedPath.startsWith(rootDir);
+};
+
+// Path to wrangler - using join for more consistent path handling
+const wranglerPath = join(rootDir, 'node_modules', '.bin', 'wrangler');
 
 export const init = async () => {
   const packages = await getValidPackages();
+
+  // Validate wrangler path
+  if (!isValidPath(wranglerPath)) {
+    throw new Error('Invalid wrangler path detected');
+  }
+
   for (const packageDir of packages) {
+    // Validate package directory
+    if (!isValidPath(packageDir)) {
+      console.error(`Skipping invalid package directory: ${packageDir}`);
+      continue;
+    }
+
     await setupWranglerInPackage(packageDir);
     await new Promise((presolve, reject) => {
-      exec(`${wranglerPath} types`, { cwd: packageDir }, (error, _, stderr) => {
-        if (error) {
-          console.error(`Error: ${packageDir}: ${error.message}`);
-          reject(error);
-          return;
-        }
-        if (stderr) {
-          console.error(`Stderr: ${packageDir}: ${stderr}`);
-        }
-      });
-      presolve();
+      // Use an array of arguments instead of template string
+      const cmd = wranglerPath;
+      const args = ['types'];
+
+      const childProcess = exec(
+        `"${cmd}" ${args.join(' ')}`,
+        {
+          cwd: packageDir,
+          shell: '/bin/sh', // Explicitly specify shell
+        },
+        (error, _, stderr) => {
+          if (error) {
+            console.error(`Error: ${packageDir}: ${error.message}`);
+            reject(error);
+            return;
+          }
+          if (stderr) {
+            console.error(`Stderr: ${packageDir}: ${stderr}`);
+          }
+          presolve();
+        },
+      );
+
+      // Add timeout to prevent hanging
+      const timeout = setTimeout(() => {
+        childProcess.kill();
+        reject(new Error('Command execution timed out'));
+      }, 30000); // 30 second timeout
+
+      childProcess.on('close', () => clearTimeout(timeout));
     });
   }
 };

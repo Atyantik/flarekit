@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: ['main']
 
+# Set minimal permissions by default
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   lint:
     runs-on: ubuntu-24.04
@@ -65,6 +70,8 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     needs: [lint, 'test']
+    permissions:
+      contents: write  # Needed for artifact upload
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -129,6 +136,9 @@ jobs:
   deploy_web:
     runs-on: ubuntu-24.04
     needs: [migrate]
+    permissions:
+      contents: read
+      deployments: write  # Needed for Cloudflare Pages deployment
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -170,6 +180,9 @@ jobs:
   deploy_backend:
     runs-on: ubuntu-24.04
     needs: [migrate]
+    permissions:
+      contents: read
+      deployments: write  # Needed for Cloudflare Workers deployment
     steps:
       - name: Check out code
         uses: actions/checkout@v4
