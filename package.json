@@ -37,12 +37,6 @@
     "typescript": "^5.8.3",
     "wrangler": "^4.13.1"
   },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.9.6",
-    "@esbuild/linux-x64": "^0.20.2",
-    "lightningcss-linux-x64-gnu": "^1.25.0",
-    "@tailwindcss/oxide-linux-x64-gnu": "^0.13.0"
-  },
   "engines": {
     "node": ">=18.17.1"
   },
