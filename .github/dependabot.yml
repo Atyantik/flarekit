@@ -20,7 +20,7 @@ updates:
 
   # Enable version updates for packages
   - package-ecosystem: "npm"
-    directory: "/packages/*"
+    directory: "/packages"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -38,7 +38,7 @@ updates:
 
   # Enable version updates for apps
   - package-ecosystem: "npm"
-    directory: "/apps/*"
+    directory: "/apps"
     schedule:
       interval: "weekly"
       day: "monday"
