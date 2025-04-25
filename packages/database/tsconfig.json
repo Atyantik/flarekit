@@ -9,10 +9,11 @@
     "declarationDir": "./dist/types",
     "outDir": "dist",
     "lib": ["ESNext"],
-    "types": ["@cloudflare/workers-types"],
     "paths": {
+      "@/*": ["./src/*"],
       "@schema/*": ["./src/schema/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["worker-configuration.d.ts", "src/**/*.ts"]

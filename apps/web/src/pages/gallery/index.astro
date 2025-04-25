@@ -4,7 +4,7 @@ import "./_style.css";
 import { getCdnUrl } from "@utils/cdn.util";
 
 const DB = Astro.locals.DB;
-const records = await DB.storage.listStorageRecords();
+const records = await DB.storage.getList();
 const { PUBLIC_BACKEND_ENDPOINT, PUBLIC_CDN_URL } = Astro.locals.runtime.env;
 ---
 

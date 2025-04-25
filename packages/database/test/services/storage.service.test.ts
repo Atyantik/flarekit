@@ -1,11 +1,18 @@
 import { createExecutionContext, env } from 'cloudflare:test';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
-import { getInstance, initDBInstance } from '../../src';
+import { getInstance, initDBInstance } from '@/index';
 import { validate } from 'uuid';
+import { ServiceError } from '@/classes/service_error.class';
+import { toSQLiteUTCString } from '@/utils/date.util';
 
 const ctx = createExecutionContext();
 const db = initDBInstance(ctx, env);
+
+const getTimestamp = (date: string | Date | null) => {
+  if (!date) return 0;
+  return new Date(date).getTime();
+};
 
 describe('storage.service', () => {
   afterEach(() => {
@@ -14,8 +21,8 @@ describe('storage.service', () => {
     vi.clearAllMocks();
   });
 
-  describe('createStorageRecord', () => {
-    it('should create a new storage record with a generated UUID and return it (success)', async () => {
+  describe('Create storage records', () => {
+    it('Should create a new storage record with a generated UUID and return it', async () => {
       const input = {
         key: 'test-key',
         originalName: 'test.txt',
@@ -24,8 +31,7 @@ describe('storage.service', () => {
         hash: 'somehash',
       };
 
-      const result = await db.storage.createStorageRecord(input);
-      await expect(env.CACHE.get('storage_records')).resolves.toBeNull();
+      const result = await db.storage.create(input);
       expect(validate(result.id)).toBe(true);
     });
 
@@ -48,86 +54,153 @@ describe('storage.service', () => {
         throw new Error('DB Insert Failed');
       });
 
-      await expect(db.storage.createStorageRecord(input)).rejects.toThrow(
+      await expect(db.storage.create(input)).rejects.toThrow(
         'DB Insert Failed',
       );
     });
 
-    it('should throw an error if response.success is false', async () => {
-      const instance = getInstance(ctx);
-      if (!instance) {
-        throw new Error(
-          'Ctx instance not found. Make sure initDatabase is implemented',
-        );
-      }
-      // 1. Mock the db.insert(...) chain to return { success: false, reason: "some-error" }
-      vi.spyOn(instance.db, 'insert').mockImplementation(() => {
-        return {
-          values: vi.fn().mockResolvedValue({
-            success: false,
-            reason: 'some-error',
-          }),
-        } as any;
-      });
-
-      // 2. Prepare your input
-      const input = {
-        key: 'somekey',
-        originalName: 'somefile',
-        size: 100,
-        mimeType: 'application/json',
-        hash: 'zzz',
-      };
-
-      // 3. Assert that createStorageRecord rejects with the expected error object
-      await expect(db.storage.createStorageRecord(input)).rejects.toEqual({
-        success: false,
-        reason: 'some-error',
-      });
-    });
-  });
-
-  describe('getStorageRecordFromKey', () => {
-    it('should return the first matched record if found', async () => {
+    it('Should handle date fields correctly', async () => {
+      const now = new Date().toISOString();
       const input = {
         key: 'test-key',
-        originalName: 'somefile',
-        size: 100,
-        mimeType: 'application/json',
-        hash: 'zzz',
+        originalName: 'test.txt',
+        size: 123,
+        mimeType: 'text/plain',
+        hash: 'somehash',
+        createdAt: now,
+        updatedAt: now,
+        deletedAt: null,
       };
-      await db.storage.createStorageRecord(input);
 
-      const result = await db.storage.getStorageRecordFromKey('test-key');
+      const nowDateSqlite = toSQLiteUTCString(now);
 
-      expect(result).toBeDefined();
+      const result = await db.storage.create(input);
+      expect(result.createdAt).toEqual(nowDateSqlite);
+      expect(result.updatedAt).toEqual(nowDateSqlite);
+      expect(result.deletedAt).toBeNull();
     });
+  });
 
-    it('should return null if no record is found', async () => {
-      const result =
-        await db.storage.getStorageRecordFromKey('non-existent-key');
-      expect(result).toBeNull();
-    });
+  describe('Update storage records', () => {
+    it('Should update an existing storage record', async () => {
+      const input = {
+        key: 'test-key',
+        originalName: 'test.txt',
+        size: 123,
+        mimeType: 'text/plain',
+        hash: 'somehash',
+      };
 
-    it('should throw an error if the query fails', async () => {
-      const instance = getInstance(ctx);
-      if (!instance) {
-        throw new Error(
-          'Ctx instance not found. Make sure initDatabase is implemented',
-        );
-      }
-      // 1. Mock the db.insert(...) chain to return { success: false, reason: "some-error" }
-      vi.spyOn(instance.db, 'select').mockImplementation(() => {
-        throw new Error('DB Select Failed');
+      const record = await db.storage.create(input);
+      // Use vi.advanceTimersByTime to simulate time passing
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(1000); // Advance by 1 second
+      const updatedRecord = await db.storage.update(record.id, {
+        originalName: 'updated.txt',
+        size: 456,
       });
-      await expect(db.storage.getStorageRecordFromKey('foo')).rejects.toThrow(
-        'DB Select Failed',
+      vi.useRealTimers();
+      expect(updatedRecord.originalName).toBe('updated.txt');
+      expect(updatedRecord.size).toBe(456);
+      expect(getTimestamp(updatedRecord.updatedAt)).toBeGreaterThan(
+        getTimestamp(record.updatedAt),
+      );
+    });
+
+    it('Should throw error when updating non-existent record', async () => {
+      await expect(
+        db.storage.update('non-existent-id', { originalName: 'test.txt' }),
+      ).rejects.toThrow(ServiceError);
+    });
+
+    it('Should handle date fields in update', async () => {
+      const input = {
+        key: 'test-key',
+        originalName: 'test.txt',
+        size: 123,
+        mimeType: 'text/plain',
+        hash: 'somehash',
+      };
+
+      const record = await db.storage.create(input);
+      const now = new Date().toISOString();
+      const updatedRecord = await db.storage.update(record.id, {
+        updatedAt: now,
+      });
+
+      expect(updatedRecord.updatedAt).toEqual(toSQLiteUTCString(now));
+    });
+  });
+
+  describe('Delete storage records', () => {
+    it('Should soft delete a record', async () => {
+      const input = {
+        key: 'test-key',
+        originalName: 'test.txt',
+        size: 123,
+        mimeType: 'text/plain',
+        hash: 'somehash',
+      };
+
+      const record = await db.storage.create(input);
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(1000); // Advance by 1 second
+      const deletedRecord = await db.storage.delete(record.id);
+      vi.useRealTimers();
+
+      expect(getTimestamp(deletedRecord.deletedAt)).toBeGreaterThan(
+        getTimestamp(record.createdAt),
+      );
+    });
+
+    it('Should permanently delete a record', async () => {
+      const input = {
+        key: 'test-key',
+        originalName: 'test.txt',
+        size: 123,
+        mimeType: 'text/plain',
+        hash: 'somehash',
+      };
+
+      const record = await db.storage.create(input);
+      await db.storage.delete(record.id, true);
+
+      const deletedRecord = await db.storage.getById(record.id, true);
+      expect(deletedRecord).toBeNull();
+    });
+
+    it('Should throw error when deleting non-existent record', async () => {
+      await expect(db.storage.delete('non-existent-id')).rejects.toThrow(
+        ServiceError,
       );
     });
   });
 
-  describe('listStorageRecords', () => {
-    it('should list all active (non-deleted) records in descending order of createdAt', async () => {
+  describe('Get storage records', () => {
+    it('Should get record by id', async () => {
+      const input = {
+        key: 'test-key',
+        originalName: 'test.txt',
+        size: 123,
+        mimeType: 'text/plain',
+        hash: 'somehash',
+      };
+
+      const record = await db.storage.create(input);
+      const foundRecord = await db.storage.getById(record.id);
+
+      expect(foundRecord).toBeDefined();
+      expect(foundRecord?.id).toBe(record.id);
+    });
+
+    it('Should return null for non-existent id', async () => {
+      const foundRecord = await db.storage.getById('non-existent-id');
+      expect(foundRecord).toBeNull();
+    });
+  });
+
+  describe('Get Storage List', () => {
+    it('Should list all active (non-deleted) records in descending order of createdAt', async () => {
       const input = {
         key: 'test-key-1',
         originalName: 'somefile',
@@ -142,36 +215,26 @@ describe('storage.service', () => {
         mimeType: 'application/json',
         hash: 'aaa',
       };
-      await db.storage.clearStorageRecords();
-      await expect(env.CACHE.get('storage_records')).resolves.toBeNull();
-      const record1 = await db.storage.createStorageRecord(input);
-      const record2 = await db.storage.createStorageRecord(input2);
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(1000); // Advance by 1 second
+      const record1 = await db.storage.create(input);
+      vi.advanceTimersByTime(1000); // Advance by 1 second
+      const record2 = await db.storage.create(input2);
+      vi.useRealTimers();
 
-      const result = await db.storage.listStorageRecords();
+      // Sort by desc as default
+      const result = await db.storage.getList();
 
       expect(result).toHaveLength(2);
-      expect(env.CACHE.get('storage_records')).resolves.toBe(
-        JSON.stringify(result),
+      expect(result[1].id).eq(record1.id);
+      expect(result[0].id).eq(record2.id);
+      // check if the records are in descending order of createdAt
+      expect(getTimestamp(result[0].createdAt)).toBeGreaterThan(
+        getTimestamp(result[1].createdAt),
       );
-
-      const cachedResult = await db.storage.listStorageRecords();
-      expect(env.CACHE.get('storage_records')).resolves.toBe(
-        JSON.stringify(result),
-      );
-      expect(result).toMatchObject(cachedResult);
-      expect(result[0].id).eq(record1.id);
-      expect(result[1].id).eq(record2.id);
     });
 
-    it('should list all records even it cache is not present', async () => {
-      const instance = getInstance(ctx);
-      if (!instance) {
-        throw new Error(
-          'Ctx instance not found. Make sure initDatabase is implemented',
-        );
-      }
-      const cache = instance.cache;
-      delete instance.cache;
+    it('Should get count of records', async () => {
       const input = {
         key: 'test-key-1',
         originalName: 'somefile',
@@ -186,34 +249,168 @@ describe('storage.service', () => {
         mimeType: 'application/json',
         hash: 'aaa',
       };
-      await db.storage.clearStorageRecords();
-      await expect(env.CACHE.get('storage_records')).resolves.toBeNull();
-      await db.storage.createStorageRecord(input);
-      await db.storage.createStorageRecord(input2);
+      await db.storage.create(input);
+      await db.storage.create(input2);
 
-      const result = await db.storage.listStorageRecords();
-
-      expect(result).toHaveLength(2);
-      instance.cache = cache;
+      const count = await db.storage.getCount();
+      expect(count).toBe(2);
     });
 
-    it('should throw if the listing fails', async () => {
-      const instance = getInstance(ctx);
-      if (!instance) {
-        throw new Error(
-          'Ctx instance not found. Make sure initDatabase is implemented',
-        );
-      }
-      vi.spyOn(instance.db, 'select').mockImplementation(() => {
-        throw new Error('DB Select Error');
+    it('Should filter records by key', async () => {
+      const input1 = {
+        key: 'test-key-1',
+        originalName: 'file1.txt',
+        size: 100,
+        mimeType: 'text/plain',
+        hash: 'zzz',
+      };
+      const input2 = {
+        key: 'test-key-2',
+        originalName: 'file2.txt',
+        size: 200,
+        mimeType: 'text/plain',
+        hash: 'aaa',
+      };
+
+      await db.storage.create(input1);
+      await db.storage.create(input2);
+
+      const filteredRecords = await db.storage.getList(undefined, undefined, {
+        key: 'test-key-1',
       });
-      await expect(db.storage.listStorageRecords()).rejects.toThrow(
-        'DB Select Error',
-      );
+      expect(filteredRecords).toHaveLength(1);
+      expect(filteredRecords[0].key).toBe('test-key-1');
+    });
+
+    it('Should sort records by size', async () => {
+      const input1 = {
+        key: 'test-key-1',
+        originalName: 'file1.txt',
+        size: 100,
+        mimeType: 'text/plain',
+        hash: 'zzz',
+      };
+      const input2 = {
+        key: 'test-key-2',
+        originalName: 'file2.txt',
+        size: 200,
+        mimeType: 'text/plain',
+        hash: 'aaa',
+      };
+
+      await db.storage.create(input1);
+      await db.storage.create(input2);
+
+      const sortedRecords = await db.storage.getList(undefined, [
+        'size',
+        'ASC',
+      ]);
+      expect(sortedRecords[0].size).toBe(100);
+      expect(sortedRecords[1].size).toBe(200);
+    });
+
+    it('Should get count with filter', async () => {
+      const input1 = {
+        key: 'test-key-1',
+        originalName: 'file1.txt',
+        size: 100,
+        mimeType: 'text/plain',
+        hash: 'zzz',
+      };
+      const input2 = {
+        key: 'test-key-2',
+        originalName: 'file2.txt',
+        size: 200,
+        mimeType: 'text/plain',
+        hash: 'aaa',
+      };
+
+      await db.storage.create(input1);
+      await db.storage.create(input2);
+
+      const count = await db.storage.getCount({ key: 'test-key-1' });
+      expect(count).toBe(1);
     });
   });
 
-  describe('clearStorageRecords', () => {
+  describe('Bulk operations', () => {
+    it('Should bulk update records', async () => {
+      const input1 = {
+        key: 'test-key-1',
+        originalName: 'file1.txt',
+        size: 100,
+        mimeType: 'text/plain',
+        hash: 'zzz',
+      };
+      const input2 = {
+        key: 'test-key-2',
+        originalName: 'file2.txt',
+        size: 200,
+        mimeType: 'text/plain',
+        hash: 'aaa',
+      };
+
+      const record1 = await db.storage.create(input1);
+      const record2 = await db.storage.create(input2);
+
+      const updates = [
+        { id: record1.id, data: { originalName: 'updated1.txt' } },
+        { id: record2.id, data: { originalName: 'updated2.txt' } },
+      ];
+
+      const updatedRecords = await db.storage.bulkUpdate(updates);
+      expect(updatedRecords).toHaveLength(2);
+      expect(updatedRecords[0].originalName).toBe('updated1.txt');
+      expect(updatedRecords[1].originalName).toBe('updated2.txt');
+    });
+
+    it('Should handle bulk update with non-existent records', async () => {
+      const updates = [
+        { id: 'non-existent-1', data: { originalName: 'updated1.txt' } },
+        { id: 'non-existent-2', data: { originalName: 'updated2.txt' } },
+      ];
+
+      await expect(db.storage.bulkUpdate(updates)).rejects.toThrow(
+        ServiceError,
+      );
+    });
+
+    it('Should bulk delete records', async () => {
+      const input1 = {
+        key: 'test-key-1',
+        originalName: 'file1.txt',
+        size: 100,
+        mimeType: 'text/plain',
+        hash: 'zzz',
+      };
+      const input2 = {
+        key: 'test-key-2',
+        originalName: 'file2.txt',
+        size: 200,
+        mimeType: 'text/plain',
+        hash: 'aaa',
+      };
+
+      const record1 = await db.storage.create(input1);
+      const record2 = await db.storage.create(input2);
+
+      const deletedRecords = await db.storage.bulkDelete([
+        record1.id,
+        record2.id,
+      ]);
+      expect(deletedRecords).toHaveLength(2);
+      expect(deletedRecords[0].deletedAt).toBeDefined();
+      expect(deletedRecords[1].deletedAt).toBeDefined();
+    });
+
+    it('Should handle bulk delete with non-existent records', async () => {
+      await expect(
+        db.storage.bulkDelete(['non-existent-1', 'non-existent-2']),
+      ).resolves.toMatchObject([]);
+    });
+  });
+
+  describe('Clear Storage Records', () => {
     it('should delete all records from the storage table', async () => {
       const input = {
         key: 'test-key-1',
@@ -229,34 +426,19 @@ describe('storage.service', () => {
         mimeType: 'application/json',
         hash: 'aaa',
       };
-      await db.storage.clearStorageRecords();
-      await db.storage.createStorageRecord(input);
-      await db.storage.createStorageRecord(input2);
+      await db.storage.create(input);
+      await db.storage.create(input2);
 
-      const records = await db.storage.listStorageRecords();
+      const records = await db.storage.getList();
       expect(records).toHaveLength(2);
 
-      await db.storage.clearStorageRecords();
-
-      const postDeleteRecords = await db.storage.listStorageRecords();
-      expect(postDeleteRecords).toHaveLength(0);
-    });
-
-    it('should throw if the deletion fails', async () => {
-      const instance = getInstance(ctx);
-      if (!instance) {
-        throw new Error(
-          'Ctx instance not found. Make sure initDatabase is implemented',
-        );
-      }
-      // 1. Mock the db.insert(...) chain to return { success: false, reason: "some-error" }
-      vi.spyOn(instance.db, 'delete').mockImplementation(() => {
-        throw new Error('DB Delete Error');
-      });
-      await expect(db.storage.clearStorageRecords()).rejects.toThrow(
-        'DB Delete Error',
+      await db.storage.bulkDelete(
+        records.map((r) => r.id),
+        true,
       );
-      expect(instance.db.delete).toHaveBeenCalledTimes(1);
+
+      const postDeleteRecords = await db.storage.getList();
+      expect(postDeleteRecords).toHaveLength(0);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { sqliteTable, text, index, integer } from 'drizzle-orm/sqlite-core';
-import { sql, type InferInsertModel, type InferSelectModel } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 // Storage Schema
 export const storageSchema = sqliteTable(
@@ -15,9 +15,5 @@ export const storageSchema = sqliteTable(
     updatedAt: text('updated_at'),
     deletedAt: text('deleted_at'),
   },
-  /* istanbul ignore next */
   (t) => [index('idx_r2_storage_key').on(t.key)],
 );
-
-export type InsertStorageType = InferInsertModel<typeof storageSchema>;
-export type SelectStorageType = InferSelectModel<typeof storageSchema>;

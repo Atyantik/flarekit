@@ -1,6 +1,6 @@
 import { createExecutionContext, env } from 'cloudflare:test';
 import { describe, it, expect } from 'vitest';
-import { initDBInstance } from '../src';
+import { initDBInstance } from '@/index';
 
 describe('Initialized Database', () => {
   it('Should be initilized without errors', async () => {
@@ -17,7 +17,7 @@ describe('Initialized Database', () => {
     const ctx = createExecutionContext();
     const db = initDBInstance(ctx, env);
 
-    const record = await db.storage.createStorageRecord({
+    const record = await db.storage.create({
       key: 'myKey',
       originalName: 'example.jpg',
       size: 12345,
