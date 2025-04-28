@@ -33,7 +33,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "tsc-alias": "^1.8.15",
-    "turbo": "^2.5.1",
+    "turbo": "^2.5.2",
     "typescript": "^5.8.3",
     "wrangler": "^4.13.1"
   },
