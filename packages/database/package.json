@@ -27,27 +27,27 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@types/node": "^22.15.2",
+    "@types/node": "^22.15.3",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "nanoid": "^5.1.5",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.21",
-    "@cloudflare/workers-types": "^4.20250425.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.24",
+    "@cloudflare/workers-types": "^4.20250504.0",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
     "@vitest/coverage-istanbul": "^3.1.2",
-    "drizzle-kit": "^0.31.0",
-    "eslint": "^9.25.1",
-    "miniflare": "^4.20250424.0",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.26.0",
+    "miniflare": "^4.20250428.1",
     "rimraf": "^6.0.1",
-    "rollup": "^4.40.0",
+    "rollup": "^4.40.1",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.2",
-    "wrangler": "^4.13.1"
+    "wrangler": "^4.14.1"
   }
 }
