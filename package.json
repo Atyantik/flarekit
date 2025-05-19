@@ -53,6 +53,6 @@
     "*.{css,scss,json,md}": "prettier --write"
   },
   "dependencies": {
-    "@types/node": "^22.15.18"
+    "@types/node": "^22.15.19"
   }
 }

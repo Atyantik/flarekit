@@ -16,8 +16,8 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8.30",
-    "@cloudflare/workers-types": "^4.20250517.0",
-    "@types/node": "^22.15.18",
+    "@cloudflare/workers-types": "^4.20250519.0",
+    "@types/node": "^22.15.19",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.3",

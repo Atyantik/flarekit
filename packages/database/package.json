@@ -27,7 +27,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.19",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "nanoid": "^5.1.5",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8.30",
-    "@cloudflare/workers-types": "^4.20250517.0",
+    "@cloudflare/workers-types": "^4.20250519.0",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
