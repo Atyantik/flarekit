@@ -15,14 +15,14 @@
     "@flarekit/database": "^1.0.0",
     "@splidejs/splide": "^4.1.4",
     "@tailwindcss/vite": "^4.1.7",
-    "astro": "^5.7.13",
+    "astro": "^5.8.0",
     "tailwindcss": "^4.1.7",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.21",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "astro-eslint-parser": "^1.2.2",
