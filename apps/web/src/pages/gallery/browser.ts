@@ -23,7 +23,7 @@ if (masonry && inputField) {
       }
 
       if (form && validFiles.length) {
-        form.disabled = true;
+        inputField.disabled = true;
         form.classList.add("loading");
         const formData = new FormData(form);
         try {
@@ -46,8 +46,10 @@ if (masonry && inputField) {
           }
         } catch (e) {
           console.error(e);
+        } finally {
+          form.classList.remove("loading");
+          inputField.disabled = false;
         }
-        form.classList.remove("loading");
       }
     }
   });
