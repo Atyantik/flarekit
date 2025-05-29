@@ -49,7 +49,7 @@ export async function hashPassword(
 
 /**
  * Check if the provided plain password and the hash matches
- * extracing salt of the hashedPassword
+ * extracting salt from the hashed password
  * @param plainPassword string
  * @param storedHashValue string
  * @param iterations number
