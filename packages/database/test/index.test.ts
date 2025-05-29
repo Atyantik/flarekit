@@ -3,13 +3,14 @@ import { describe, it, expect } from 'vitest';
 import { initDBInstance } from '@/index';
 
 describe('Initialized Database', () => {
-  it('Should be initilized without errors', async () => {
+  it('Should be initialized without errors', async () => {
     const ctx = createExecutionContext();
     const db = initDBInstance(ctx, env);
     expect(db).toBeDefined();
 
     const db2 = initDBInstance(ctx, env);
     expect(db2).toBeDefined();
+    expect(db2).toBe(db);
   });
 
   // Hypothetical usage
