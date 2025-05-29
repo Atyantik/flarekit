@@ -62,10 +62,10 @@ npm run dev
 
 ### **4. Build for Production**
 
-Build the application and apply D1 migrations:
+Build the application for production:
 
 ```bash
-npm run build:production
+npm run build
 ```
 
 ### **5. Preview the Build**
@@ -84,13 +84,11 @@ The following npm scripts are available in the `package.json`:
 
 | Command                      | Description                                                                                |
 | ---------------------------- | ------------------------------------------------------------------------------------------ |
-| `npm run dev`                | Starts the development server with Cloudflare worker types.                                |
-| `npm run build:local`        | Builds the application for local development and applies D1 migrations locally.            |
-| `npm run build:production`   | Builds the application for production and applies D1 migrations to the remote environment. |
-| `npm run migrate:local`      | Applies D1 migrations to the local database.                                               |
-| `npm run migrate:production` | Applies D1 migrations to the remote production database.                                   |
-| `npm run preview`            | Previews the production build locally.                                                     |
-| `npm run astro`              | Runs Astro CLI commands.                                                                   |
+| `npm run dev`             | Starts the development server. |
+| `npm run build`           | Builds the application for production. |
+| `npm run preview`         | Previews the production build locally. |
+| `npm run test:e2e`        | Runs Playwright end-to-end tests. |
+| `npm run test:e2e:watch`  | Opens the Playwright test UI for interactive debugging. |
 
 ---
 
