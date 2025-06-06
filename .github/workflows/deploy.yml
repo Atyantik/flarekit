@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --force
 
       - name: Lint
         run: npm run lint
@@ -60,7 +60,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: rm -rf node_modules package-lock.json && npm install
+        run: rm -rf node_modules package-lock.json && npm install --force
 
       - name: Test all packages
         run: npm test
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [lint, 'test']
     permissions:
-      contents: write  # Needed for artifact upload
+      contents: write # Needed for artifact upload
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -91,7 +91,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: rm -rf node_modules package-lock.json && npm install
+        run: rm -rf node_modules package-lock.json && npm install --force
 
       - name: Build all applications
         run: npm run build
@@ -125,7 +125,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: rm -rf node_modules package-lock.json && npm install
+        run: rm -rf node_modules package-lock.json && npm install --force
 
       - name: Run migrations on production
         run: npx flarekit migrate:d1:production
@@ -138,7 +138,7 @@ jobs:
     needs: [migrate]
     permissions:
       contents: read
-      deployments: write  # Needed for Cloudflare Pages deployment
+      deployments: write # Needed for Cloudflare Pages deployment
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -158,7 +158,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: rm -rf node_modules package-lock.json && npm install
+        run: rm -rf node_modules package-lock.json && npm install --force
 
       - name: Setup Wrangler
         run: npm run setup
@@ -182,7 +182,7 @@ jobs:
     needs: [migrate]
     permissions:
       contents: read
-      deployments: write  # Needed for Cloudflare Workers deployment
+      deployments: write # Needed for Cloudflare Workers deployment
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -202,7 +202,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: rm -rf node_modules package-lock.json && npm install
+        run: rm -rf node_modules package-lock.json && npm install --force
 
       - name: Setup Wrangler
         run: npm run setup

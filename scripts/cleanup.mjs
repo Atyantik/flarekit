@@ -4,7 +4,7 @@ import path from 'path';
 const itemsToRemove = [
   'node_modules',
   'coverage',
-  '.wrangler',
+  // '.wrangler',
   '.turbo',
   '.dev.vars',
   'worker-configuration.d.ts',
