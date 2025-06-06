@@ -1,9 +1,12 @@
-import { initDBInstance } from '@flarekit/database';
-import { Handler, Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { uploadHandler } from './routes/upload.route';
+import { Handler } from 'hono';
+import routesv1 from './routes';
 
-const app = new Hono<{ Bindings: Env }>();
+import { cors } from 'hono/cors';
+import { queueHandler } from './handlers/queue.handler';
+import { scheduledHandler } from './handlers/scheduled.handler';
+import { createOpenAPIApp } from './config/openapi.config';
+
+const app = createOpenAPIApp();
 app.use(cors());
 
 const honoHomeRoute: Handler = (c) => {
@@ -13,41 +16,15 @@ const honoHomeRoute: Handler = (c) => {
   });
 };
 
-app.post('/upload', uploadHandler);
+app.all('/', honoHomeRoute);
 
-app.get('/', honoHomeRoute);
+// Register all routes
+routesv1.forEach((routeRegister) => routeRegister(app));
 
 export { app };
 
 export default {
   fetch: app.fetch,
-  /* istanbul ignore next: Cannot test Queue invocation */
-  // async queue( batch: MessageBatch, env: Environment, ctx: ExecutionContext)
-  async queue(batch): Promise<void> {
-    let messages = JSON.stringify(batch.messages);
-    console.log(`Consumed from our queue: ${messages}`);
-    batch.ackAll();
-  },
-
-  /* istanbul ignore next: Cannot test scheduled invocation */
-  // scheduled(event: ScheduledEvent, env: Environment, ctx: ExecutionContext)
-  async scheduled(event, env, ctx) {
-    const db = initDBInstance(ctx, env);
-    // Pass a promise
-    ctx.waitUntil(
-      (async () => {
-        // Clear the storage every 2th minute
-        if (event.cron.startsWith('*/2')) {
-          const storageRecords = await db.storage.getList();
-          // Remove each storage record from the storage
-          const idsToRemove = [];
-          for (const record of storageRecords) {
-            idsToRemove.push(record.id);
-            await env.STORAGE.delete(record.key);
-          }
-          await db.storage.bulkDelete(idsToRemove, true);
-        }
-      })(),
-    );
-  },
+  queue: queueHandler,
+  scheduled: scheduledHandler,
 } satisfies ExportedHandler<Env>;
