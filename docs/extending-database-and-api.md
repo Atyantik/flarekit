@@ -67,26 +67,76 @@ This guide explains how the `packages/database` package and the `apps/backend` w
 
 ## Creating API Routes
 
-Create a new route file under `apps/backend/src/routes` that uses the service methods. Example for a `user` API:
+Routes live inside `apps/backend/src/routes/v1`. Each route file is written with
+`hono/zod-openapi` so that request and response schemas become part of the
+generated OpenAPI document.
+
+### 1. Create the route file
 
 ```ts
-// apps/backend/src/routes/user.route.ts
+// apps/backend/src/routes/v1/user.route.ts
+import { z } from 'zod';
+import { createRoute } from 'hono/zod-openapi';
 import { initDBInstance } from '@flarekit/database';
-import { Handler } from 'hono';
 
-export const createUser: Handler = async (c) => {
-  const db = initDBInstance(c, c.env);
-  const body = await c.req.json();
-  const record = await db.users.create(body);
-  return c.json(record);
-};
+const userInput = z.object({
+  name: z.string(),
+  email: z.string().email(),
+});
+
+const userResponse = userInput.extend({ id: z.string() });
+
+export const createUser = createRoute({
+  method: 'post',
+  path: '/v1/users',
+  request: {
+    body: {
+      content: {
+        'application/json': { schema: userInput },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Created user',
+      content: {
+        'application/json': { schema: userResponse },
+      },
+    },
+  },
+  handler: async (c) => {
+    const db = initDBInstance(c, c.env);
+    const body = await c.req.json();
+    const record = await db.users.create(body);
+    return c.json(record);
+  },
+});
 ```
 
-Register the route in `apps/backend/src/index.ts`:
+### 2. Register the route
+
+Create `apps/backend/src/routes/v1/index.ts` if it does not exist and export the
+route instances:
+
 ```ts
-import { createUser } from './routes/user.route';
-
-app.post('/users', createUser);
+// apps/backend/src/routes/v1/index.ts
+export { createUser } from './user.route';
 ```
 
-This pattern can be repeated for other CRUD operations using `BaseService` methods such as `getList`, `getById`, `update` and `delete`.
+### 3. Mount the routes
+
+Import the routes in `apps/backend/src/index.ts` and add them to the Hono app:
+
+```ts
+import * as v1 from './routes/v1';
+
+const app = new Hono<{ Bindings: Env }>();
+app.use(cors());
+
+app.route('/v1', (r) => {
+  r.post('/users', v1.createUser);
+});
+```
+
+Repeat this pattern for other CRUD operations using `BaseService` helper methods
+like `getList`, `getById`, `update`, and `delete`.
