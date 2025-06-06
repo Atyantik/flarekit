@@ -23,7 +23,7 @@ export const storageCreateEndpoint = createApiEndpoint({
     let images = body?.['images[]'];
 
     if (!body?.['images[]']) {
-      throw new ValidationError('No images provided', [
+      throw new ValidationError('No images provided.', [
         { field: 'images[]', code: 'REQUIRED', message: 'Images are required' },
       ]);
     }
