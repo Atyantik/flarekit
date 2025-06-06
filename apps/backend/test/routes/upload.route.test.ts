@@ -2,18 +2,23 @@
 import { env } from 'cloudflare:test';
 import { describe, it, expect } from 'vitest';
 import { app } from '@/index'; // Assuming the app is exported from src/index
-import { ApiError } from '@/classes/ApiError.class';
+import { ValidationError } from '@/classes/ValidationError.class';
 
 describe('Upload Route', () => {
   it('Should return 400 if no images[] are found', async () => {
-    const response = await app.request('/api/v1/upload', {
+    const response = await app.request('/api/v1/storage', {
       method: 'POST',
       body: new FormData(),
     });
     expect(response.status).toBe(400);
-    expect(await response.json()).toEqual(
-      new ApiError(400, 'No images[] found.').toJSON(),
-    );
+    const error: any = await response.json();
+    const expectedError = new ValidationError('No images provided.', [
+      { field: 'images[]', code: 'REQUIRED', message: 'Images are required' },
+    ]).toJSON();
+    expect(error.code).toBe(expectedError.code);
+    expect(error.status).toBe(expectedError.status);
+    expect(error.message).toBe(expectedError.message);
+    expect(error.details).toEqual(expectedError.details);
   });
 
   it('Should return 200 and upload images if valid images are provided', async () => {
@@ -29,7 +34,7 @@ describe('Upload Route', () => {
     formData.append('images[]', file, 'atyantik.png');
 
     const response = await app.request(
-      '/api/v1/upload',
+      '/api/v1/storage',
       {
         method: 'POST',
         body: formData,
@@ -37,7 +42,7 @@ describe('Upload Route', () => {
       env,
     );
 
-    const responseData = (await response.json()) as any;
+    const responseData: any = (await response.json()) as any;
 
     expect(response.status).toBe(200);
     expect(responseData.message).toBe('Images uploaded successfully');
@@ -63,7 +68,7 @@ describe('Upload Route', () => {
     formData.append('images[]', largeFile, largeFile.name);
 
     const response = await app.request(
-      '/api/v1/upload',
+      '/api/v1/storage',
       {
         method: 'POST',
         body: formData,
@@ -71,7 +76,7 @@ describe('Upload Route', () => {
       env,
     );
 
-    const responseData = (await response.json()) as any;
+    const responseData: any = (await response.json()) as any;
 
     expect(response.status).toBe(200);
     expect(responseData.message).toBe('Images uploaded successfully');
@@ -92,7 +97,7 @@ describe('Upload Route', () => {
     formData.append('images[]', largeFile, largeFile.name);
 
     const response = await app.request(
-      '/api/v1/upload',
+      '/api/v1/storage',
       {
         method: 'POST',
         body: formData,
@@ -100,13 +105,26 @@ describe('Upload Route', () => {
       env,
     );
 
-    const responseData = await response.json();
+    const error: any = await response.json();
     expect(response.status).toBe(400);
-    expect(responseData).toEqual(
-      new ApiError(
-        400,
-        'No valid images found. Please ensure files are images under 2MB.',
-      ).toJSON(),
+    const expectedError = new ValidationError('Invalid image files', [
+      {
+        field: 'images[]',
+        code: 'INVALID_FILES',
+        message: expect.stringContaining('Please ensure files are'),
+        value: expect.anything(),
+      },
+    ]).toJSON();
+    expect(error.code).toBe(expectedError.code);
+    expect(error.status).toBe(expectedError.status);
+    expect(error.message).toBe(expectedError.message);
+    expect(error.details[0]).toEqual(
+      expect.objectContaining({
+        field: 'images[]',
+        code: 'INVALID_FILES',
+        message: expect.stringContaining('Please ensure files are'),
+        value: expect.anything(),
+      }),
     );
   });
 
@@ -123,7 +141,7 @@ describe('Upload Route', () => {
     formData.append('images[]', atyantikFile, atyantikFile.name);
 
     const response = await app.request(
-      '/api/v1/upload',
+      '/api/v1/storage',
       {
         method: 'POST',
         body: formData,
@@ -131,14 +149,14 @@ describe('Upload Route', () => {
       env,
     );
 
-    const responseData = (await response.json()) as any;
+    const responseData: any = (await response.json()) as any;
     expect(response.status).toBe(200);
     expect(responseData.message).toBe('Images uploaded successfully');
     expect(responseData.data).toHaveLength(1);
     expect(responseData.data?.[0]?.append).toBe(true);
 
     const reuploadResponse = await app.request(
-      '/api/v1/upload',
+      '/api/v1/storage',
       {
         method: 'POST',
         body: formData,
@@ -146,42 +164,10 @@ describe('Upload Route', () => {
       env,
     );
 
-    const reuploadResponseData = (await reuploadResponse.json()) as any;
+    const reuploadResponseData: any = (await reuploadResponse.json()) as any;
     expect(reuploadResponse.status).toBe(200);
     expect(reuploadResponseData.message).toBe('Images uploaded successfully');
     expect(reuploadResponseData.data).toHaveLength(1);
     expect(reuploadResponseData.data?.[0]?.append).toBe(false);
   });
-
-  // it('Should throw error if STORAGE binding is not found', async () => {
-  //   const atyantikImage = env.ASSETS?.['atyantik.png'];
-  //   if (!atyantikImage) {
-  //     throw new Error('Cannot find assets');
-  //   }
-  //   const atyantikFile = new File([atyantikImage], 'atyantik.png', {
-  //     type: 'image/jpeg',
-  //   });
-
-  //   const formData = new FormData();
-  //   formData.append('images[]', atyantikFile, atyantikFile.name);
-
-  //   const response = await app.request(
-  //     '/api/v1/upload',
-  //     {
-  //       method: 'POST',
-  //       body: formData,
-  //     },
-  //     {
-  //       CACHE: env.CACHE,
-  //       DB: env.DB,
-  //     },
-  //   );
-
-  //   const responseData = (await response.json()) as any;
-  //   expect(response.status).toBe(400);
-  //   expect(responseData).toEqual({
-  //     success: false,
-  //     message: 'You need to add storage binding to the environment.',
-  //   });
-  // });
 });
