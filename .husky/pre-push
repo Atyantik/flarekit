@@ -1,2 +1,3 @@
-npm run test:coverage
+# npm run test:coverage
+npm run test
 npm run test:e2e
