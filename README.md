@@ -225,6 +225,8 @@ Run migrations locally:
 npx flarekit migrate:d1:local
 ```
 
+For a step-by-step example of registering new tables and exposing them through backend routes, see [docs/extending-database-and-api.md](docs/extending-database-and-api.md).
+
 ---
 
 ## Contribution Guidelines
