@@ -15,7 +15,7 @@
     "@flarekit/database": "^1.0.0",
     "@splidejs/splide": "^4.1.4",
     "@tailwindcss/vite": "^4.1.8",
-    "astro": "^5.9.0",
+    "astro": "^5.9.1",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3"
   },
