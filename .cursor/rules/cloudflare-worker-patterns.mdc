@@ -1,0 +1,64 @@
+---
+description: Cloudflare Worker development patterns for Flarekit
+globs: ["apps/backend/**/*.ts", "packages/database/**/*.ts"]
+alwaysApply: false
+---
+
+# Cloudflare Worker Development Patterns
+
+When developing Cloudflare Workers in Flarekit:
+
+## Worker Entry Point
+- Export default object with `fetch`, `queue`, and `scheduled` handlers
+- Use `satisfies ExportedHandler<Env>` for type safety
+- Main app logic should be in separate modules
+
+## Environment Variables
+- Access via `c.env` in Hono context
+- Define types in `worker-configuration.d.ts`
+- Use `.dev.vars` for local development secrets
+
+## D1 Database Integration
+- Access D1 via `c.env.DB`
+- Use Drizzle ORM with `drizzle(env.DB, { schema })`
+- Implement connection pooling with WeakMap pattern
+
+## R2 Storage Integration
+- Access R2 buckets via `c.env.R2_BUCKET`
+- Use for file uploads and static asset storage
+- Implement proper error handling for storage operations
+
+## Queue Handling
+- Implement queue handlers in `/handlers/queue.handler.ts`
+- Use for background processing and async operations
+- Handle batch processing for efficiency
+
+## Scheduled Events
+- Implement cron handlers in `/handlers/scheduled.handler.ts`
+- Use for maintenance tasks and periodic operations
+- Consider timezone implications for scheduling
+
+## Edge-First Considerations
+- Minimize cold start time by avoiding heavy imports
+- Use streaming responses for large data
+- Implement proper caching strategies
+- Consider geographic distribution of data
+
+## Local Development
+- Use `wrangler dev` with persistence: `--persist-to=../../.wrangler/state`
+- Test scheduled events with `--test-scheduled`
+- Use different ports for different services
+
+## Deployment
+- Use `wrangler deploy` for production deployment
+- Implement proper CI/CD with GitHub Actions
+- Use environment-specific configurations
+
+## Performance Best Practices
+- Use connection pooling for database connections
+- Implement request-level caching where appropriate
+- Use Cloudflare's edge caching for static content
+- Monitor CPU time and memory usage
+
+@apps/backend/src/index.ts
+@apps/backend/wrangler.json

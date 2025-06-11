@@ -2,15 +2,26 @@ import { BaseError } from '@/classes/BaseError.class';
 import { ValidationError } from '@/classes/ValidationError.class';
 import { SystemError } from '@/classes/SystemError.class';
 import { AppContext } from '@/types';
-import { Context } from 'hono';
+import { Context, HonoRequest } from 'hono';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { ZodError } from 'zod';
 
+const requestIdMap = new WeakMap<HonoRequest, string>();
 /**
  * Generates a unique request ID for error tracking
  */
-const generateRequestId = (): string => {
-  return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+const generateRequestId = (c: Context<AppContext>): string => {
+  const cfRequestId = c.req.header('cf-ray') || c.req.header('x-request-id');
+  if (cfRequestId) {
+    return cfRequestId;
+  }
+  const cachedRequestId = requestIdMap.get(c.req);
+  if (cachedRequestId) {
+    return cachedRequestId;
+  }
+  const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+  requestIdMap.set(c.req, requestId);
+  return requestId;
 };
 
 /**
@@ -55,7 +66,7 @@ const logError = (
  * Handles all error types and provides consistent response format
  */
 export const handleError = (ex: unknown, c: Context<AppContext>) => {
-  const requestId = generateRequestId();
+  const requestId = generateRequestId(c);
 
   // Handle our custom unified errors
   if (ex instanceof BaseError) {

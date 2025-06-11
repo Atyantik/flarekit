@@ -35,12 +35,12 @@
     "tsc-alias": "^1.8.16",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3",
-    "wrangler": "^4.19.1"
+    "wrangler": "^4.19.2"
   },
   "engines": {
-    "node": ">=18.17.1"
+    "node": ">=22.16.0"
   },
-  "packageManager": "npm@11.0.0",
+  "packageManager": "npm@11.4.1",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -53,6 +53,6 @@
     "*.{css,scss,json,md}": "prettier --write"
   },
   "dependencies": {
-    "@types/node": "^22.15.30"
+    "@types/node": "^24.0.0"
   }
 }

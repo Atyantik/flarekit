@@ -1,10 +1,10 @@
 import { initDBInstance } from '@flarekit/database';
 import { computeShortHash } from './hash.util';
 
-export const uploadFiles = async (files: File[], ctx: Env) => {
-  const db = initDBInstance(ctx, ctx);
+export const uploadFiles = async (files: File[], env: Env) => {
+  const db = initDBInstance(env, env);
   // signatures than the one from the worker
-  const storage = ctx.STORAGE;
+  const storage = env.STORAGE;
   if (!storage) {
     throw new Error('You need to add storage binding to the environment.');
   }

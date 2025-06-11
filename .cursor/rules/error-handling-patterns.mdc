@@ -1,0 +1,86 @@
+---
+description: Error handling patterns for Flarekit applications
+globs: ["apps/backend/src/**/*.ts", "packages/database/src/**/*.ts"]
+alwaysApply: false
+---
+
+# Error Handling Patterns
+
+When handling errors in Flarekit applications:
+
+## Custom Error Classes
+Use the appropriate error class for different scenarios:
+
+- `ValidationError` - For user input validation failures
+- `DatabaseError` - For database operation failures  
+- `ExternalServiceError` - For third-party service failures
+- `SystemError` - For unexpected system errors
+- `BaseError` - Base class for all custom errors
+
+## Error Creation Patterns
+```typescript
+// Validation errors with field-level details
+throw new ValidationError('Invalid input data', [
+  {
+    field: 'email',
+    code: 'INVALID_FORMAT',
+    message: 'Email format is invalid',
+    value: userInput.email
+  }
+]);
+
+// Database errors with context
+throw DatabaseError.schemaError('users', 'Failed to create user', {
+  originalError: error.message,
+  operation: 'create',
+  data: userData
+});
+
+// External service errors
+throw ExternalServiceError.serviceUnavailable('File storage service', {
+  originalError: error.message,
+  service: 'R2',
+  operation: 'upload'
+});
+```
+
+## Error Handling in Routes
+- Always wrap database operations in try/catch blocks
+- Re-throw custom errors, don't catch them in route handlers
+- Let the global error handler manage error responses
+- Include relevant context for debugging
+
+## Error Logging
+- Errors are automatically logged with structured format
+- Include request ID for tracing
+- Severe errors (5xx) are logged as errors
+- Client errors (4xx) are logged as warnings
+- Development mode includes stack traces
+
+## Response Format
+All errors return consistent JSON structure:
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human readable message",
+    "details": [...], // Field-level errors for validation
+    "requestId": "req_123456789",
+    "timestamp": "2025-01-01T00:00:00.000Z"
+  }
+}
+```
+
+## Zod Validation Errors
+- Automatically converted to ValidationError format
+- Field paths are properly mapped
+- Include received values for debugging
+
+## Production Considerations
+- Sensitive information is stripped in production
+- Stack traces are only included in development
+- Request IDs enable error tracing across services
+
+@apps/backend/src/handlers/error.handler.ts
+@apps/backend/src/classes/ValidationError.class.ts

@@ -1,0 +1,77 @@
+---
+description: Database service patterns using Drizzle ORM and BaseService
+globs: ["packages/database/src/**/*.ts", "apps/backend/src/**/*.ts"]
+alwaysApply: false
+---
+
+# Database Service Patterns
+
+When working with database operations in Flarekit:
+
+## Schema Definition
+- Define Drizzle schemas in `packages/database/src/schema/[table].schema.ts`
+- Use consistent field naming:
+  - Database: snake_case (`created_at`, `updated_at`)
+  - TypeScript: camelCase (`createdAt`, `updatedAt`)
+- Standard fields for all tables:
+```typescript
+{
+  id: text('id').primaryKey(),
+  createdAt: text('created_at').default(sql`(current_timestamp)`),
+  updatedAt: text('updated_at'),
+  deletedAt: text('deleted_at'), // for soft deletes
+}
+```
+
+## Service Registration
+- Register new services in `packages/database/src/services.ts`:
+```typescript
+export const services = (ctx: Ctx) => ({
+  [getTableName(yourSchema)]: new BaseService<
+    typeof yourSchema.$inferInsert,
+    typeof yourSchema.$inferSelect
+  >(yourSchema, ctx),
+});
+```
+
+## Database Instance Usage
+- Always use `initDBInstance(c.env, c.env)` to get database services
+- Access services by table name: `db.tableName`
+- The BaseService provides these methods:
+  - `create(data)` - Insert new record
+  - `update(id, data)` - Update existing record
+  - `delete(id, permanent?)` - Soft or hard delete
+  - `getById(id, includeDeleted?)` - Get single record
+  - `getByShortId(shortId, includeDeleted?)` - Get by shortId if available
+  - `getList(range?, sort?, filter?, includeDeleted?)` - Paginated list
+  - `getCount(filter?, includeDeleted?)` - Count records
+  - `bulkUpdate(updates)` - Bulk update operations
+  - `bulkDelete(ids, permanent?)` - Bulk delete operations
+
+## Common Patterns
+- Use UUID v7 for primary keys (automatically generated)
+- Use nanoid for shortIds (automatically generated)
+- Slugs are auto-generated from title fields
+- Timestamps are automatically managed
+- Soft deletes are supported by default
+
+## Error Handling
+- Wrap database operations in try/catch
+- Throw `DatabaseError.schemaError()` for database-related errors
+- Include context information for debugging
+
+## Example Usage
+```typescript
+try {
+  const db = initDBInstance(c.env, c.env);
+  const records = await db.storage.getList([0, 9], ['createdAt', 'DESC'], {});
+  return c.json(records);
+} catch (error) {
+  throw DatabaseError.schemaError('storage', 'Failed to fetch records', {
+    originalError: error.message,
+  });
+}
+```
+
+@packages/database/src/services/base.service.ts
+@packages/database/src/schema/storage.schema.ts

@@ -1,7 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
-import type { AppContext } from '../types';
-import { handleError } from '../handlers/error.handler';
+import type { AppContext } from '@/types';
+import { handleError } from '@/handlers/error.handler';
 
 /**
  * OpenAPI configuration object that defines the API specification version and metadata.
@@ -15,6 +15,10 @@ export const openApiConfig = {
     description: 'Flarekit API Documentation', // You could add more metadata
   },
 };
+
+export const SPECIFICATION_ENDPOINT = '/specification.json';
+
+export const DOCS_ENDPOINT = '/docs';
 
 /**
  * Registers common OpenAPI components (e.g., security schemes) to the app's registry.
@@ -39,12 +43,12 @@ export function registerOpenAPIComponents(app: OpenAPIHono<AppContext>) {
  * @param {OpenAPIHono<AppContext>} app - The OpenAPIHono app instance to set up documentation for
  */
 export function setupOpenAPIDocs(app: OpenAPIHono<AppContext>) {
-  app.doc31('/specification.json', openApiConfig);
+  app.doc31(SPECIFICATION_ENDPOINT, openApiConfig);
 
   app.get(
-    '/docs',
+    DOCS_ENDPOINT,
     swaggerUI({
-      url: '/specification.json',
+      url: SPECIFICATION_ENDPOINT,
       persistAuthorization: true,
     }),
   );
@@ -56,7 +60,7 @@ export function setupOpenAPIDocs(app: OpenAPIHono<AppContext>) {
  *
  * @returns {OpenAPIHono<AppContext>} A configured OpenAPIHono instance with error handling
  */
-export function createOpenAPIApp() {
+export function createOpenAPIApp(): OpenAPIHono<AppContext> {
   const app = new OpenAPIHono<AppContext>({
     defaultHook: (result, c) => {
       if (!result.success) {
