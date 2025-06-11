@@ -1,3 +1,3 @@
-import storageRoutes from './v1/storage';
+import loadRoutes from './loader';
 
-export default [...storageRoutes];
+export default loadRoutes();
