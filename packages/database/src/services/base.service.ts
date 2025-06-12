@@ -316,10 +316,7 @@ export class BaseService<
     let query = this.ctx.db.select().from(this.schema);
 
     for (const rel of this.relations) {
-      query = query.leftJoin(
-        rel.schema,
-        rel.on(this.schema as any, rel.schema as any),
-      );
+      query.leftJoin(rel.schema, rel.on(this.schema, rel.schema));
     }
 
     const conditions = [eq(columns.id, id)];
@@ -451,45 +448,55 @@ export class BaseService<
     includeDeleted = false,
   ): Promise<any[]> {
     const columns = getTableColumns(this.schema);
-    let query = this.ctx.db.select().from(this.schema);
-    for (const rel of this.relations) {
-      query = query.leftJoin(
-        rel.schema,
-        rel.on(this.schema as any, rel.schema as any),
-      );
-    }
+    const conditions = [];
 
-    const conditions: any[] = [];
+    // Soft delete condition, if applicable and not including deleted
     if ('deletedAt' in columns && !includeDeleted) {
       conditions.push(isNull(columns.deletedAt));
     }
 
+    // Apply provided filter conditions
     if (filter) {
       Object.entries(filter).forEach(([key, value]) => {
         if (key in columns && value !== undefined) {
           if (Array.isArray(value)) {
-            conditions.push(inArray(columns[key], value));
+            conditions.push(inArray(columns[key], value)); // Handle array values
           } else {
-            conditions.push(eq(columns[key], value));
+            conditions.push(eq(columns[key], value)); // Handle single values
           }
         }
       });
     }
 
-    if (conditions.length) {
-      query = query.where(and(...conditions));
+    // Build the base query with joins
+    let query = this.ctx.db.select().from(this.schema);
+
+    // Add joins
+    for (const rel of this.relations) {
+      query.leftJoin(rel.schema, rel.on(this.schema, rel.schema));
     }
 
+    // Add where conditions
+    if (conditions.length > 0) {
+      query.where(and(...conditions));
+    }
+
+    // Add sorting
     if (sort && Object.keys(sort).length > 0) {
-      query = query.orderBy(
-        sort[1] === 'ASC' ? columns[sort[0]] : desc(columns[sort[0]]),
-      );
+      const sortKey = sort[0] as string;
+      if (sortKey in columns) {
+        query.orderBy(
+          sort[1] === 'ASC' ? columns[sortKey] : desc(columns[sortKey]),
+        );
+      }
     } else if ('id' in columns) {
-      query = query.orderBy(desc(columns.id));
+      // Default to id desc if available
+      query.orderBy(desc(columns.id));
     }
 
+    // Add pagination
     if (range) {
-      query = query.limit(range[1] - range[0] + 1).offset(range[0]);
+      query.limit(range[1] - range[0] + 1).offset(range[0]);
     }
 
     return await query.all();
