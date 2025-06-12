@@ -209,4 +209,126 @@ describe('Custom error classes', () => {
     SystemError.kernelPanic();
     SystemError.memoryLeak('comp');
   });
+
+  it('Constructor behavior for all error classes', () => {
+    const originalError = new Error('Original error');
+
+    // Test AuthenticationError constructor
+    const authErr = new AuthenticationError('Custom auth error', {
+      code: 'CUSTOM_AUTH_ERROR',
+      details: [{ message: 'Invalid token format', code: 'INVALID_TOKEN' }],
+      context: { userId: '123' },
+      requestId: 'req-123',
+      cause: originalError,
+    });
+    expect(authErr.message).toBe('Custom auth error');
+    expect(authErr.code).toBe('CUSTOM_AUTH_ERROR');
+    expect(authErr.status).toBe(401);
+    expect(authErr.category).toBe('AUTHENTICATION');
+    expect(authErr.details).toEqual([
+      { message: 'Invalid token format', code: 'INVALID_TOKEN' },
+    ]);
+    expect(authErr.context).toEqual({ userId: '123' });
+    expect(authErr.requestId).toBe('req-123');
+    expect(authErr.cause).toBe(originalError);
+
+    // Test AuthorizationError constructor
+    const authzErr = new AuthorizationError('Custom authz error', {
+      code: 'CUSTOM_AUTHZ_ERROR',
+      details: [{ message: 'Missing role', code: 'MISSING_ROLE' }],
+      context: { role: 'admin' },
+      requestId: 'req-456',
+      cause: originalError,
+    });
+    expect(authzErr.message).toBe('Custom authz error');
+    expect(authzErr.code).toBe('CUSTOM_AUTHZ_ERROR');
+    expect(authzErr.status).toBe(403);
+    expect(authzErr.category).toBe('AUTHORIZATION');
+    expect(authzErr.details).toEqual([
+      { message: 'Missing role', code: 'MISSING_ROLE' },
+    ]);
+    expect(authzErr.context).toEqual({ role: 'admin' });
+    expect(authzErr.requestId).toBe('req-456');
+    expect(authzErr.cause).toBe(originalError);
+
+    // Test BusinessLogicError constructor
+    const businessErr = new BusinessLogicError(
+      'CUSTOM_BUSINESS_ERROR',
+      'Custom business error',
+      { state: 'pending' },
+    );
+    expect(businessErr.message).toBe('Custom business error');
+    expect(businessErr.code).toBe('CUSTOM_BUSINESS_ERROR');
+    expect(businessErr.status).toBe(400);
+    expect(businessErr.category).toBe('BUSINESS_LOGIC');
+    expect(businessErr.context).toEqual({ state: 'pending' });
+
+    // Test DatabaseError constructor
+    const dbErr = new DatabaseError('Custom db error', {
+      code: 'CUSTOM_DB_ERROR',
+      details: [{ message: 'Connection failed', code: 'CONNECTION_FAILED' }],
+      context: { db: 'main' },
+      requestId: 'req-101',
+      cause: originalError,
+    });
+    expect(dbErr.message).toBe('Custom db error');
+    expect(dbErr.code).toBe('CUSTOM_DB_ERROR');
+    expect(dbErr.status).toBe(500);
+    expect(dbErr.category).toBe('DATABASE');
+    expect(dbErr.details).toEqual([
+      { message: 'Connection failed', code: 'CONNECTION_FAILED' },
+    ]);
+    expect(dbErr.context).toEqual({ db: 'main' });
+    expect(dbErr.requestId).toBe('req-101');
+    expect(dbErr.cause).toBe(originalError);
+
+    // Test ExternalServiceError constructor
+    const extErr = new ExternalServiceError('Custom external error', {
+      code: 'CUSTOM_EXT_ERROR',
+      details: [{ message: 'API timeout', code: 'API_TIMEOUT' }],
+      context: { service: 'payment' },
+      requestId: 'req-102',
+      cause: originalError,
+    });
+    expect(extErr.message).toBe('Custom external error');
+    expect(extErr.code).toBe('CUSTOM_EXT_ERROR');
+    expect(extErr.status).toBe(502);
+    expect(extErr.category).toBe('EXTERNAL_SERVICE');
+    expect(extErr.details).toEqual([
+      { message: 'API timeout', code: 'API_TIMEOUT' },
+    ]);
+    expect(extErr.context).toEqual({ service: 'payment' });
+    expect(extErr.requestId).toBe('req-102');
+    expect(extErr.cause).toBe(originalError);
+
+    // Test NotFoundError constructor
+    const notFoundErr = new NotFoundError('User', '123');
+    expect(notFoundErr.message).toBe('User not found');
+    expect(notFoundErr.code).toBe('RESOURCE_NOT_FOUND');
+    expect(notFoundErr.status).toBe(404);
+    expect(notFoundErr.category).toBe('NOT_FOUND');
+    expect(notFoundErr.context).toEqual({
+      resource: 'User',
+      identifier: '123',
+    });
+
+    // Test SystemError constructor
+    const sysErr = new SystemError('Custom system error', {
+      code: 'CUSTOM_SYS_ERROR',
+      details: [{ message: 'Memory limit exceeded', code: 'MEMORY_LIMIT' }],
+      context: { memory: '1GB' },
+      requestId: 'req-104',
+      cause: originalError,
+    });
+    expect(sysErr.message).toBe('Custom system error');
+    expect(sysErr.code).toBe('CUSTOM_SYS_ERROR');
+    expect(sysErr.status).toBe(500);
+    expect(sysErr.category).toBe('SYSTEM');
+    expect(sysErr.details).toEqual([
+      { message: 'Memory limit exceeded', code: 'MEMORY_LIMIT' },
+    ]);
+    expect(sysErr.context).toEqual({ memory: '1GB' });
+    expect(sysErr.requestId).toBe('req-104');
+    expect(sysErr.cause).toBe(originalError);
+  });
 });

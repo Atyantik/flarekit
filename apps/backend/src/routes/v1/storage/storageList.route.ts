@@ -1,7 +1,6 @@
 import { z } from '@hono/zod-openapi';
 import { StorageRecordSchema } from '@/schemas/storage.schema';
 import { createApiEndpoint } from '@/utils/api-builder.util';
-import { HeadersSchema } from '@/schemas/headers.scheme';
 import { ListQuerySchema } from '@/schemas/listQuery.schema';
 import { initDBInstance } from '@flarekit/database';
 import { ValidationError } from '@/classes/ValidationError.class';
