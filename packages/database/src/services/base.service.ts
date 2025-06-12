@@ -469,6 +469,13 @@ export class BaseService<
 
       return deletedRows as TSelect[];
     } else {
+      if (!('deletedAt' in columns)) {
+        throw new ServiceError(
+          400,
+          "Schema does not have a 'deletedAt' field, cannot perform soft delete.",
+        );
+      }
+
       const now = toSQLiteUTCString(new Date());
       const updatedRows = await this.ctx.db
         .update(this.schema)
