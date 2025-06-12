@@ -119,7 +119,7 @@ export const storageListEndpoint = createApiEndpoint({
         });
 
       return c.json(storageList, 200, {
-        'Content-Range': `content ${parsedRange[0]}-${parsedRange[1]}/${totalItems}`,
+        'Content-Range': `storage ${parsedRange[0]}-${parsedRange[1]}/${totalItems}`,
         'Access-Control-Expose-Headers': 'Content-Range',
       });
     } catch (error) {
