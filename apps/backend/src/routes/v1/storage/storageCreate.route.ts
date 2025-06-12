@@ -69,11 +69,14 @@ export const storageCreateEndpoint = createApiEndpoint({
 
     try {
       const uploadData = await uploadFiles(allUploadedImages, c.env);
-      return c.json({
-        success: true,
-        message: 'Images uploaded successfully',
-        data: uploadData,
-      });
+      return c.json(
+        {
+          success: true,
+          message: 'Images uploaded successfully',
+          data: uploadData,
+        },
+        201,
+      );
     } catch (ex) {
       if (ex instanceof Error) {
         throw ExternalServiceError.serviceUnavailable('File storage service', {

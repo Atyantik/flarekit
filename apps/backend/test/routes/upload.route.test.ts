@@ -44,7 +44,7 @@ describe('Upload Route', () => {
 
     const responseData: any = (await response.json()) as any;
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(responseData.message).toBe('Images uploaded successfully');
     expect(responseData.data).toHaveLength(1);
     expect(responseData.data?.[0]?.originalName).toBe(file.name);
@@ -78,7 +78,7 @@ describe('Upload Route', () => {
 
     const responseData: any = (await response.json()) as any;
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(responseData.message).toBe('Images uploaded successfully');
     expect(responseData.data).toHaveLength(1);
     expect(responseData.data?.[0]?.originalName).toBe(atyantikFile.name);
@@ -150,7 +150,7 @@ describe('Upload Route', () => {
     );
 
     const responseData: any = (await response.json()) as any;
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(responseData.message).toBe('Images uploaded successfully');
     expect(responseData.data).toHaveLength(1);
     expect(responseData.data?.[0]?.append).toBe(true);
@@ -165,7 +165,7 @@ describe('Upload Route', () => {
     );
 
     const reuploadResponseData: any = (await reuploadResponse.json()) as any;
-    expect(reuploadResponse.status).toBe(200);
+    expect(reuploadResponse.status).toBe(201);
     expect(reuploadResponseData.message).toBe('Images uploaded successfully');
     expect(reuploadResponseData.data).toHaveLength(1);
     expect(reuploadResponseData.data?.[0]?.append).toBe(false);
