@@ -15,6 +15,7 @@ import { slugify } from '@utils/slugify.util';
 import { toSQLiteUTCString } from '@utils/date.util';
 import { ServiceError } from '../classes/service_error.class';
 import { Ctx } from '../types';
+import type { SQL } from 'drizzle-orm';
 
 export interface HasDateFields {
   createdAt?: string | Date | null;
@@ -36,6 +37,11 @@ export interface GenericSelectType {
   shortId?: string;
   deletedAt?: string | null;
   [key: string]: any;
+}
+
+export interface RelationConfig {
+  schema: SQLiteTable;
+  on: (base: any, join: any) => SQL;
 }
 
 export function getTableQuery(ctx: Ctx, tableName: string) {
@@ -62,12 +68,15 @@ export class BaseService<
   TSelect extends GenericSelectType,
 > {
   protected ctx: Ctx;
+  protected relations: RelationConfig[];
 
   constructor(
     public schema: SQLiteTable,
     ctx: Ctx,
+    relations: RelationConfig[] = [],
   ) {
     this.ctx = ctx;
+    this.relations = relations;
   }
 
   #prepareData(
@@ -292,6 +301,40 @@ export class BaseService<
     return (record as TSelect) ?? null;
   }
 
+  async getByIdWithRelations(
+    id: string,
+    includeDeleted = false,
+  ): Promise<any | null> {
+    const columns = getTableColumns(this.schema);
+    if (!('id' in columns)) {
+      throw new ServiceError(
+        400,
+        "Schema does not have an 'id' field, cannot perform getById operation.",
+      );
+    }
+
+    let query = this.ctx.db.select().from(this.schema);
+
+    for (const rel of this.relations) {
+      query = query.leftJoin(
+        rel.schema,
+        rel.on(this.schema as any, rel.schema as any),
+      );
+    }
+
+    const conditions = [eq(columns.id, id)];
+
+    if ('deletedAt' in columns && !includeDeleted) {
+      conditions.push(isNull(columns.deletedAt));
+    }
+
+    const records = await query
+      .where(and(...conditions))
+      .limit(1)
+      .all();
+    return records?.[0] ?? null;
+  }
+
   // Method to get record by shortId if the schema has the shortId column
   async getByShortId(
     shortId: string,
@@ -372,6 +415,57 @@ export class BaseService<
     });
 
     return records as TSelect[];
+  }
+
+  async getListWithRelations(
+    range?: [number, number],
+    sort?: [keyof TSelect, 'ASC' | 'DESC'],
+    filter?: Partial<Record<keyof TSelect, any>>,
+    includeDeleted = false,
+  ): Promise<any[]> {
+    const columns = getTableColumns(this.schema);
+    let query = this.ctx.db.select().from(this.schema);
+    for (const rel of this.relations) {
+      query = query.leftJoin(
+        rel.schema,
+        rel.on(this.schema as any, rel.schema as any),
+      );
+    }
+
+    const conditions: any[] = [];
+    if ('deletedAt' in columns && !includeDeleted) {
+      conditions.push(isNull(columns.deletedAt));
+    }
+
+    if (filter) {
+      Object.entries(filter).forEach(([key, value]) => {
+        if (key in columns && value !== undefined) {
+          if (Array.isArray(value)) {
+            conditions.push(inArray(columns[key], value));
+          } else {
+            conditions.push(eq(columns[key], value));
+          }
+        }
+      });
+    }
+
+    if (conditions.length) {
+      query = query.where(and(...conditions));
+    }
+
+    if (sort && Object.keys(sort).length > 0) {
+      query = query.orderBy(
+        sort[1] === 'ASC' ? columns[sort[0]] : desc(columns[sort[0]]),
+      );
+    } else if ('id' in columns) {
+      query = query.orderBy(desc(columns.id));
+    }
+
+    if (range) {
+      query = query.limit(range[1] - range[0] + 1).offset(range[0]);
+    }
+
+    return await query.all();
   }
 
   async getCount(

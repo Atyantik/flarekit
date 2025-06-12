@@ -225,6 +225,26 @@ Run migrations locally:
 npx flarekit migrate:d1:local
 ```
 
+### Joining Tables
+
+The `BaseService` constructor accepts an optional `relations` array to join
+related tables using Drizzle ORM.
+
+```typescript
+import { eq } from 'drizzle-orm';
+import { storageSchema, storageInfoSchema } from '@flarekit/database';
+
+const storageInfoService = new BaseService(storageInfoSchema, ctx, [
+  {
+    schema: storageSchema,
+    on: (info, storage) => eq(info.storageId, storage.id),
+  },
+]);
+
+// Fetch a record with its related storage entry
+const result = await storageInfoService.getByIdWithRelations(id);
+```
+
 ---
 
 ## Contribution Guidelines
