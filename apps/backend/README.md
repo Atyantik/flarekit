@@ -39,6 +39,52 @@ export const storageListEndpoint = createApiEndpoint({
 });
 ```
 
+## REST API Conventions
+
+The backend endpoints implement the dialect used by
+[`ra-data-simple-rest`](https://github.com/marmelab/react-admin/tree/master/packages/ra-data-simple-rest).
+List requests accept three query parameters and must include a `Content-Range`
+header for pagination:
+
+- `sort` – JSON array `["field","ASC"|"DESC"]`
+- `range` – zero-based `[start, end]` indices
+- `filter` – JSON object with filter values
+
+Responses follow the HTTP method semantics defined in
+[RFC&nbsp;9110](https://www.rfc-editor.org/rfc/rfc9110) and
+[RFC&nbsp;7231](https://www.rfc-editor.org/rfc/rfc7231). For example:
+
+```txt
+GET /api/v1/posts?sort=["title","ASC"]&range=[0,4]&filter={"author_id":12}
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Range: posts 0-4/27
+[
+  { "id": 126, "title": "allo?", "author_id": 12 },
+  { "id": 127, "title": "bien le bonjour", "author_id": 12 },
+  { "id": 124, "title": "good day sunshine", "author_id": 12 },
+  { "id": 123, "title": "hello, world", "author_id": 12 },
+  { "id": 125, "title": "howdy partner", "author_id": 12 }
+]
+```
+
+`POST` requests that create a resource return **201 Created** with the new record
+in the body, while successful deletions respond with **204 No Content**. Example:
+
+```txt
+POST /api/v1/posts
+{ "title": "hello, world", "author_id": 12 }
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{ "id": 123, "title": "hello, world", "author_id": 12 }
+
+DELETE /api/v1/posts/123
+
+HTTP/1.1 204 No Content
+```
+
 ## Environment Variables
 
 The worker relies on several Cloudflare bindings declared in the root `wrangler.json` file. These bindings are automatically copied into the app configuration so every application in the monorepo shares the same environment variables:
