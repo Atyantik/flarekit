@@ -325,6 +325,33 @@ export class BaseService<
     return (record as TSelect) ?? null;
   }
 
+  async getMany(ids: string[], includeDeleted = false): Promise<TSelect[]> {
+    if (!ids.length) return [];
+
+    const columns = getTableColumns(this.schema);
+
+    if (!('id' in columns)) {
+      throw new ServiceError(
+        400,
+        "Schema does not have an 'id' field, cannot perform getMany operation.",
+      );
+    }
+
+    const tableQuery = getTableQuery(this.ctx, getTableName(this.schema));
+
+    const conditions = [inArray(columns.id, ids)];
+
+    if ('deletedAt' in columns && !includeDeleted) {
+      conditions.push(isNull(columns.deletedAt));
+    }
+
+    const records = await tableQuery.findMany({
+      where: and(...conditions),
+    });
+
+    return records as TSelect[];
+  }
+
   async getList(
     range?: [number, number],
     sort?: [keyof TSelect, 'ASC' | 'DESC'],
@@ -412,6 +439,31 @@ export class BaseService<
       rowCount = (await query)?.[0]?.count;
     }
     return rowCount;
+  }
+
+  async getManyReference(
+    referenceField: keyof TSelect,
+    id: string,
+    range?: [number, number],
+    sort?: [keyof TSelect, 'ASC' | 'DESC'],
+    filter?: Partial<Record<keyof TSelect, any>>,
+    includeDeleted = false,
+  ): Promise<TSelect[]> {
+    const columns = getTableColumns(this.schema);
+
+    if (!(referenceField in columns)) {
+      throw new ServiceError(
+        400,
+        `Reference field ${String(referenceField)} does not exist in schema.`,
+      );
+    }
+
+    const refFilter = {
+      ...(filter ?? {}),
+      [referenceField]: id,
+    } as Partial<Record<keyof TSelect, any>>;
+
+    return this.getList(range, sort, refFilter, includeDeleted);
   }
 
   async bulkUpdate(

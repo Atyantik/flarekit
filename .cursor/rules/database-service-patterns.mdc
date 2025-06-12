@@ -43,6 +43,8 @@ export const services = (ctx: Ctx) => ({
   - `delete(id, permanent?)` - Soft or hard delete
   - `getById(id, includeDeleted?)` - Get single record
   - `getByShortId(shortId, includeDeleted?)` - Get by shortId if available
+  - `getMany(ids, includeDeleted?)` - Fetch multiple records by ID
+  - `getManyReference(referenceField, id, range?, sort?, filter?, includeDeleted?)` - Fetch records by foreign key
   - `getList(range?, sort?, filter?, includeDeleted?)` - Paginated list
   - `getCount(filter?, includeDeleted?)` - Count records
   - `bulkUpdate(updates)` - Bulk update operations
