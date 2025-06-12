@@ -3,8 +3,6 @@ name: Deploy to Cloudflare Infrastructure
 on:
   push:
     branches: ['main']
-  pull_request:
-    branches: ['main']
 
 # Set minimal permissions by default
 permissions:
