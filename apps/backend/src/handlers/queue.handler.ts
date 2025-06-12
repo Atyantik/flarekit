@@ -8,8 +8,10 @@
  * @returns {Promise<void>} Resolves when all messages have been acknowledged.
  */
 
+import { logInfo } from '@utils/logger.util';
+
 export const queueHandler: ExportedHandlerQueueHandler<Env> = async (batch) => {
-  let messages = JSON.stringify(batch.messages);
-  console.log(`Consumed from our queue: ${messages}`);
+  const messages = JSON.stringify(batch.messages);
+  logInfo(`Consumed from our queue: ${messages}`);
   batch.ackAll();
 };
