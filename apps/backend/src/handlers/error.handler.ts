@@ -5,6 +5,7 @@ import { AppContext } from '@/types';
 import { Context, HonoRequest } from 'hono';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import { ZodError } from 'zod';
+import { logError, logWarn } from '@utils/logger.util';
 
 const requestIdMap = new WeakMap<HonoRequest, string>();
 /**
@@ -27,7 +28,7 @@ const generateRequestId = (c: Context<AppContext>): string => {
 /**
  * Logs error with structured format for monitoring and debugging
  */
-const logError = (
+const logStructuredError = (
   error: BaseError,
   requestId: string,
   c: Context<AppContext>,
@@ -54,10 +55,10 @@ const logError = (
   };
 
   if (options.severe || error.status >= 500) {
-    console.error('[SEVERE ERROR]', JSON.stringify(logData, null, 2));
+    logError('[SEVERE ERROR]', JSON.stringify(logData, null, 2));
     // Here you could integrate with external error tracking (Sentry, etc.)
   } else {
-    console.warn('[APPLICATION ERROR]', JSON.stringify(logData, null, 2));
+    logWarn('[APPLICATION ERROR]', JSON.stringify(logData, null, 2));
   }
 };
 
@@ -75,7 +76,7 @@ export const handleError = (ex: unknown, c: Context<AppContext>) => {
       (ex as any).requestId = requestId;
     }
 
-    logError(ex, requestId, c);
+    logStructuredError(ex, requestId, c);
     return c.json(ex.toJSON(), ex.status as ContentfulStatusCode);
   }
 
@@ -102,7 +103,7 @@ export const handleError = (ex: unknown, c: Context<AppContext>) => {
     (validationError as any).requestId = requestId;
     validationError.context.zodIssues = zodError.issues;
 
-    logError(validationError, requestId, c);
+    logStructuredError(validationError, requestId, c);
     return c.json(
       validationError.toJSON(),
       validationError.status as ContentfulStatusCode,
@@ -129,7 +130,7 @@ export const handleError = (ex: unknown, c: Context<AppContext>) => {
     },
   });
 
-  logError(systemError, requestId, c, { severe: true });
+  logStructuredError(systemError, requestId, c, { severe: true });
 
   // Return safe error response (without sensitive internal details in production)
   const response = systemError.toJSON();

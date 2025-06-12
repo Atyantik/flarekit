@@ -5,8 +5,10 @@
  * It receives a batch of messages, logs them, and acknowledges all messages in the batch.
  */
 
+import { logInfo } from '@utils/logger.util';
+
 export const queueHandler: ExportedHandlerQueueHandler<Env> = async (batch) => {
-  let messages = JSON.stringify(batch.messages);
-  console.log(`Consumed from our queue: ${messages}`);
+  const messages = JSON.stringify(batch.messages);
+  logInfo(`Consumed from our queue: ${messages}`);
   batch.ackAll();
 };
