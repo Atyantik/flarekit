@@ -199,6 +199,57 @@ describe('storage.service', () => {
     });
   });
 
+  describe('Get many records', () => {
+    it('should fetch multiple records by id', async () => {
+      const r1 = await db.storage.create({
+        key: 'many-1',
+        originalName: 'f1',
+        size: 1,
+        mimeType: 'text/plain',
+        hash: 'h1',
+      });
+      const r2 = await db.storage.create({
+        key: 'many-2',
+        originalName: 'f2',
+        size: 2,
+        mimeType: 'text/plain',
+        hash: 'h1',
+      });
+
+      const records = await db.storage.getMany([r1.id, r2.id]);
+      expect(records.map((r) => r.id).sort()).toEqual([r1.id, r2.id].sort());
+    });
+
+    it('should filter by reference field', async () => {
+      const h = 'refhash';
+      const a = await db.storage.create({
+        key: 'ref-1',
+        originalName: 'f1',
+        size: 1,
+        mimeType: 'text/plain',
+        hash: h,
+      });
+      await db.storage.create({
+        key: 'ref-2',
+        originalName: 'f2',
+        size: 2,
+        mimeType: 'text/plain',
+        hash: h,
+      });
+      await db.storage.create({
+        key: 'ref-3',
+        originalName: 'f3',
+        size: 3,
+        mimeType: 'text/plain',
+        hash: 'other',
+      });
+
+      const refRecords = await db.storage.getManyReference('hash', h);
+      expect(refRecords.length).toBe(2);
+      expect(refRecords.some((r) => r.id === a.id)).toBe(true);
+    });
+  });
+
   describe('Get Storage List', () => {
     it('Should list all active (non-deleted) records in descending order of createdAt', async () => {
       const input = {
