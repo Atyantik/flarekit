@@ -23,7 +23,7 @@ describe('error-log utilities', () => {
     it('creates a unique request id', () => {
       const id1 = generateRequestId();
       const id2 = generateRequestId();
-      expect(id1).toMatch(/^req_\d+_[a-z0-9]+$/);
+      expect(id1).toMatch(/^req_(\d+_[a-z0-9]+|[a-f0-9-]{36})$/);
       expect(id1).not.toBe(id2);
     });
   });
@@ -57,6 +57,16 @@ describe('error-log utilities', () => {
       expect(data.errorCode).toBe(err.code);
       expect(data.request.method).toBe('GET');
       expect(Array.isArray(data.stack)).toBe(true);
+    });
+
+    it('omits stack in production logs', () => {
+      process.env.NODE_ENV = 'production';
+      const err = new ValidationError('oops', []);
+      logError(err, 'req1', ctx);
+
+      const [, payload] = warnSpy.mock.calls[0] as [string, string];
+      const data = JSON.parse(payload);
+      expect(data.stack).toBeUndefined();
     });
 
     it('logs severe errors using console.error', () => {

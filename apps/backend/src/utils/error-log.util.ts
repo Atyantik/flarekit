@@ -6,7 +6,10 @@ import { Context } from 'hono';
  * Generates a unique request ID for error tracking
  */
 export const generateRequestId = (): string => {
-  return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  if (globalThis.crypto?.randomUUID) {
+    return `req_${globalThis.crypto.randomUUID()}`;
+  }
+  return `req_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 };
 
 /**
