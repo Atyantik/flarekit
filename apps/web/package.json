@@ -14,15 +14,15 @@
     "@astrojs/cloudflare": "^12.5.4",
     "@flarekit/database": "^1.0.0",
     "@splidejs/splide": "^4.1.4",
-    "@tailwindcss/vite": "^4.1.9",
+    "@tailwindcss/vite": "^4.1.10",
     "astro": "^5.9.2",
-    "tailwindcss": "^4.1.9",
+    "tailwindcss": "^4.1.10",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
     "@playwright/test": "^1.53.0",
-    "@types/node": "^24.0.0",
+    "@types/node": "^24.0.1",
     "@typescript-eslint/eslint-plugin": "^8.34.0",
     "@typescript-eslint/parser": "^8.34.0",
     "astro-eslint-parser": "^1.2.2",
