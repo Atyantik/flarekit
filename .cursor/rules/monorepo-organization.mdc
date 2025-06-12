@@ -1,0 +1,70 @@
+---
+description: Monorepo organization and development patterns for Flarekit
+globs: ["apps/**/*", "packages/**/*", "scripts/**/*"]
+alwaysApply: false
+---
+
+# Monorepo Organization Patterns
+
+When working with the Flarekit monorepo:
+
+## Project Structure
+```
+flarekit/
+├── apps/
+│   ├── backend/     # Cloudflare Worker API (Hono)
+│   └── web/         # Frontend application (Astro)
+├── packages/
+│   └── database/    # Shared database layer (Drizzle)
+├── scripts/         # Utility scripts
+└── .github/         # CI/CD workflows
+```
+
+## Package Dependencies
+- Use workspace references: `"@flarekit/database": "*"`
+- Shared packages should be built before dependent apps
+- Use TurboRepo for efficient builds and caching
+
+## Development Workflow
+- Start all services: `npm run dev` (from root)
+- Individual services: `npm run dev --filter="@flarekit/backend"`
+- Database migrations: `npx flarekit migrate:d1:local`
+
+## Shared Code Patterns
+- Database schemas and services in `packages/database`
+- Utility functions should be in appropriate packages
+- Type definitions shared across apps
+- Common configurations in root or shared packages
+
+## Build Process
+- Database package builds first (dependency for backend)
+- Backend and web can build in parallel
+- Use `turbo.json` for build orchestration
+- Generate migrations before building database package
+
+## Environment Management
+- Each app has its own `.dev.vars` for local secrets
+- Shared environment variables in root `.env`
+- Use `wrangler.json` for Cloudflare-specific config
+- Different persistence paths for different environments
+
+## Testing Strategy
+- Unit tests in each package/app
+- Integration tests for database operations
+- E2E tests for full application flows
+- Use Vitest with Cloudflare Workers pool
+
+## Deployment
+- Database migrations run first
+- Backend and frontend deploy independently
+- Use GitHub Actions for automated deployment
+- Environment-specific configurations
+
+## Code Sharing Best Practices
+- Export types from packages for use in apps
+- Keep business logic in appropriate layers
+- Avoid circular dependencies between packages
+- Use path aliases for clean imports (`@/`, `@utils/`)
+
+@turbo.json
+@package.json

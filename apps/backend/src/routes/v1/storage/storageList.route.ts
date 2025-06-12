@@ -17,7 +17,6 @@ type StorageSortField =
   | 'createdAt'
   | 'updatedAt'
   | 'deletedAt';
-type SortDirection = 'ASC' | 'DESC';
 
 export const storageListEndpoint = createApiEndpoint({
   resource: 'Storage',
@@ -25,7 +24,6 @@ export const storageListEndpoint = createApiEndpoint({
   path: '/api/v1/storage',
   responseSchema: z.array(StorageRecordSchema),
   request: {
-    headers: HeadersSchema,
     query: ListQuerySchema,
   },
   handler: async (c) => {
@@ -35,7 +33,7 @@ export const storageListEndpoint = createApiEndpoint({
       const { range, sort, filter } = query;
 
       let parsedRange: [number, number];
-      let parsedSort: [StorageSortField, SortDirection];
+      let parsedSort: [StorageSortField, 'ASC' | 'DESC'];
       let parsedFilter: Record<string, any>;
 
       try {

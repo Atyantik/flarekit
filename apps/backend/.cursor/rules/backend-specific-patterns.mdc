@@ -1,0 +1,59 @@
+---
+description: Backend-specific development patterns for Hono API routes
+globs: ["src/routes/**/*.ts", "src/handlers/**/*.ts", "src/schemas/**/*.ts"]
+alwaysApply: true
+---
+
+# Backend-Specific Development Patterns
+
+When working in the Flarekit backend:
+
+## Route Registration Pattern
+- Each route file exports a single endpoint function
+- Route directories have an `index.ts` that exports an array of endpoints
+- Main routes index imports and spreads all route arrays
+
+## File Naming Conventions
+- Route files: `[resource][Action].route.ts` (e.g., `userCreate.route.ts`)
+- Schema files: `[resource].schema.ts`
+- Handler files: `[purpose].handler.ts`
+- Utility files: `[purpose].util.ts`
+
+## Import Aliases
+Use these path aliases consistently:
+- `@/` - src root
+- `@utils/` - src/utils
+- `@/schemas/` - src/schemas
+- `@/classes/` - src/classes
+- `@/handlers/` - src/handlers
+
+## API Versioning
+- All API routes start with `/api/v1/`
+- Group related endpoints under resource paths
+- Use RESTful conventions where possible
+
+## Schema Organization
+- Request/Response schemas in `/schemas/[resource].schema.ts`
+- Include OpenAPI examples in all schemas
+- Use descriptive schema names with suffixes: `CreateRequest`, `SuccessResponse`
+
+## Database Integration
+- Always initialize DB with: `const db = initDBInstance(c.env, c.env)`
+- Use service methods from BaseService
+- Handle pagination with range parameters: `[start, end]`
+- Include total count in list responses via headers
+
+## Validation Patterns
+- Use Zod schemas for all input validation
+- Validate file uploads with size and type constraints
+- Provide detailed field-level error messages
+- Parse JSON query parameters safely
+
+## Response Headers
+- Set CORS headers appropriately
+- Include `Content-Range` for paginated responses
+- Expose necessary headers with `Access-Control-Expose-Headers`
+- Add caching headers when appropriate
+
+@src/routes/v1/storage/storageList.route.ts
+@src/utils/api-builder.util.ts

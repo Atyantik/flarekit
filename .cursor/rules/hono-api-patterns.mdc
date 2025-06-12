@@ -1,0 +1,59 @@
+---
+description: Hono API development patterns for Flarekit backend
+globs: ["apps/backend/src/routes/**/*.ts", "apps/backend/src/handlers/**/*.ts"]
+alwaysApply: false
+---
+
+# Hono API Development Patterns
+
+When creating new API endpoints in Flarekit:
+
+## Route Structure
+- Organize routes by version: `/routes/v1/[feature]/`
+- Each feature should have its own directory with an `index.ts` that exports an array of endpoint functions
+- Use descriptive filenames: `[resource][Action].route.ts` (e.g., `storageCreate.route.ts`)
+
+## API Endpoint Creation
+- Always use `createApiEndpoint()` utility from `@/utils/api-builder.util`
+- Follow this structure:
+```typescript
+export const [resourceAction]Endpoint = createApiEndpoint({
+  resource: 'ResourceName',
+  method: 'post|get|put|delete',
+  path: '/api/v1/resource',
+  responseSchema: YourResponseSchema,
+  request: {
+    body: { content: { 'application/json': { schema: YourRequestSchema } } },
+    query: YourQuerySchema, // if needed
+    headers: HeadersSchema, // if auth required
+  },
+  handler: async (c) => {
+    // Implementation
+  },
+});
+```
+
+## Schema Patterns
+- Create separate Zod schemas for requests and responses in `/schemas/`
+- Use `.openapi()` method for documentation examples
+- Follow naming: `[Resource][Action][Request|Response]Schema`
+- Always include success/error response schemas
+
+## Database Integration
+- Use `initDBInstance(c.env, c.env)` to get database services
+- Access services via `db.[tableName]` (e.g., `db.storage`)
+- Handle database errors with try/catch and throw appropriate custom errors
+
+## Error Handling
+- Use custom error classes: `ValidationError`, `DatabaseError`, `ExternalServiceError`
+- Always include field-level validation errors for user input
+- Provide meaningful error messages and codes
+
+## Response Format
+- Always return JSON responses with consistent structure
+- Include `success: boolean` for operation results
+- Use appropriate HTTP status codes
+- Add pagination headers for list endpoints: `Content-Range`
+
+@apps/backend/src/routes/v1/storage/storageCreate.route.ts
+@apps/backend/src/utils/api-builder.util.ts
