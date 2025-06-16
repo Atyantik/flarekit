@@ -15,7 +15,7 @@
     "@flarekit/database": "^1.0.0",
     "@splidejs/splide": "^4.1.4",
     "@tailwindcss/vite": "^4.1.10",
-    "astro": "^5.9.2",
+    "astro": "^5.9.3",
     "tailwindcss": "^4.1.10",
     "typescript": "^5.8.3"
   },
@@ -29,6 +29,6 @@
     "eslint-plugin-astro": "^1.3.1",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
-    "tsx": "^4.20.1"
+    "tsx": "^4.20.3"
   }
 }
