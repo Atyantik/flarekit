@@ -34,20 +34,20 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.37",
-    "@cloudflare/workers-types": "^4.20250612.0",
-    "@rollup/plugin-commonjs": "^28.0.3",
+    "@cloudflare/vitest-pool-workers": "^0.8.38",
+    "@cloudflare/workers-types": "^4.20250614.0",
+    "@rollup/plugin-commonjs": "^28.0.5",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
     "@vitest/coverage-istanbul": "^3.2.3",
     "drizzle-kit": "^0.31.1",
-    "eslint": "^9.28.0",
-    "miniflare": "^4.20250604.0",
+    "eslint": "^9.29.0",
+    "miniflare": "^4.20250604.1",
     "rimraf": "^6.0.1",
     "rollup": "^4.43.0",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.3",
-    "wrangler": "^4.19.2"
+    "wrangler": "^4.20.0"
   }
 }

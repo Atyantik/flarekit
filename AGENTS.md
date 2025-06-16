@@ -6,7 +6,7 @@ This repository is a monorepo containing Cloudflare Workers, a web app, and a sh
 
 1. Install dependencies:
    ```bash
-   npm install --force
+   npm install
    ```
 2. Start all apps and services for local development:
    ```bash
