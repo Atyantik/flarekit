@@ -27,7 +27,7 @@
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-prettier": "^5.5.0",
     "eslint-plugin-react": "^7.37.5",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
@@ -35,7 +35,7 @@
     "tsc-alias": "^1.8.16",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3",
-    "wrangler": "^4.20.0"
+    "wrangler": "^4.20.1"
   },
   "engines": {
     "node": ">=22"
@@ -53,6 +53,6 @@
     "*.{css,scss,json,md}": "prettier --write"
   },
   "dependencies": {
-    "@types/node": "^24.0.1"
+    "@types/node": "^24.0.3"
   }
 }
