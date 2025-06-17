@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   output: "server",
   adapter: cloudflare({
+    imageService: "compile", // Change to "cloudflare" if using cloudflare images
     platformProxy: {
       enabled: true,
       persist: {

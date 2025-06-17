@@ -20,7 +20,7 @@
     "migrate:d1:production": "echo 'Y' | wrangler d1 migrations apply DB --remote",
     "dev": "rollup --config --watch",
     "build": "npm run build:distribution && npm run build:migrations",
-    "build:migrations": "drizzle-kit generate",
+    "build:migrations": "drizzle-kit generate --config=./drizzle.config.ts",
     "build:distribution": "npm run clean && rollup --config",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
