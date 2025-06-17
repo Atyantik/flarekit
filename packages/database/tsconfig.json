@@ -9,6 +9,7 @@
     "declarationDir": "./dist/types",
     "outDir": "dist",
     "lib": ["ESNext"],
+    "types": ["./worker-configuration.d.ts"],
     "paths": {
       "@/*": ["./src/*"],
       "@schema/*": ["./src/schema/*"],
@@ -16,5 +17,5 @@
       "@utils/*": ["./src/utils/*"]
     }
   },
-  "include": ["worker-configuration.d.ts", "src/**/*.ts"]
+  "include": ["src/**/*.ts", "./worker-configuration.d.ts"]
 }

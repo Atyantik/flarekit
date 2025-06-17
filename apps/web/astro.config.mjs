@@ -20,7 +20,11 @@ export default defineConfig({
     optimizeDeps: {
       include: ["@flarekit/database"],
     },
-
+    build: {
+      rollupOptions: {
+        external: ["node:crypto"],
+      },
+    },
     plugins: [tailwindcss()],
   },
 });

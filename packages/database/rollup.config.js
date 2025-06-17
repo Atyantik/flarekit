@@ -17,6 +17,7 @@ export default [
         format: 'esm', // ES Module format
       },
     ],
+    external: ['node:crypto'],
     plugins: [
       // Resolves node_modules imports
       resolve(),

@@ -5,14 +5,15 @@
     "**/*",
     "../../scripts",
     ".prettierrc.mjs",
-    "../../packages/database/dist/types/index.d.ts"
+    "../../packages/database/dist/types/index.d.ts",
+    "./worker-configuration.d.ts"
   ],
   "exclude": ["dist"],
   "compilerOptions": {
     "lib": ["DOM", "ESNext"],
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "types": ["@cloudflare/workers-types"],
+    "types": ["./worker-configuration.d.ts"],
     "paths": {
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
