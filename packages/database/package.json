@@ -27,15 +27,15 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@types/node": "^24.0.12",
+    "@types/node": "^24.0.13",
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.44.2",
     "nanoid": "^5.1.5",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.50",
-    "@cloudflare/workers-types": "^4.20250710.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.53",
+    "@cloudflare/workers-types": "^4.20250711.0",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.4",
@@ -48,6 +48,6 @@
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
-    "wrangler": "^4.24.0"
+    "wrangler": "^4.24.3"
   }
 }

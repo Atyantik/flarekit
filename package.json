@@ -35,7 +35,7 @@
     "tsc-alias": "^1.8.16",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3",
-    "wrangler": "^4.24.0"
+    "wrangler": "^4.24.3"
   },
   "engines": {
     "node": ">=22"
@@ -53,6 +53,6 @@
     "*.{css,scss,json,md}": "prettier --write"
   },
   "dependencies": {
-    "@types/node": "^24.0.12"
+    "@types/node": "^24.0.13"
   }
 }
