@@ -23,12 +23,15 @@ export const analyzeRoute = (
   method: HttpMethod,
   path: string,
 ): RouteAnalysis => {
-  const pathVariables = path.match(/\{\w+\}/g) || [];
+  const pathVariables = (path.match(/{[^}]+}/g) || []).map((v) =>
+    v.slice(1, -1),
+  ) as string[];
   const hasPathVariables = pathVariables.length > 0;
+  const hasIdPathVariable = pathVariables.includes('id');
 
   return {
     isListRoute: method === 'get' && !hasPathVariables,
-    isGetByIdRoute: method === 'get' && hasPathVariables,
+    isGetByIdRoute: method === 'get' && hasIdPathVariable,
     isCreateRoute: method === 'post' && !hasPathVariables,
     isUpdateRoute: (method === 'put' || method === 'patch') && hasPathVariables,
     isDeleteRoute: method === 'delete' && hasPathVariables,

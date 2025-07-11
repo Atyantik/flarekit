@@ -3,7 +3,6 @@ description: Hono API development patterns for Flarekit backend
 globs: ["apps/backend/src/routes/**/*.ts", "apps/backend/src/handlers/**/*.ts"]
 alwaysApply: false
 ---
-
 # Hono API Development Patterns
 
 When creating new API endpoints in Flarekit:
@@ -25,6 +24,7 @@ export const [resourceAction]Endpoint = createApiEndpoint({
   request: {
     body: { content: { 'application/json': { schema: YourRequestSchema } } },
     query: YourQuerySchema, // if needed
+    params: YourParamSchema, // for path parameters like :id
     headers: HeadersSchema, // if auth required
   },
   handler: async (c) => {
@@ -33,11 +33,53 @@ export const [resourceAction]Endpoint = createApiEndpoint({
 });
 ```
 
+## Route Parameter Patterns
+- For single resource retrieval (GET `/resource/:id`), use `GetOneParamSchema`
+- The route analyzer automatically detects `:id` parameters and applies appropriate schemas
+- Path parameters use curly braces in OpenAPI spec: `/api/v1/storage/{id}`
+- Access path parameters with: `const id = c.req.param('id')`
+
+### Get By ID Routes
+```typescript
+import { GetOneParamSchema } from '@/schemas/getOneQuery.schema';
+
+export const resourceGetOneEndpoint = createApiEndpoint({
+  resource: 'Resource',
+  method: 'get',
+  path: '/api/v1/resource/{id}',
+  responseSchema: ResourceRecordSchema,
+  request: {
+    params: GetOneParamSchema,
+  },
+  handler: async (c) => {
+    const id = c.req.param('id');
+    // Implementation
+  },
+});
+```
+
+### Custom Path Parameters
+For non-standard path parameters (not `:id`), create custom parameter schemas:
+```typescript
+const CustomParamSchema = z.object({
+  slug: z.string().openapi({
+    param: {
+      name: 'slug',
+      in: 'path',
+      description: 'Resource slug identifier',
+      required: true,
+      schema: { type: 'string' },
+    },
+  }),
+}).openapi('CustomParamSchema');
+```
+
 ## Schema Patterns
 - Create separate Zod schemas for requests and responses in `/schemas/`
 - Use `.openapi()` method for documentation examples
 - Follow naming: `[Resource][Action][Request|Response]Schema`
 - Always include success/error response schemas
+- Use `GetOneParamSchema` for standard `:id` path parameters
 
 ## Database Integration
 - Use `initDBInstance(c.env, c.env)` to get database services
@@ -45,9 +87,10 @@ export const [resourceAction]Endpoint = createApiEndpoint({
 - Handle database errors with try/catch and throw appropriate custom errors
 
 ## Error Handling
-- Use custom error classes: `ValidationError`, `DatabaseError`, `ExternalServiceError`
+- Use custom error classes: `ValidationError`, `DatabaseError`, `ExternalServiceError`, `NotFoundError`
 - Always include field-level validation errors for user input
 - Provide meaningful error messages and codes
+- For missing resources, use `NotFoundError` instead of `DatabaseError`
 
 ## Response Format
 - Always return JSON responses with consistent structure
@@ -55,5 +98,15 @@ export const [resourceAction]Endpoint = createApiEndpoint({
 - Use appropriate HTTP status codes
 - Add pagination headers for list endpoints: `Content-Range`
 
+## Route Analysis
+The route analyzer (`analyzeRoute`) automatically detects:
+- List routes: GET without path variables
+- Get by ID routes: GET with `:id` path parameter specifically
+- Create routes: POST without path variables
+- Update routes: PUT/PATCH with path variables
+- Delete routes: DELETE with path variables
+
 @apps/backend/src/routes/v1/storage/storageCreate.route.ts
+@apps/backend/src/routes/v1/storage/storageGetOne.route.ts
 @apps/backend/src/utils/api-builder.util.ts
+@apps/backend/src/schemas/getOneQuery.schema.ts

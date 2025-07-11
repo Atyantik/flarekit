@@ -1,0 +1,77 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Backend-Specific Development Patterns
+
+When working in the Flarekit backend:
+
+## Route Registration Pattern
+- Each route file exports a single endpoint function
+- Route directories have an `index.ts` that exports an array of endpoints
+- Main routes index imports and spreads all route arrays
+
+## File Naming Conventions
+- Route files: `[resource][Action].route.ts` (e.g., `userCreate.route.ts`)
+- Schema files: `[resource].schema.ts`
+- Parameter schema files: `[purpose].schema.ts` (e.g., `getOneQuery.schema.ts`)
+- Handler files: `[purpose].handler.ts`
+- Utility files: `[purpose].util.ts`
+
+## Import Aliases
+Use these path aliases consistently:
+- `@/` - src root
+- `@utils/` - src/utils
+- `@/schemas/` - src/schemas
+- `@/classes/` - src/classes
+- `@/handlers/` - src/handlers
+
+## API Versioning
+- All API routes start with `/api/v1/`
+- Group related endpoints under resource paths
+- Use RESTful conventions where possible
+
+## Schema Organization
+- Request/Response schemas in `/schemas/[resource].schema.ts`
+- Parameter schemas in `/schemas/[purpose].schema.ts`
+- Use `GetOneParamSchema` for standard `:id` path parameters
+- Include OpenAPI examples in all schemas
+- Use descriptive schema names with suffixes: `CreateRequest`, `SuccessResponse`
+
+## Route Parameter Handling
+- Use `:id` for single resource identification in route paths
+- OpenAPI spec uses curly braces: `/api/v1/storage/{id}`
+- Route analyzer automatically detects `:id` parameters for get-by-id routes
+- Access parameters with: `const id = c.req.param('id')`
+- Import `GetOneParamSchema` from `@/schemas/getOneQuery.schema`
+
+## Database Integration
+- Always initialize DB with: `const db = initDBInstance(c.env, c.env)`
+- Use service methods from BaseService
+- Handle pagination with range parameters: `[start, end]`
+- Include total count in list responses via headers
+
+## Validation Patterns
+- Use Zod schemas for all input validation
+- Validate file uploads with size and type constraints
+- Provide detailed field-level error messages
+- Parse JSON query parameters safely
+- Use `GetOneParamSchema` for path parameter validation
+
+## Error Handling Patterns
+- Use `NotFoundError` for missing resources, not `DatabaseError`
+- Throw specific error types: `ValidationError`, `AuthenticationError`, etc.
+- Include context information in error constructors
+- Let global error handler manage error responses
+
+## Response Headers
+- Set CORS headers appropriately
+- Include `Content-Range` for paginated responses
+- Expose necessary headers with `Access-Control-Expose-Headers`
+- Add caching headers when appropriate
+
+@src/routes/v1/storage/storageList.route.ts
+@src/routes/v1/storage/storageGetOne.route.ts
+@src/utils/api-builder.util.ts
+@src/schemas/getOneQuery.schema.ts

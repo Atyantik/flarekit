@@ -14,6 +14,7 @@ const itemsToRemove = [
   'playwright-report',
   'test-results',
   '.test.vars',
+  'package-lock.json',
 ];
 
 const excludeFiles = ['wrangler.json', '.dev.vars']; // Files to exclude in the current directory
