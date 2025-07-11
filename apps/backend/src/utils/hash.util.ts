@@ -2,7 +2,7 @@ import { base64UrlEncode } from '@utils/base64.util';
 
 /**
  * Computes the SHA-256 hash of the given ArrayBuffer, encodes it in URL-safe Base64,
- * and truncates it to 22 characters.
+ * and truncates it to 32 characters.
  * @param arrayBuffer - The file content as ArrayBuffer.
  * @returns The truncated Base64-encoded SHA-256 hash as a string.
  */
@@ -19,8 +19,27 @@ export async function computeShortHash(
   }
 
   // Encode in URL-safe Base64
-  const base64Hash = base64UrlEncode(hashString);
+  let base64Hash = base64UrlEncode(hashString);
 
-  // Truncate to 22 characters for brevity
-  return base64Hash.substring(0, 22);
+  // Remove _,- from the string
+  base64Hash = base64Hash.replaceAll(/[_-]/g, '');
+
+  // Truncate to 32 characters for brevity
+  return base64Hash.substring(0, 32);
+}
+
+/**
+ * Generates a random value, computes its SHA-256 hash, encodes it in URL-safe Base64,
+ * and truncates it to 32 characters. This is suitable for generating unique, short, random hashes.
+ * @returns The truncated Base64-encoded SHA-256 hash as a string.
+ */
+export async function computeRandomHash(): Promise<string> {
+  // Generate 32 random bytes for strong entropy
+  const randomBytes = new Uint8Array(32);
+  crypto.getRandomValues(randomBytes);
+
+  // Convert random bytes to ArrayBuffer
+  const arrayBuffer = randomBytes.buffer;
+
+  return computeShortHash(arrayBuffer);
 }

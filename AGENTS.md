@@ -60,6 +60,52 @@ Pre‑commit hooks run `lint-staged`; pre‑push hooks run the test suites. Thes
 
 Shared variables live in `.dev.vars`. Each workspace receives a copy when running `npm run setup` (or implicitly via `npm run dev`). You can add additional variables per workspace as described in `apps/backend/README.md`.
 
+## Route Parameter Development Patterns
+
+When working with API routes that require path parameters:
+
+### Standard ID Parameters
+
+- Use `:id` for single resource identification in route paths
+- Import `GetOneParamSchema` from `@/schemas/getOneQuery.schema` for validation
+- OpenAPI spec uses curly braces: `/api/v1/storage/{id}`
+- Access parameters with: `const id = c.req.param('id')`
+
+### Route Analysis
+
+The route analyzer automatically detects:
+
+- **Get By ID Routes**: Only routes with specifically `:id` parameter (not other parameter names)
+- **List Routes**: GET routes without path variables
+- **Create Routes**: POST routes without path variables
+- **Update/Delete Routes**: PUT/PATCH/DELETE routes with path variables
+
+### Error Handling for Missing Resources
+
+- Use `NotFoundError` for missing resources, not `DatabaseError`
+- Include context information in error constructors
+- Example: `throw new NotFoundError('Storage', id);`
+
+### Custom Parameters
+
+For non-standard path parameters (not `:id`), create custom parameter schemas:
+
+```typescript
+const CustomParamSchema = z
+  .object({
+    paramName: z.string().openapi({
+      param: {
+        name: 'paramName',
+        in: 'path',
+        description: 'Description of the parameter',
+        required: true,
+        schema: { type: 'string' },
+      },
+    }),
+  })
+  .openapi('CustomParamSchema');
+```
+
 ## Documentation and style guides
 
 - **Backend error system**: see `apps/backend/docs/error-handling.md` for detailed patterns.

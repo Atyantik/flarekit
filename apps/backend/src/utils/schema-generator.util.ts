@@ -1,7 +1,8 @@
 // utils/schema-generator.util.ts
-import { z } from 'zod';
+import { z } from '@hono/zod-openapi';
 import { ListQuerySchema } from '@/schemas/listQuery.schema';
 import { analyzeRoute, HttpMethod } from './route-analyzer.util';
+import { GetOneParamSchema } from '../schemas/getOneQuery.schema';
 
 export const generateParamsSchema = (
   method: HttpMethod,
@@ -11,6 +12,10 @@ export const generateParamsSchema = (
   const analysis = analyzeRoute(method, path);
 
   if (!analysis.hasPathVariables) return undefined;
+
+  if (analysis.isGetByIdRoute) {
+    return GetOneParamSchema;
+  }
 
   if (analysis.pathVariables.length === 1) {
     const paramName = analysis.pathVariables[0].replace(/[{}]/g, '');

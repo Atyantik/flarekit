@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hash & Chunked Upload Progress Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/hash-wasm@4/dist/sha256.umd.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        padding: 30px;
+      }
+      .container {
+        background: #fff;
+        max-width: 500px;
+        margin: 30px auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+        padding: 30px;
+      }
+      h2 {
+        text-align: center;
+        margin-top: 0;
+      }
+      .file-input {
+        margin: 20px 0;
+      }
+      .progress {
+        width: 100%;
+        height: 24px;
+        background: #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 15px 0;
+      }
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+      .hashing {
+        background: linear-gradient(90deg, #2196f3, #1976d2);
+      }
+      .uploading {
+        background: linear-gradient(90deg, #4caf50, #45a049);
+      }
+      .status {
+        font-size: 16px;
+        margin: 10px 0 5px 0;
+      }
+      .result {
+        background: #e3f2fd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 12px;
+        font-size: 15px;
+        word-break: break-all;
+      }
+      .error {
+        background: #ffebee;
+        color: #c62828;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 12px;
+        font-size: 15px;
+      }
+      button {
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #bbb;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Large File Hash & Chunked Upload Demo</h2>
+      <div class="file-input">
+        <input type="file" id="fileInput" />
+        <button id="uploadBtn">Start Hash & Upload</button>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="status" id="statusMsg">Ready.</div>
+      <div class="result" id="resultMsg"></div>
+      <div class="error" id="errorMsg" style="display: none"></div>
+    </div>
+
+    <script>
+      // --- CONFIGURATION ---
+      const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB (simulate, adjust as needed)
+
+      // --- DOM references ---
+      const fileInput = document.getElementById('fileInput');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const progressBar = document.getElementById('progressBar');
+      const statusMsg = document.getElementById('statusMsg');
+      const resultMsg = document.getElementById('resultMsg');
+      const errorMsg = document.getElementById('errorMsg');
+
+      uploadBtn.onclick = async () => {
+        // Reset UI
+        errorMsg.style.display = 'none';
+        resultMsg.innerHTML = '';
+        progressBar.className = 'progress-bar hashing';
+        progressBar.style.width = '0%';
+        statusMsg.textContent = 'Ready.';
+
+        const file = fileInput.files[0];
+        if (!file) {
+          showError('Please select a file.');
+          return;
+        }
+
+        uploadBtn.disabled = true;
+        try {
+          // Step 1: Hash the file with progress
+          const fileHash = await hashFileWithProgress(file, (percent) => {
+            progressBar.className = 'progress-bar hashing';
+            statusMsg.textContent = `Hashing file... ${percent}%`;
+            progressBar.style.width = percent + '%';
+          });
+
+          // Step 2: Create upload session
+          statusMsg.textContent = 'Creating upload session...';
+          const { uploadId, key } = await createUploadSession(file, fileHash);
+
+          // Step 3: Upload chunks with progress
+          const parts = await uploadChunks(file, key, uploadId, (percent) => {
+            progressBar.className = 'progress-bar uploading';
+            statusMsg.textContent = `Uploading file... ${percent}%`;
+            progressBar.style.width = percent + '%';
+          });
+
+          // Step 4: Complete upload
+          statusMsg.textContent = 'Finalizing upload...';
+          const completeResult = await completeUpload(key, uploadId, parts);
+
+          // --- Done ---
+          statusMsg.textContent = 'Upload complete!';
+          progressBar.style.width = '100%';
+          resultMsg.innerHTML = `<b>File:</b> ${file.name}<br>
+          <b>Size:</b> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
+          <b>SHA-256:</b> ${fileHash}<br>
+          <b>UploadId:</b> ${uploadId}<br>
+          <b>Key:</b> ${key}<br>
+          <b>Chunks uploaded:</b> ${parts.length}<br>
+          <b>Final ETag:</b> ${completeResult.etag || 'N/A'}`;
+        } catch (err) {
+          showError(err.message || err);
+        }
+        uploadBtn.disabled = false;
+      };
+
+      // --- Hash file with incremental progress (worker for UI) ---
+      async function hashFileWithProgress(file, onProgress) {
+        return new Promise((resolve, reject) => {
+          // Inline worker
+          const workerCode = `
+          self.importScripts('https://cdn.jsdelivr.net/npm/hash-wasm@4/dist/sha256.umd.min.js');
+          self.onmessage = async function(e) {
+            try {
+              const { file } = e.data;
+              const stream = file.stream();
+              const reader = stream.getReader();
+              let bytesRead = 0;
+              const sha256 = await self.hashwasm.createSHA256();
+              sha256.init();
+              const fileSize = file.size;
+
+              // Progress update interval to avoid too frequent updates
+              let lastProgressUpdate = 0;
+              const PROGRESS_UPDATE_INTERVAL = 100; // Update every 100ms
+
+              while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                sha256.update(value);
+                bytesRead += value.length;
+
+                // Update progress with throttling
+                const now = Date.now();
+                const progress = (bytesRead / fileSize) * 100;
+                if (now - lastProgressUpdate > PROGRESS_UPDATE_INTERVAL || progress === 100) {
+                  self.postMessage({ type: 'progress', progress });
+                  lastProgressUpdate = now;
+                }
+              }
+
+              reader.releaseLock();
+              const hashBuffer = sha256.digest('binary');
+              const hash = Array.from(new Uint8Array(hashBuffer))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+              self.postMessage({ type: 'done', hash });
+            } catch (err) {
+              self.postMessage({ type: 'error', message: err.message });
+            }
+          };
+        `;
+
+          const blob = new Blob([workerCode], {
+            type: 'application/javascript',
+          });
+          const worker = new Worker(URL.createObjectURL(blob));
+
+          worker.onmessage = function (e) {
+            if (e.data.type === 'progress' && onProgress) {
+              onProgress(Math.round(e.data.progress * 100) / 100); // Round to 2 decimal places
+            } else if (e.data.type === 'done') {
+              worker.terminate();
+              resolve(e.data.hash);
+            } else if (e.data.type === 'error') {
+              worker.terminate();
+              reject(new Error(e.data.message));
+            }
+          };
+
+          worker.onerror = function (error) {
+            worker.terminate();
+            reject(new Error(`Worker error: ${error.message}`));
+          };
+
+          worker.postMessage({ file });
+        });
+      }
+
+      // --- Backend logic for upload session ---
+      async function createUploadSession(file, hash) {
+        const key = hash;
+        const createRes = await fetch(
+          new URL('/api/v1/uploads', 'http://localhost:8000'),
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key }),
+          },
+        );
+
+        if (!createRes.ok) {
+          throw new Error(
+            `Failed to create upload session: ${createRes.status} ${createRes.statusText}`,
+          );
+        }
+
+        const { uploadId } = await createRes.json();
+        return {
+          uploadId,
+          key,
+        };
+      }
+      async function uploadChunks(file, key, uploadId, onProgress) {
+        const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+        const parts = [];
+        const totalParts = Math.ceil(file.size / CHUNK_SIZE);
+
+        for (let i = 0; i < totalParts; i++) {
+          const chunk = file.slice(
+            i * CHUNK_SIZE,
+            Math.min(file.size, (i + 1) * CHUNK_SIZE),
+          );
+          const partNumber = i + 1;
+          const putUrl = new URL(
+            `/api/v1/uploads/${encodeURIComponent(key)}/parts/${partNumber}?uploadId=${encodeURIComponent(uploadId)}`,
+            'http://localhost:8000',
+          );
+
+          const putRes = await fetch(putUrl, {
+            method: 'PUT',
+            body: chunk,
+            headers: {
+              'Content-Type': 'application/octet-stream',
+            },
+          });
+
+          if (!putRes.ok) {
+            const errorText = await putRes.text().catch(() => 'Unknown error');
+            throw new Error(
+              `Failed to upload part ${partNumber}: ${putRes.status} ${putRes.statusText} - ${errorText}`,
+            );
+          }
+
+          const responseData = await putRes.json();
+          const { etag } = responseData;
+          parts.push({ etag, partNumber });
+
+          // Update progress
+          if (onProgress) {
+            const progress = ((i + 1) / totalParts) * 100;
+            onProgress(Math.round(progress * 100) / 100); // Round to 2 decimal places
+          }
+        }
+        return parts;
+      }
+      async function completeUpload(key, uploadId, parts) {
+        const completeUrl = new URL(
+          `/api/v1/uploads/${encodeURIComponent(key)}/complete?uploadId=${encodeURIComponent(uploadId)}`,
+          'http://localhost:8000',
+        );
+        const completeRes = await fetch(completeUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ parts }),
+        });
+
+        if (!completeRes.ok) {
+          throw new Error(
+            `Failed to complete upload: ${completeRes.status} ${completeRes.statusText}`,
+          );
+        }
+
+        const completeData = await completeRes.json();
+
+        return completeData;
+      }
+
+      function showError(msg) {
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = msg;
+        statusMsg.textContent = 'Error occurred.';
+        progressBar.style.width = '0%';
+        progressBar.className = 'progress-bar hashing';
+        resultMsg.innerHTML = '';
+        uploadBtn.disabled = false;
+      }
+    </script>
+  </body>
+</html>

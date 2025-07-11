@@ -48,6 +48,35 @@ export const StorageCreateSuccessResponseSchema = z
   })
   .openapi('Storage.SuccessResponse');
 
+// Schema for storage update request body (file replacement only)
+export const StorageUpdateRequestSchema = z
+  .object({
+    'images[]': z.any().openapi({
+      type: 'string',
+      format: 'binary',
+      description:
+        'New image file to replace the existing one. Max size: 2MB per file. Supports: JPEG, PNG, GIF, WebP',
+    }),
+  })
+  .openapi('Storage.UpdateRequest');
+
+// Schema for successful update response
+export const StorageUpdateSuccessResponseSchema = z
+  .object({
+    success: z.boolean().default(true),
+    message: z
+      .string()
+      .openapi({ example: 'Storage record updated successfully' }),
+    data: StorageRecordSchema.openapi({
+      description: 'Updated storage record',
+    }),
+    fileReplaced: z.boolean().openapi({
+      example: true,
+      description: 'Indicates if the file was replaced in R2 storage',
+    }),
+  })
+  .openapi('Storage.UpdateSuccessResponse');
+
 // File validation constants as schema
 export const UploadConstraintsSchema = z
   .object({

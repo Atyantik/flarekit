@@ -153,3 +153,83 @@ npm run test -w @flarekit/backend
 ### Deployment
 
 Deployments are handled automatically through the repository's GitHub Actions workflows. Manual deployment is rarely required, but you can refer to the root `README.md` for instructions if needed.
+
+## Features
+
+- 🚀 **Hono Framework** - Fast, lightweight web framework optimized for edge computing
+- 📊 **Database Integration** - SQLite with Drizzle ORM and automated migrations
+- 🔧 **Auto-generated Schemas** - Zod schemas with OpenAPI documentation
+- 🛡️ **Comprehensive Error Handling** - Structured error responses with detailed context
+- 📁 **File Storage** - R2 integration for file uploads and management
+- 🔍 **Smart Route Analysis** - Automatic detection of route patterns and parameter handling
+- ⚡ **Edge Optimized** - Built for Cloudflare Workers with minimal cold start time
+
+## Route Parameter Patterns
+
+The backend uses intelligent route analysis to automatically handle different endpoint patterns:
+
+### Path Parameters
+
+For single resource retrieval, use the `:id` parameter pattern:
+
+```typescript
+// Route definition
+path: '/api/v1/storage/{id}'; // OpenAPI spec format
+
+// In route handler
+const id = c.req.param('id');
+```
+
+### Schema Usage
+
+- **Standard ID Parameters**: Use `GetOneParamSchema` for `:id` path parameters
+- **Custom Parameters**: Create custom parameter schemas for non-standard paths
+
+```typescript
+import { GetOneParamSchema } from '@/schemas/getOneQuery.schema';
+
+export const storageGetOneEndpoint = createApiEndpoint({
+  resource: 'Storage',
+  method: 'get',
+  path: '/api/v1/storage/{id}',
+  request: {
+    params: GetOneParamSchema, // Validates :id parameter
+  },
+  handler: async (c) => {
+    const id = c.req.param('id');
+    // Implementation
+  },
+});
+```
+
+### Route Analysis
+
+The route analyzer automatically detects endpoint types:
+
+- **List Routes**: `GET /resource` (no path variables)
+- **Get By ID Routes**: `GET /resource/:id` (specifically `:id` parameter)
+- **Create Routes**: `POST /resource` (no path variables)
+- **Update Routes**: `PUT/PATCH /resource/:id` (with path variables)
+- **Delete Routes**: `DELETE /resource/:id` (with path variables)
+
+### Custom Parameter Schemas
+
+For non-standard path parameters, create custom schemas:
+
+```typescript
+const SlugParamSchema = z
+  .object({
+    slug: z.string().openapi({
+      param: {
+        name: 'slug',
+        in: 'path',
+        description: 'Resource slug identifier',
+        required: true,
+        schema: { type: 'string' },
+      },
+    }),
+  })
+  .openapi('SlugParamSchema');
+```
+
+## API Documentation
