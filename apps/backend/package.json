@@ -12,18 +12,18 @@
   "dependencies": {
     "@flarekit/database": "*",
     "@hono/swagger-ui": "^0.5.2",
-    "@hono/zod-openapi": "^0.19.9",
-    "@vitest/coverage-istanbul": "^3.2.4",
-    "hono": "^4.8.4"
+    "@hono/zod-openapi": "^1.1.4",
+    "@vitest/coverage-istanbul": "^4.0.3",
+    "hono": "^4.10.3"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.50",
+    "@cloudflare/vitest-pool-workers": "^0.10.0",
     "@cloudflare/workers-types": "^4.20250710.0",
-    "@types/node": "^24.0.12",
-    "typescript": "^5.8.3",
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4",
-    "wrangler": "^4.24.0"
+    "vitest": "^4.0.3",
+    "wrangler": "^4.45.0"
   },
   "version": "1.0.1"
 }
