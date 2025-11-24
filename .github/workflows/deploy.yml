@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node
         uses: actions/setup-node@v4
@@ -41,7 +41,7 @@ jobs:
     # No 'needs:' here, so it can run in parallel with 'lint'
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node
         uses: actions/setup-node@v4
@@ -72,7 +72,7 @@ jobs:
       contents: write # Needed for artifact upload
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node
         uses: actions/setup-node@v4
@@ -106,7 +106,7 @@ jobs:
     needs: [build]
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node
         uses: actions/setup-node@v4
@@ -139,7 +139,7 @@ jobs:
       deployments: write # Needed for Cloudflare Pages deployment
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node
         uses: actions/setup-node@v4
@@ -183,7 +183,7 @@ jobs:
       deployments: write # Needed for Cloudflare Workers deployment
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node
         uses: actions/setup-node@v4
