@@ -95,7 +95,7 @@ jobs:
         run: npm run build
 
       - name: Archive web artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: web-dist
           path: ./apps/web/dist
